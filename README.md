@@ -1,5 +1,17 @@
 # Finite Regional Residue Obstruction Classifier
 
+## Current proof status
+
+The authoritative mathematical account is in [`PROOF.md`](PROOF.md).
+
+The project proves:
+
+1. The actual residue represents a nonzero class in $H^1$.
+2. The obstruction verdict is invariant under the declared presentation changes.
+3. The obstruction persists under the four declared refinement witnesses.
+
+The project does not yet prove persistence under all possible refinements. A universal refinement theorem would require a general pushforward/pullback pairing result.
+
 ## Overview
 
 This framework classifies seam residues in finite geometric constructions using Čech cohomology. It determines whether a residue is:
@@ -214,19 +226,21 @@ Refinement Testing: obstruction_survives_refinement
     └── refined classification: nontrivial_H1_obstruction
 ```
 
-## Paper Statement
+## Paper statements (scoped)
 
-**After classification:**
-> The finite construction produces a seam-supported residue whose cohomology class is non-zero; hence the defect is not removable by re-choice of local representatives.
+See [`PROOF.md`](PROOF.md) for the full proof with explicit scope at each step.
 
-**After invariance tests:**
-> The obstruction is not an artefact of region naming, edge orientation, edge ordering, rational rescaling, or addition of exact gauge terms. Across these re-presentations, the classifier returns the same non-zero (H¹) verdict.
+**Base obstruction (proved):**
+> The residue $r = (1,1,1,-2)$ is not a coboundary. Cycle witness: $\langle z, r \rangle = -5 \neq 0$.
 
-**After refinement test:**
-> The non-zero cohomology class [r] persists when the regional cover is refined (U1 subdivided into U1a, U1b). This is strong evidence that the obstruction is intrinsic to the regional system and not an artefact of the coarse cover.
+**Presentation invariance (proved for declared transformations):**
+> The obstruction verdict is stable under region renaming, orientation reversal, edge reordering, nonzero rational scaling, and gauge perturbation.
 
-**After formal lemma:**
-> Therefore the obstruction is invariant under the declared presentation equivalence and survives cover refinement.
+**Refinement persistence (proved for four declared witnesses):**
+> The obstruction persists under the four declared refinement maps (subdivide $U_1$, subdivide $U_2$, subdivide all regions, insert bridge), certified by nonzero cycle pairings $-7/2$, $-4$, $-5/4$, $-5$.
+
+**Not yet proved:**
+> Persistence under all admissible refinements. A universal theorem requires a pushforward/pullback pairing argument; see `PROOF.md` §4.
 
 ## Technical Notes
 
