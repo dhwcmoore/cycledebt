@@ -322,5 +322,8 @@ if __name__ == "__main__":
     
     with open(report_file, 'w') as f:
         json.dump(results, f, indent=2, default=str)
-    
+
     print(f"Full report saved to: {report_file}")
+
+    if results.get("refinement_claim") != "obstruction_survives_refinement":
+        sys.exit(1)

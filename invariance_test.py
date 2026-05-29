@@ -380,5 +380,8 @@ if __name__ == "__main__":
     
     with open(report_file, 'w') as f:
         json.dump(results, f, indent=2)
-    
+
     print(f"Full report saved to: {report_file}")
+
+    if results.get("invariance_claim") != "stable_under_tested_presentations":
+        sys.exit(1)
