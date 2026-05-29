@@ -1,0 +1,27 @@
+{
+  "residue_degree": 1,
+  "coefficient_domain": "Q",
+  "is_cocycle": true,
+  "is_coboundary": true,
+  "classification": "coboundary_removable",
+  "support": [
+    "U0-U1",
+    "U1-U2",
+    "U0-U2"
+  ],
+  "residue_values": {
+    "U0-U1": "1",
+    "U1-U2": "2",
+    "U0-U2": "3"
+  },
+  "witness": {
+    "cocycle_test_passed": true,
+    "coboundary_test_passed": true,
+    "gauge_correction": {
+      "bU0": "b2 - 3",
+      "bU1": "b2 - 2",
+      "bU2": "0"
+    },
+    "gauge_correction_meaning": "These local values can be added to each region to remove the residue."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "invalid_cocycle_example_C",
+  "description": "Filled triangle but residue violates cocycle condition. δ¹r ≠ 0 => coherence failure.",
+  "coefficient_domain": "Q",
+  "regions": ["U0", "U1", "U2"],
+  "edges": [
+    ["U0", "U1"],
+    ["U1", "U2"],
+    ["U0", "U2"]
+  ],
+  "faces": [
+    ["U0", "U1", "U2"]
+  ],
+  "residue": {
+    "U0-U1": "1",
+    "U1-U2": "2",
+    "U0-U2": "99"
+  }
+}

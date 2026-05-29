@@ -1,0 +1,465 @@
+{
+  "base_object": "actual_gluing_object_v1",
+  "refinement_tests": {
+    "subdivide_U1_equally": {
+      "refinement_type": "subdivide_U1_equally",
+      "base_object": "actual_gluing_object_v1",
+      "refined_object": "actual_gluing_object_v1_refined_subdivide_U1_equally",
+      "refined_nerve": {
+        "regions": [
+          "U1a",
+          "U1b",
+          "U2",
+          "U3",
+          "U4"
+        ],
+        "edges": [
+          "U1a-U2",
+          "U1b-U2",
+          "U2-U3",
+          "U3-U4",
+          "U1a-U4",
+          "U1b-U4",
+          "U1a-U1b"
+        ],
+        "faces": [],
+        "num_edges": 7
+      },
+      "transfer_strategy": "equal_distribution",
+      "transfer_map_description": "Old edge values split equally across refined edges. Internal edges have value 0.",
+      "refined_residue_values": {
+        "U1a-U2": "1/2",
+        "U1b-U2": "1/2",
+        "U2-U3": "1",
+        "U3-U4": "1",
+        "U1a-U4": "-1",
+        "U1b-U4": "-1",
+        "U1a-U1b": "0"
+      },
+      "base_classification": "nontrivial_H1_obstruction",
+      "refined_certificate": {
+        "residue_degree": 1,
+        "coefficient_domain": "Q",
+        "is_cocycle": true,
+        "is_coboundary": false,
+        "classification": "nontrivial_H1_obstruction",
+        "support": [
+          "U1a-U2",
+          "U1b-U2",
+          "U2-U3",
+          "U3-U4",
+          "U1a-U4",
+          "U1b-U4",
+          "U1a-U1b"
+        ],
+        "residue_values": {
+          "U1a-U2": "1/2",
+          "U1b-U2": "1/2",
+          "U2-U3": "1",
+          "U3-U4": "1",
+          "U1a-U4": "-1",
+          "U1b-U4": "-1",
+          "U1a-U1b": "0"
+        },
+        "cohomology_summary": {
+          "dim_C0": 5,
+          "dim_C1": 7,
+          "dim_C2": 0,
+          "rank_delta0": 4,
+          "rank_delta1": 0,
+          "dim_kernel_delta1": 7,
+          "dim_H1": 3
+        },
+        "witness": {
+          "cocycle_test_passed": true,
+          "coboundary_test_passed": false,
+          "failed_linear_system": "D0 b = r has no solution; residue is forced.",
+          "loop_sum": "1",
+          "loop_obstruction_meaning": "Non-zero accumulation around loop; cannot be gauged away."
+        },
+        "cycle_witness": {
+          "cycle_edges": [
+            "U1a-U2",
+            "U2-U3",
+            "U3-U4",
+            "U1a-U4"
+          ],
+          "cycle_vector": [
+            "-1",
+            "0",
+            "-1",
+            "-1",
+            "1",
+            "0",
+            "0"
+          ],
+          "boundary_of_cycle": "0",
+          "pairing_with_residue": "-7/2",
+          "conclusion": "residue_not_coboundary_by_nonzero_pairing"
+        }
+      },
+      "refined_classification": "nontrivial_H1_obstruction",
+      "obstruction_persists": true
+    },
+    "subdivide_U2_equally": {
+      "refinement_type": "subdivide_U2_equally",
+      "base_object": "actual_gluing_object_v1",
+      "refined_object": "actual_gluing_object_v1_refined_subdivide_U2_equally",
+      "refined_nerve": {
+        "regions": [
+          "U1",
+          "U2a",
+          "U2b",
+          "U3",
+          "U4"
+        ],
+        "edges": [
+          "U1-U2a",
+          "U1-U2b",
+          "U2a-U3",
+          "U2b-U3",
+          "U3-U4",
+          "U1-U4",
+          "U2a-U2b"
+        ],
+        "faces": [],
+        "num_edges": 7
+      },
+      "transfer_strategy": "equal_distribution",
+      "transfer_map_description": "Old edge values split equally across refined edges. Internal edges have value 0.",
+      "refined_residue_values": {
+        "U1-U2a": "1/2",
+        "U1-U2b": "1/2",
+        "U2a-U3": "1/2",
+        "U2b-U3": "1/2",
+        "U3-U4": "1",
+        "U1-U4": "-2",
+        "U2a-U2b": "0"
+      },
+      "base_classification": "nontrivial_H1_obstruction",
+      "refined_certificate": {
+        "residue_degree": 1,
+        "coefficient_domain": "Q",
+        "is_cocycle": true,
+        "is_coboundary": false,
+        "classification": "nontrivial_H1_obstruction",
+        "support": [
+          "U1-U2a",
+          "U1-U2b",
+          "U2a-U3",
+          "U2b-U3",
+          "U3-U4",
+          "U1-U4",
+          "U2a-U2b"
+        ],
+        "residue_values": {
+          "U1-U2a": "1/2",
+          "U1-U2b": "1/2",
+          "U2a-U3": "1/2",
+          "U2b-U3": "1/2",
+          "U3-U4": "1",
+          "U1-U4": "-2",
+          "U2a-U2b": "0"
+        },
+        "cohomology_summary": {
+          "dim_C0": 5,
+          "dim_C1": 7,
+          "dim_C2": 0,
+          "rank_delta0": 4,
+          "rank_delta1": 0,
+          "dim_kernel_delta1": 7,
+          "dim_H1": 3
+        },
+        "witness": {
+          "cocycle_test_passed": true,
+          "coboundary_test_passed": false,
+          "failed_linear_system": "D0 b = r has no solution; residue is forced.",
+          "loop_sum": "1",
+          "loop_obstruction_meaning": "Non-zero accumulation around loop; cannot be gauged away."
+        },
+        "cycle_witness": {
+          "cycle_edges": [
+            "U1-U2a",
+            "U2a-U3",
+            "U3-U4",
+            "U1-U4"
+          ],
+          "cycle_vector": [
+            "-1",
+            "0",
+            "-1",
+            "0",
+            "-1",
+            "1",
+            "0"
+          ],
+          "boundary_of_cycle": "0",
+          "pairing_with_residue": "-4",
+          "conclusion": "residue_not_coboundary_by_nonzero_pairing"
+        }
+      },
+      "refined_classification": "nontrivial_H1_obstruction",
+      "obstruction_persists": true
+    },
+    "subdivide_all_regions_equally": {
+      "refinement_type": "subdivide_all_regions_equally",
+      "base_object": "actual_gluing_object_v1",
+      "refined_object": "actual_gluing_object_v1_refined_subdivide_all_regions_equally",
+      "refined_nerve": {
+        "regions": [
+          "U1a",
+          "U1b",
+          "U2a",
+          "U2b",
+          "U3a",
+          "U3b",
+          "U4a",
+          "U4b"
+        ],
+        "edges": [
+          "U1a-U2a",
+          "U1a-U2b",
+          "U1b-U2a",
+          "U1b-U2b",
+          "U2a-U3a",
+          "U2a-U3b",
+          "U2b-U3a",
+          "U2b-U3b",
+          "U3a-U4a",
+          "U3a-U4b",
+          "U3b-U4a",
+          "U3b-U4b",
+          "U1a-U4a",
+          "U1a-U4b",
+          "U1b-U4a",
+          "U1b-U4b",
+          "U1a-U1b",
+          "U2a-U2b",
+          "U3a-U3b",
+          "U4a-U4b"
+        ],
+        "faces": [],
+        "num_edges": 20
+      },
+      "transfer_strategy": "equal_distribution",
+      "transfer_map_description": "Old edge values split equally across refined edges. Internal edges have value 0.",
+      "refined_residue_values": {
+        "U1a-U2a": "1/4",
+        "U1a-U2b": "1/4",
+        "U1b-U2a": "1/4",
+        "U1b-U2b": "1/4",
+        "U2a-U3a": "1/4",
+        "U2a-U3b": "1/4",
+        "U2b-U3a": "1/4",
+        "U2b-U3b": "1/4",
+        "U3a-U4a": "1/4",
+        "U3a-U4b": "1/4",
+        "U3b-U4a": "1/4",
+        "U3b-U4b": "1/4",
+        "U1a-U4a": "-1/2",
+        "U1a-U4b": "-1/2",
+        "U1b-U4a": "-1/2",
+        "U1b-U4b": "-1/2",
+        "U1a-U1b": "0",
+        "U2a-U2b": "0",
+        "U3a-U3b": "0",
+        "U4a-U4b": "0"
+      },
+      "base_classification": "nontrivial_H1_obstruction",
+      "refined_certificate": {
+        "residue_degree": 1,
+        "coefficient_domain": "Q",
+        "is_cocycle": true,
+        "is_coboundary": false,
+        "classification": "nontrivial_H1_obstruction",
+        "support": [
+          "U1a-U2a",
+          "U1a-U2b",
+          "U1b-U2a",
+          "U1b-U2b",
+          "U2a-U3a",
+          "U2a-U3b",
+          "U2b-U3a",
+          "U2b-U3b",
+          "U3a-U4a",
+          "U3a-U4b",
+          "U3b-U4a",
+          "U3b-U4b",
+          "U1a-U4a",
+          "U1a-U4b",
+          "U1b-U4a",
+          "U1b-U4b",
+          "U1a-U1b",
+          "U2a-U2b",
+          "U3a-U3b",
+          "U4a-U4b"
+        ],
+        "residue_values": {
+          "U1a-U2a": "1/4",
+          "U1a-U2b": "1/4",
+          "U1b-U2a": "1/4",
+          "U1b-U2b": "1/4",
+          "U2a-U3a": "1/4",
+          "U2a-U3b": "1/4",
+          "U2b-U3a": "1/4",
+          "U2b-U3b": "1/4",
+          "U3a-U4a": "1/4",
+          "U3a-U4b": "1/4",
+          "U3b-U4a": "1/4",
+          "U3b-U4b": "1/4",
+          "U1a-U4a": "-1/2",
+          "U1a-U4b": "-1/2",
+          "U1b-U4a": "-1/2",
+          "U1b-U4b": "-1/2",
+          "U1a-U1b": "0",
+          "U2a-U2b": "0",
+          "U3a-U3b": "0",
+          "U4a-U4b": "0"
+        },
+        "cohomology_summary": {
+          "dim_C0": 8,
+          "dim_C1": 20,
+          "dim_C2": 0,
+          "rank_delta0": 7,
+          "rank_delta1": 0,
+          "dim_kernel_delta1": 20,
+          "dim_H1": 13
+        },
+        "witness": {
+          "cocycle_test_passed": true,
+          "coboundary_test_passed": false,
+          "failed_linear_system": "D0 b = r has no solution; residue is forced.",
+          "loop_sum": "1",
+          "loop_obstruction_meaning": "Non-zero accumulation around loop; cannot be gauged away."
+        },
+        "cycle_witness": {
+          "cycle_edges": [
+            "U1a-U2a",
+            "U2a-U3a",
+            "U3a-U4a",
+            "U1a-U4a"
+          ],
+          "cycle_vector": [
+            "-1",
+            "0",
+            "0",
+            "0",
+            "-1",
+            "0",
+            "0",
+            "0",
+            "-1",
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "boundary_of_cycle": "0",
+          "pairing_with_residue": "-5/4",
+          "conclusion": "residue_not_coboundary_by_nonzero_pairing"
+        }
+      },
+      "refined_classification": "nontrivial_H1_obstruction",
+      "obstruction_persists": true
+    },
+    "insert_bridge_U1_U2": {
+      "refinement_type": "insert_bridge_U1_U2",
+      "base_object": "actual_gluing_object_v1",
+      "refined_object": "actual_gluing_object_v1_refined_insert_bridge_U1_U2",
+      "refined_nerve": {
+        "regions": [
+          "U1",
+          "U2",
+          "U3",
+          "U4",
+          "Bridge_U1_U2"
+        ],
+        "edges": [
+          "U1-Bridge_U1_U2",
+          "Bridge_U1_U2-U2",
+          "U2-U3",
+          "U3-U4",
+          "U1-U4"
+        ],
+        "faces": [],
+        "num_edges": 5
+      },
+      "transfer_strategy": "equal_distribution",
+      "transfer_map_description": "Old edge values split equally across refined edges. Internal edges have value 0.",
+      "refined_residue_values": {
+        "U1-Bridge_U1_U2": "1/2",
+        "Bridge_U1_U2-U2": "1/2",
+        "U2-U3": "1",
+        "U3-U4": "1",
+        "U1-U4": "-2"
+      },
+      "base_classification": "nontrivial_H1_obstruction",
+      "refined_certificate": {
+        "residue_degree": 1,
+        "coefficient_domain": "Q",
+        "is_cocycle": true,
+        "is_coboundary": false,
+        "classification": "nontrivial_H1_obstruction",
+        "support": [
+          "U1-Bridge_U1_U2",
+          "Bridge_U1_U2-U2",
+          "U2-U3",
+          "U3-U4",
+          "U1-U4"
+        ],
+        "residue_values": {
+          "U1-Bridge_U1_U2": "1/2",
+          "Bridge_U1_U2-U2": "1/2",
+          "U2-U3": "1",
+          "U3-U4": "1",
+          "U1-U4": "-2"
+        },
+        "cohomology_summary": {
+          "dim_C0": 5,
+          "dim_C1": 5,
+          "dim_C2": 0,
+          "rank_delta0": 4,
+          "rank_delta1": 0,
+          "dim_kernel_delta1": 5,
+          "dim_H1": 1
+        },
+        "witness": {
+          "cocycle_test_passed": true,
+          "coboundary_test_passed": false,
+          "failed_linear_system": "D0 b = r has no solution; residue is forced.",
+          "loop_sum": "1",
+          "loop_obstruction_meaning": "Non-zero accumulation around loop; cannot be gauged away."
+        },
+        "cycle_witness": {
+          "cycle_edges": [
+            "U1-Bridge_U1_U2",
+            "Bridge_U1_U2-U2",
+            "U2-U3",
+            "U3-U4",
+            "U1-U4"
+          ],
+          "cycle_vector": [
+            "-1",
+            "-1",
+            "-1",
+            "-1",
+            "1"
+          ],
+          "boundary_of_cycle": "0",
+          "pairing_with_residue": "-5",
+          "conclusion": "residue_not_coboundary_by_nonzero_pairing"
+        }
+      },
+      "refined_classification": "nontrivial_H1_obstruction",
+      "obstruction_persists": true
+    }
+  },
+  "refinement_claim": "obstruction_survives_refinement"
+}

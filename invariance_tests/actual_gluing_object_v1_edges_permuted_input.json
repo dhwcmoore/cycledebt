@@ -1,0 +1,36 @@
+{
+  "name": "actual_gluing_object_v1_edges_permuted",
+  "description": "The actual finite geometric construction from the reconciliation scheme.",
+  "coefficient_domain": "Q",
+  "regions": [
+    "U1",
+    "U2",
+    "U3",
+    "U4"
+  ],
+  "edges": [
+    [
+      "U2",
+      "U3"
+    ],
+    [
+      "U3",
+      "U4"
+    ],
+    [
+      "U1",
+      "U4"
+    ],
+    [
+      "U2",
+      "U1"
+    ]
+  ],
+  "faces": [],
+  "residue": {
+    "U2-U3": "-1",
+    "U3-U4": "1",
+    "U1-U4": "1",
+    "U2-U1": "-2"
+  }
+}

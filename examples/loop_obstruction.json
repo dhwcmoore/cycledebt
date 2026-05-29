@@ -1,0 +1,19 @@
+{
+  "name": "loop_obstruction_example_A",
+  "description": "4-cycle loop with no filled 2-simplices. Loop sum nonzero => genuine H¹ obstruction.",
+  "coefficient_domain": "Q",
+  "regions": ["U0", "U1", "U2", "U3"],
+  "edges": [
+    ["U0", "U1"],
+    ["U1", "U2"],
+    ["U2", "U3"],
+    ["U0", "U3"]
+  ],
+  "faces": [],
+  "residue": {
+    "U0-U1": "1",
+    "U1-U2": "1",
+    "U2-U3": "1",
+    "U0-U3": "-2"
+  }
+}

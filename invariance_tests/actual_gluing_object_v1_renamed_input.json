@@ -1,0 +1,36 @@
+{
+  "name": "actual_gluing_object_v1_renamed",
+  "description": "The actual finite geometric construction from the reconciliation scheme.",
+  "coefficient_domain": "Q",
+  "regions": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "edges": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "D"
+    ],
+    [
+      "A",
+      "D"
+    ]
+  ],
+  "faces": [],
+  "residue": {
+    "A-B": "1",
+    "B-C": "1",
+    "C-D": "1",
+    "A-D": "-2"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "residue_degree": 1,
+  "coefficient_domain": "Q",
+  "is_cocycle": true,
+  "is_coboundary": false,
+  "classification": "nontrivial_H1_obstruction",
+  "support": [
+    "U0-U1",
+    "U1-U2",
+    "U2-U3",
+    "U0-U3"
+  ],
+  "residue_values": {
+    "U0-U1": "1",
+    "U1-U2": "1",
+    "U2-U3": "1",
+    "U0-U3": "-2"
+  },
+  "witness": {
+    "cocycle_test_passed": true,
+    "coboundary_test_passed": false,
+    "failed_linear_system": "D0 b = r has no solution; residue is forced.",
+    "loop_sum": "1",
+    "loop_obstruction_meaning": "Non-zero accumulation around loop; cannot be gauged away."
+  }
+}

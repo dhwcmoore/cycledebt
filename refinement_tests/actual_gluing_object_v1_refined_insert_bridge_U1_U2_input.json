@@ -1,0 +1,42 @@
+{
+  "name": "actual_gluing_object_v1_refined_insert_bridge_U1_U2",
+  "description": "Refined by insert_bridge_U1_U2: subdivided U1",
+  "coefficient_domain": "Q",
+  "regions": [
+    "U1",
+    "U2",
+    "U3",
+    "U4",
+    "Bridge_U1_U2"
+  ],
+  "edges": [
+    [
+      "U1",
+      "Bridge_U1_U2"
+    ],
+    [
+      "Bridge_U1_U2",
+      "U2"
+    ],
+    [
+      "U2",
+      "U3"
+    ],
+    [
+      "U3",
+      "U4"
+    ],
+    [
+      "U1",
+      "U4"
+    ]
+  ],
+  "faces": [],
+  "residue": {
+    "U1-Bridge_U1_U2": "1/2",
+    "Bridge_U1_U2-U2": "1/2",
+    "U2-U3": "1",
+    "U3-U4": "1",
+    "U1-U4": "-2"
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "name": "actual_gluing_object_v1_refined_subdivide_all_regions_equally",
+  "description": "Refined by subdivide_all_regions_equally: subdivided U1",
+  "coefficient_domain": "Q",
+  "regions": [
+    "U1a",
+    "U1b",
+    "U2a",
+    "U2b",
+    "U3a",
+    "U3b",
+    "U4a",
+    "U4b"
+  ],
+  "edges": [
+    [
+      "U1a",
+      "U2a"
+    ],
+    [
+      "U1a",
+      "U2b"
+    ],
+    [
+      "U1b",
+      "U2a"
+    ],
+    [
+      "U1b",
+      "U2b"
+    ],
+    [
+      "U2a",
+      "U3a"
+    ],
+    [
+      "U2a",
+      "U3b"
+    ],
+    [
+      "U2b",
+      "U3a"
+    ],
+    [
+      "U2b",
+      "U3b"
+    ],
+    [
+      "U3a",
+      "U4a"
+    ],
+    [
+      "U3a",
+      "U4b"
+    ],
+    [
+      "U3b",
+      "U4a"
+    ],
+    [
+      "U3b",
+      "U4b"
+    ],
+    [
+      "U1a",
+      "U4a"
+    ],
+    [
+      "U1a",
+      "U4b"
+    ],
+    [
+      "U1b",
+      "U4a"
+    ],
+    [
+      "U1b",
+      "U4b"
+    ],
+    [
+      "U1a",
+      "U1b"
+    ],
+    [
+      "U2a",
+      "U2b"
+    ],
+    [
+      "U3a",
+      "U3b"
+    ],
+    [
+      "U4a",
+      "U4b"
+    ]
+  ],
+  "faces": [],
+  "residue": {
+    "U1a-U2a": "1/4",
+    "U1a-U2b": "1/4",
+    "U1b-U2a": "1/4",
+    "U1b-U2b": "1/4",
+    "U2a-U3a": "1/4",
+    "U2a-U3b": "1/4",
+    "U2b-U3a": "1/4",
+    "U2b-U3b": "1/4",
+    "U3a-U4a": "1/4",
+    "U3a-U4b": "1/4",
+    "U3b-U4a": "1/4",
+    "U3b-U4b": "1/4",
+    "U1a-U4a": "-1/2",
+    "U1a-U4b": "-1/2",
+    "U1b-U4a": "-1/2",
+    "U1b-U4b": "-1/2",
+    "U1a-U1b": "0",
+    "U2a-U2b": "0",
+    "U3a-U3b": "0",
+    "U4a-U4b": "0"
+  }
+}

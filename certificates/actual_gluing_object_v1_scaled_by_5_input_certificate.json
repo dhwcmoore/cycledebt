@@ -1,0 +1,52 @@
+{
+  "residue_degree": 1,
+  "coefficient_domain": "Q",
+  "is_cocycle": true,
+  "is_coboundary": false,
+  "classification": "nontrivial_H1_obstruction",
+  "support": [
+    "U2-U1",
+    "U2-U3",
+    "U3-U4",
+    "U1-U4"
+  ],
+  "residue_values": {
+    "U2-U1": "-5",
+    "U2-U3": "5",
+    "U3-U4": "5",
+    "U1-U4": "-10"
+  },
+  "cohomology_summary": {
+    "dim_C0": 4,
+    "dim_C1": 4,
+    "dim_C2": 0,
+    "rank_delta0": 3,
+    "rank_delta1": 0,
+    "dim_kernel_delta1": 4,
+    "dim_H1": 1
+  },
+  "witness": {
+    "cocycle_test_passed": true,
+    "coboundary_test_passed": false,
+    "failed_linear_system": "D0 b = r has no solution; residue is forced.",
+    "loop_sum": "-5",
+    "loop_obstruction_meaning": "Non-zero accumulation around loop; cannot be gauged away."
+  },
+  "cycle_witness": {
+    "cycle_edges": [
+      "U2-U1",
+      "U2-U3",
+      "U3-U4",
+      "U1-U4"
+    ],
+    "cycle_vector": [
+      "1",
+      "-1",
+      "-1",
+      "1"
+    ],
+    "boundary_of_cycle": "0",
+    "pairing_with_residue": "-25",
+    "conclusion": "residue_not_coboundary_by_nonzero_pairing"
+  }
+}

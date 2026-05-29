@@ -1,0 +1,39 @@
+{
+  "base_object": "actual_gluing_object_v1",
+  "base_classification": "nontrivial_H1_obstruction",
+  "base_is_cocycle": true,
+  "base_is_coboundary": false,
+  "invariance_tests": {
+    "region_renaming": {
+      "passed": true,
+      "classification": "nontrivial_H1_obstruction",
+      "error": null
+    },
+    "orientation_reversal": {
+      "passed": true,
+      "classification": "nontrivial_H1_obstruction",
+      "error": null
+    },
+    "nonzero_rational_scaling": {
+      "passed": true,
+      "classification": "nontrivial_H1_obstruction",
+      "error": null
+    },
+    "gauge_perturbation": {
+      "passed": true,
+      "classification": "nontrivial_H1_obstruction",
+      "error": null
+    },
+    "edge_order_permutation": {
+      "passed": true,
+      "classification": "nontrivial_H1_obstruction",
+      "error": null
+    },
+    "refinement": {
+      "passed": null,
+      "status": "pending",
+      "reason": "Requires transfer map definition"
+    }
+  },
+  "invariance_claim": "stable_under_tested_presentations"
+}

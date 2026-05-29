@@ -1,0 +1,19 @@
+{
+  "name": "actual_gluing_object_v1",
+  "description": "The actual finite geometric construction from the reconciliation scheme.",
+  "coefficient_domain": "Q",
+  "regions": ["U1", "U2", "U3", "U4"],
+  "edges": [
+    ["U1", "U2"],
+    ["U2", "U3"],
+    ["U3", "U4"],
+    ["U1", "U4"]
+  ],
+  "faces": [],
+  "residue": {
+    "U1-U2": "1",
+    "U2-U3": "1",
+    "U3-U4": "1",
+    "U1-U4": "-2"
+  }
+}

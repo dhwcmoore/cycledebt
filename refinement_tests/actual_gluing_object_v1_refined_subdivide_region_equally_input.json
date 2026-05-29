@@ -1,0 +1,52 @@
+{
+  "name": "actual_gluing_object_v1_refined_subdivide_region_equally",
+  "description": "Refined by subdivide_region_equally: subdivided U1",
+  "coefficient_domain": "Q",
+  "regions": [
+    "U1a",
+    "U1b",
+    "U2",
+    "U3",
+    "U4"
+  ],
+  "edges": [
+    [
+      "U1a",
+      "U2"
+    ],
+    [
+      "U1b",
+      "U2"
+    ],
+    [
+      "U2",
+      "U3"
+    ],
+    [
+      "U3",
+      "U4"
+    ],
+    [
+      "U1a",
+      "U4"
+    ],
+    [
+      "U1b",
+      "U4"
+    ],
+    [
+      "U1a",
+      "U1b"
+    ]
+  ],
+  "faces": [],
+  "residue": {
+    "U1a-U2": "1/2",
+    "U1b-U2": "1/2",
+    "U2-U3": "1",
+    "U3-U4": "1",
+    "U1a-U4": "-1",
+    "U1b-U4": "-1",
+    "U1a-U1b": "0"
+  }
+}

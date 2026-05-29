@@ -1,0 +1,19 @@
+{
+  "name": "filled_triangle_coboundary_example_B",
+  "description": "Filled triangle: every cocycle is a coboundary. Residue is removable.",
+  "coefficient_domain": "Q",
+  "regions": ["U0", "U1", "U2"],
+  "edges": [
+    ["U0", "U1"],
+    ["U1", "U2"],
+    ["U0", "U2"]
+  ],
+  "faces": [
+    ["U0", "U1", "U2"]
+  ],
+  "residue": {
+    "U0-U1": "1",
+    "U1-U2": "2",
+    "U0-U2": "3"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "residue_degree": 1,
+  "coefficient_domain": "Q",
+  "is_cocycle": false,
+  "is_coboundary": false,
+  "classification": "coherence_failure",
+  "support": [
+    "U0-U1",
+    "U1-U2",
+    "U0-U2"
+  ],
+  "residue_values": {
+    "U0-U1": "1",
+    "U1-U2": "2",
+    "U0-U2": "99"
+  },
+  "witness": {
+    "cocycle_test_failed": true,
+    "delta1_r": {
+      "('U0', 'U1', 'U2')": "-96"
+    }
+  }
+}
