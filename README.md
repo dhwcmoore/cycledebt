@@ -45,6 +45,15 @@ python refinement_invariance_test.py actual/actual_gluing_object_v1.json
 ```
 Output: `certificates/actual_gluing_object_v1_refinement_test_report.json`
 
+### Generate one-page summary PDF
+
+- A small utility script generates a concise PDF summary from `reports/one_page_summary.txt`.
+- To regenerate the PDF:
+```bash
+python3 scripts/generate_pdf.py reports/one_page_summary.txt reports/summary.pdf
+```
+- Requires the `reportlab` Python package (added to `requirements.txt`).
+
 ## Workflow
 
 ### Stage 1: Classification
