@@ -177,29 +177,96 @@ def find_cycle_lift(regions, edge_pairs, edge_names, transfer,
 
 def _diagnose_failure(d_prime, M, z_vec, regions, edge_names, base_edges):
     """
-    Diagnose why cycle-lift fails.
-    Checks if flow-conservation forces lambda = 0.
+    Diagnose why cycle-lift fails: solve the system symbolically and confirm lambda=0.
     """
-    n_base = z_vec.shape[0]
     n_ref = len(edge_names)
-
-    # Build symbolic z' as free variables
     z_sym = sp.Matrix(sp.symbols(f"z0:{n_ref}"))
     lam = sp.Symbol("lam")
-
-    # Cycle condition: d' * z' = 0  (n_vert equations)
     cycle_eqs = list(d_prime * z_sym)
-    # Lift condition: M * z' = lam * z  (n_base equations)
     lift_eqs = list(M * z_sym - lam * z_vec)
-
-    all_eqs = cycle_eqs + lift_eqs
-    sol = sp.solve(all_eqs, list(z_sym) + [lam])
-
+    sol = sp.solve(cycle_eqs + lift_eqs, list(z_sym) + [lam])
     if isinstance(sol, dict):
         lam_val = sol.get(lam, lam)
         if lam_val == 0 or (hasattr(lam_val, 'free_symbols') and not lam_val.free_symbols):
             return f"System forces lambda = {lam_val}; cycle-lift impossible."
     return "No cycle-lift solution exists in the null space."
+
+
+def build_witness_certificate(d_prime, M, z_vec, edge_names, base_edges, result):
+    """
+    Build a detailed witness / counter-witness for cycle-faithfulness.
+
+    For cycle-faithful refinements:
+      - z', λ, PK basis generator, rank certificate, pushforward check
+
+    For non-faithful refinements:
+      - generator of im(P|_{Z_1(N')}), proof that z ∉ im(PK),
+        ratio table showing which edges break uniformity
+    """
+    K_vecs = d_prime.nullspace()
+    if not K_vecs:
+        return {"error": "no cycles in N'"}
+
+    K = sp.Matrix.hstack(*K_vecs)          # n_ref × dim(Z_1)
+    PK = M * K                              # n_base × dim(Z_1)
+
+    # Find im(PK) generator (rank-1 case simplifies reporting)
+    im_gen = None
+    for j in range(PK.shape[1]):
+        col = PK.col(j)
+        if col != sp.zeros(PK.shape[0], 1):
+            im_gen = col
+            break
+
+    if result["cycle_faithful"]:
+        z_prime = sp.Matrix([sp.Rational(v) for v in result["z_prime"]])
+        pushforward = M * z_prime
+        return {
+            "type": "cycle_lift_witness",
+            "lambda": result["lambda"],
+            "z_prime_nonzero": {
+                edge_names[i]: result["z_prime"][i]
+                for i in range(len(edge_names))
+                if result["z_prime"][i] not in ("0", "0/1")
+            },
+            "pushforward_equals_lambda_z": {
+                base_edges[i]: str(pushforward[i])
+                for i in range(len(base_edges))
+            },
+            "im_PK_generator": [str(x) for x in im_gen] if im_gen is not None else None,
+            "rank_PK": result["rank_PK"],
+            "dim_Z1_N_prime": result["dim_Z1_N_prime"],
+        }
+    else:
+        # Compute ratios: for each base edge, ρ_*(z')[e] / z(e)
+        # These ratios are all the same for a cycle-lift, but differ across edges otherwise.
+        # Report the direction im_gen relative to z.
+        ratios = {}
+        if im_gen is not None:
+            for i, e in enumerate(base_edges):
+                if z_vec[i] != 0:
+                    ratios[e] = str(sp.Rational(im_gen[i]) / z_vec[i])
+
+        # Show that z is not in im(PK) by exhibiting distinct ratios
+        # if PK has rank 1, all cycles push forward to multiples of im_gen
+        return {
+            "type": "cycle_lift_obstruction",
+            "im_PK_generator": [str(x) for x in im_gen] if im_gen is not None else None,
+            "im_PK_generator_edges": base_edges,
+            "ratio_im_gen_to_z": ratios,
+            "ratios_uniform": len(set(ratios.values())) == 1,
+            "rank_PK": result["rank_PK"],
+            "rank_PK_augmented": result["rank_PK_augmented"],
+            "z_is_in_im_PK": False,
+            "failure_reason": result.get("failure_reason"),
+            "interpretation": (
+                "All cycles in N' push forward to multiples of im_PK_generator. "
+                "Since the ratios im_PK_generator[e] / z[e] are not uniform, "
+                "z is not in the image."
+                if not (len(set(ratios.values())) == 1)
+                else "Unexpected: ratios uniform but z not found in im(PK)."
+            ),
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -291,6 +358,15 @@ def run_all():
         regions, edge_pairs, edge_names, transfer = builder()
         res = find_cycle_lift(regions, edge_pairs, edge_names, transfer)
         res["refinement"] = name
+
+        # Build detailed witness certificate
+        z_vec = sp.Matrix(BASE_Z)
+        d_prime = build_boundary_matrix(regions, edge_pairs)
+        M = build_pushforward_matrix(edge_names, transfer, BASE_EDGES)
+        res["witness_certificate"] = build_witness_certificate(
+            d_prime, M, z_vec, edge_names, BASE_EDGES, res
+        )
+
         results[name] = res
     return results
 
@@ -336,18 +412,28 @@ def print_report(results):
     print("Non-cycle-faithful refinements:")
     for name, res in results.items():
         if not res["cycle_faithful"]:
+            wc = res.get("witness_certificate", {})
+            gen = wc.get("im_PK_generator")
+            ratios = wc.get("ratio_im_gen_to_z", {})
             print(f"  {name}")
             print(f"    {res.get('failure_reason', 'No lift found.')}")
+            if gen:
+                gen_str = dict(zip(BASE_EDGES, gen))
+                print(f"    im(PK) generator: {gen_str}")
+                print(f"    ratios gen[e]/z[e]: {ratios}  (non-uniform → z ∉ im(PK))")
     print()
 
     all_agree = all(r["methods_agree"] for r in results.values())
     print(f"Both methods agree on all refinements: {all_agree}")
     print()
     print("Interpretation:")
-    print("  Layer 1 (direct persistence):    all four refinements — proved by")
-    print("    direct cycle-pairing in N' (Lemma lem:cycle-pairing).")
-    print("  Layer 2 (witness persistence):   two refinements — proved by")
-    print("    Cycle-Lift Persistence Theorem (Theorem thm:cycle-lift).")
+    print("  Direct persistence (Layer 1):   all four — direct cycle-pairing in N'.")
+    print("  Witness persistence (Layer 2):  two — Cycle-Lift Persistence Theorem.")
+    print()
+    print("Philosophical statement:")
+    print("  Direct obstruction persistence and witness persistence are distinct.")
+    print("  A refinement may preserve the non-removable residue while changing")
+    print("  the cycle through which non-removability is witnessed.")
 
 
 if __name__ == "__main__":

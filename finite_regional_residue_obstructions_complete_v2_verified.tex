@@ -1176,17 +1176,94 @@ edge with the same weight, and the diagonal path through the fully
 subdivided complex crosses each cluster with weight \(1/4\). In both
 cases \(\operatorname{rank}(PK)=\operatorname{rank}([PK\;\;z])=1\).
 
-For the single-region subdivisions, no uniform circulation exists: the
-junction vertex forces an imbalance between the split-edge cluster and
-the unchanged adjacent edge, giving \(\operatorname{rank}(PK)=1\) but
-\(\operatorname{rank}([PK\;\;z])=2\). This confirms that the image of
-\(Z_1(N')\) under \(\rho_*\) is a one-dimensional subspace of
-\(C_1(N;\Q)\) that does not contain \(z\).
+For the single-region subdivisions, no uniform circulation exists.
+The generator of \(\operatorname{im}(P|_{Z_1(N')})\) has a non-uniform
+ratio relative to \(z\). For subdivide-\(U_1\):
+\[
+\text{generator} = (-\tfrac{1}{2},-1,-1,\tfrac{1}{2}),
+\quad
+\frac{\text{gen}[e]}{z[e]} =
+\begin{cases}\tfrac{1}{2} & e\in\{U_1U_2,U_1U_4\}\\1 & e\in\{U_2U_3,U_3U_4\}\end{cases}.
+\]
+The split edges (those incident to the subdivided \(U_1\)) contribute
+ratio \(\tfrac{1}{2}\); the unchanged edges contribute ratio \(1\).
+No scalar multiple of this generator equals \(z\), so
+\(\operatorname{rank}([PK\;\;z])=2\) and \(z\notin\operatorname{im}(PK)\).
 
 Proving Conjecture \ref{conj:cycle-fibre} would give a geometric
-sufficient condition for cycle-faithfulness and turn the current
-classification into a theorem about an explicit refinement class.
+sufficient condition for cycle-faithfulness. The two theorems below
+provide partial progress.
 \end{remark}
+
+\begin{definition}[Cycle-covering refinement]\label{def:cycle-covering}
+Let \(z\in Z_1(N;\Q)\) be a simple rational cycle, and let
+\(L=\operatorname{supp}(z)\) be its supporting loop. A refinement
+\(\rho:N'\to N\) is \emph{cycle-covering relative to \(z\)} if there
+exists a subcomplex \(L'\subseteq N'\) and a rational cycle
+\(z'\in Z_1(L';\Q)\) such that \(\rho_*z'=\lambda z\) for some
+\(\lambda\in\Q^\times\).
+\end{definition}
+
+\begin{theorem}[Cycle-covering refinements are cycle-faithful]\label{thm:covering-faithful}
+Every cycle-covering refinement relative to \(z\) is cycle-faithful
+relative to \(z\).
+\end{theorem}
+
+\begin{proof}
+By definition, a cycle-covering refinement supplies \(z'\in Z_1(N';\Q)\)
+with \(\rho_*z'=\lambda z\) and \(\lambda\neq 0\). Hence
+\(\rho_*(Z_1(N';\Q))\cap\Q^\times z\neq\varnothing\), which is the
+definition of cycle-faithfulness.
+\end{proof}
+
+\begin{theorem}[Uniform loop subdivision]\label{thm:uniform-subdivision}
+Let \(z\) be a simple rational cycle in \(N\). Suppose \(\rho:N'\to N\)
+refines each edge \(e\) of \(z\) by replacing it with a nonempty
+oriented path \(\Pi(e)\) in \(N'\), and that the replacement paths chain
+consecutively to form a closed loop \(z'\) in \(N'\). If there exists
+\(\lambda\in\Q^\times\) such that \(\rho_*(z')[e]=\lambda z(e)\) for
+every edge \(e\) in \(z\), then \(\rho\) is cycle-faithful relative to
+\(z\).
+\end{theorem}
+
+\begin{proof}
+The paths chain into a closed loop by hypothesis, so \(\partial' z'=0\).
+The pushforward condition gives \(\rho_*z'=\lambda z\) by summing the
+per-edge contributions. Since \(\lambda\neq 0\), \(z'\) is a
+nonzero-degree lift of \(z\), and Theorem \ref{thm:cycle-lift} applies.
+\end{proof}
+
+\begin{remark}[Application to the declared refinements]
+For \emph{insert bridge}: the edge \(U_1U_2\) is replaced by the serial
+path \(U_1\text{-Bridge-}U_2\), and \(z'\) traverses both path edges.
+The pushforward gives degree \(\lambda=1\) on every edge.
+
+For \emph{subdivide all}: the diagonal path \(U_{1a}U_{2a}U_{3a}U_{4a}U_{1a}\)
+replaces each base edge with one of four parallel options. Each
+contributes degree \(\tfrac{1}{4}\), giving \(\lambda=\tfrac{1}{4}\)
+uniformly.
+
+For \emph{subdivide \(U_1\) or \(U_2\)}: the edges incident to the
+subdivided region contribute degree \(\tfrac{1}{2}\) while the unchanged
+edges contribute degree \(1\). The degree is non-uniform, so Theorem
+\ref{thm:uniform-subdivision} does not apply. Non-faithfulness is proved
+algebraically by \(\operatorname{rank}([PK\;\;z])=2\).
+\end{remark}
+
+The full picture is summarised in the following table.
+
+\begin{center}
+\begin{tabular}{lllll}
+\toprule
+Refinement & Direct persistence & Cycle-faithful & Degree \(\lambda\) & Reason \\
+\midrule
+Subdivide \(U_1\) & Yes & No & --- & cycle image line misses \(z\) \\
+Subdivide \(U_2\) & Yes & No & --- & cycle image line misses \(z\) \\
+Subdivide all & Yes & Yes & \(1/4\) & uniform diagonal loop \\
+Insert bridge & Yes & Yes & \(1\) & preserved serial loop \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \section{Spectral diagnosis of associator fields}
 

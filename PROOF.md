@@ -298,6 +298,47 @@ they either eliminate the original junction vertex ($U_2 \to U_{2a}, U_{2b}$) or
 replace $U_1$-$U_2$ with a *path* through a new vertex (Bridge), preserving
 flow balance without multiplying the parallel edges at the original vertex.
 
+**Definition (Cycle-covering refinement).**
+A refinement $\rho: N' \to N$ is *cycle-covering relative to $z$* if there exists
+a subcomplex $L' \subseteq N'$ and $z' \in Z_1(L';\mathbb Q)$ such that
+$\rho_* z' = \lambda z$ for some $\lambda \in \mathbb Q^\times$.
+
+**Theorem (Cycle-covering refinements are cycle-faithful).**
+Every cycle-covering refinement relative to $z$ is cycle-faithful. *(Proof:
+cycle-covering directly supplies the nonzero-degree lift.)*
+
+**Theorem (Uniform loop subdivision).**
+Let $z$ be a simple rational cycle. Suppose $\rho$ replaces each edge of $z$
+by a nonempty oriented path $\Pi(e)$ and these paths chain into a closed loop
+$z'$. If the pushforward degree $\rho_*(z')[e] / z(e)$ is the same
+$\lambda \in \mathbb Q^\times$ for all edges $e$ of $z$, then $\rho$ is
+cycle-faithful relative to $z$.
+
+*Proof.* The chaining condition gives $\partial' z' = 0$. The uniform degree
+condition gives $\rho_*(z') = \lambda z$. $\square$
+
+**Why single-region subdivisions fail the uniform degree condition.**
+
+For subdivide-$U_1$, the im(PK) generator is $(-\tfrac{1}{2}, -1, -1, \tfrac{1}{2})$.
+The ratio generator[e]/z[e] is $\tfrac{1}{2}$ for the split edges ($U_1U_2, U_1U_4$)
+and $1$ for the unchanged edges ($U_2U_3, U_3U_4$). Non-uniform. Therefore
+$z \notin \operatorname{im}(PK)$ and $\operatorname{rank}([PK\,z])=2$.
+
+For subdivide-$U_2$, the generator is $(-\tfrac{1}{2}, -\tfrac{1}{2}, -1, 1)$
+with ratio $\tfrac{1}{2}$ on $U_1U_2, U_2U_3$ and $1$ on $U_3U_4, U_1U_4$.
+Same non-uniformity pattern.
+
+**Complete classification table:**
+
+| Refinement | Direct persistence | Cycle-faithful | Degree $\lambda$ | Reason |
+|---|---|---|---|---|
+| Subdivide $U_1$ | Yes | No | — | cycle image line misses $z$ |
+| Subdivide $U_2$ | Yes | No | — | cycle image line misses $z$ |
+| Subdivide all | Yes | Yes | $1/4$ | uniform diagonal loop |
+| Insert bridge | Yes | Yes | $1$ | preserved serial loop |
+
+---
+
 **Conjecture (Balanced cycle-fibre).**
 Let $z$ be a simple rational cycle in a finite oriented nerve $N$.
 Let $\rho: N' \to N$ be a refinement equipped with a chain pushforward $\rho_*$.

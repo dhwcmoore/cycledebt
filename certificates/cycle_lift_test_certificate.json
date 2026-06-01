@@ -25,7 +25,34 @@
         9,
         8
       ],
-      "failure_reason": "System forces lambda = 0; cycle-lift impossible."
+      "failure_reason": "System forces lambda = 0; cycle-lift impossible.",
+      "witness_certificate": {
+        "type": "cycle_lift_obstruction",
+        "im_PK_generator": [
+          "-1/2",
+          "-1",
+          "-1",
+          "1/2"
+        ],
+        "im_PK_generator_edges": [
+          "U1-U2",
+          "U2-U3",
+          "U3-U4",
+          "U1-U4"
+        ],
+        "ratio_im_gen_to_z": {
+          "U1-U2": "1/2",
+          "U2-U3": "1",
+          "U3-U4": "1",
+          "U1-U4": "1/2"
+        },
+        "ratios_uniform": false,
+        "rank_PK": 1,
+        "rank_PK_augmented": 2,
+        "z_is_in_im_PK": false,
+        "failure_reason": "System forces lambda = 0; cycle-lift impossible.",
+        "interpretation": "All cycles in N' push forward to multiples of im_PK_generator. Since the ratios im_PK_generator[e] / z[e] are not uniform, z is not in the image."
+      }
     },
     "Subdivide U2 \u2192 (U2a, U2b)": {
       "cycle_faithful": false,
@@ -38,7 +65,34 @@
         9,
         8
       ],
-      "failure_reason": "System forces lambda = 0; cycle-lift impossible."
+      "failure_reason": "System forces lambda = 0; cycle-lift impossible.",
+      "witness_certificate": {
+        "type": "cycle_lift_obstruction",
+        "im_PK_generator": [
+          "-1/2",
+          "-1/2",
+          "-1",
+          "1"
+        ],
+        "im_PK_generator_edges": [
+          "U1-U2",
+          "U2-U3",
+          "U3-U4",
+          "U1-U4"
+        ],
+        "ratio_im_gen_to_z": {
+          "U1-U2": "1/2",
+          "U2-U3": "1/2",
+          "U3-U4": "1",
+          "U1-U4": "1"
+        },
+        "ratios_uniform": false,
+        "rank_PK": 1,
+        "rank_PK_augmented": 2,
+        "z_is_in_im_PK": false,
+        "failure_reason": "System forces lambda = 0; cycle-lift impossible.",
+        "interpretation": "All cycles in N' push forward to multiples of im_PK_generator. Since the ratios im_PK_generator[e] / z[e] are not uniform, z is not in the image."
+      }
     },
     "Subdivide all regions": {
       "cycle_faithful": true,
@@ -96,7 +150,31 @@
         "U3a-U3b",
         "U4a-U4b"
       ],
-      "boundary_check_zero": true
+      "boundary_check_zero": true,
+      "witness_certificate": {
+        "type": "cycle_lift_witness",
+        "lambda": "1",
+        "z_prime_nonzero": {
+          "U1a-U2a": "-4",
+          "U2a-U3a": "-4",
+          "U3a-U4a": "-4",
+          "U1a-U4a": "4"
+        },
+        "pushforward_equals_lambda_z": {
+          "U1-U2": "-1",
+          "U2-U3": "-1",
+          "U3-U4": "-1",
+          "U1-U4": "1"
+        },
+        "im_PK_generator": [
+          "-1/4",
+          "-1/4",
+          "-1/4",
+          "1/4"
+        ],
+        "rank_PK": 1,
+        "dim_Z1_N_prime": 13
+      }
     },
     "Insert bridge between U1 and U2": {
       "cycle_faithful": true,
@@ -124,7 +202,32 @@
         "U3-U4",
         "U1-U4"
       ],
-      "boundary_check_zero": true
+      "boundary_check_zero": true,
+      "witness_certificate": {
+        "type": "cycle_lift_witness",
+        "lambda": "1",
+        "z_prime_nonzero": {
+          "U1-Bridge_U1_U2": "-1",
+          "Bridge_U1_U2-U2": "-1",
+          "U2-U3": "-1",
+          "U3-U4": "-1",
+          "U1-U4": "1"
+        },
+        "pushforward_equals_lambda_z": {
+          "U1-U2": "-1",
+          "U2-U3": "-1",
+          "U3-U4": "-1",
+          "U1-U4": "1"
+        },
+        "im_PK_generator": [
+          "-1",
+          "-1",
+          "-1",
+          "1"
+        ],
+        "rank_PK": 1,
+        "dim_Z1_N_prime": 1
+      }
     }
   }
 }
