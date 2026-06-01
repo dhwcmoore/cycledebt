@@ -1,0 +1,14 @@
+Object: actual_gluing_object_v1
+
+Classification: nontrivial_H1_obstruction
+
+Cocycle: true
+Coboundary: false
+
+Cycle pairing witness: -5
+
+Invariance tests: region renaming, orientation reversal, nonzero rational scaling, gauge perturbation, edge order permutation — all PASS
+
+Refinement tests: obstruction persists under tested refinements (subdivide U1, subdivide U2, subdivide all, insert bridge) with pairings -7/2, -4, -5/4, -5 respectively.
+
+Certificates and reports saved in the `certificates/` folder.
