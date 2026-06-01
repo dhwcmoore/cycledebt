@@ -162,27 +162,92 @@ Each nonzero pairing constitutes a proof, by the lemma above, that the transferr
 
 ---
 
-## 4. Scope of the proof
+## 4. Universal admissible refinement theorem
+
+The following theorem gives a general sufficient condition for persistence
+that subsumes the cycle-pairing argument.
+
+**Theorem (Persistence under admissible refinement).**
+Let $N$ be a finite oriented nerve and $r \in C^1(N;\mathbb Q)$ a cocycle.
+Suppose $z \in Z_1(N;\mathbb Q)$ with $\langle z, r \rangle \neq 0$.
+Let $\rho: N' \to N$ be a refinement equipped with maps
+$$
+\rho^*: C^1(N;\mathbb Q) \to C^1(N';\mathbb Q),
+\qquad
+\rho_*: C_1(N';\mathbb Q) \to C_1(N;\mathbb Q),
+$$
+satisfying the adjointness condition
+$$
+\langle z', \rho^* \alpha \rangle = \langle \rho_* z', \alpha \rangle
+$$
+for all $z' \in C_1(N';\mathbb Q)$ and $\alpha \in C^1(N;\mathbb Q)$.
+
+If there exists a refined cycle $z' \in Z_1(N';\mathbb Q)$ and a nonzero rational
+$\lambda \in \mathbb Q^\times$ such that
+$$
+\rho_* z' = \lambda z,
+$$
+then $[\rho^* r] \neq 0 \in H^1(N';\mathbb Q)$.
+
+**Proof.**
+Assume for contradiction that $\rho^* r = \delta'^0 b'$ for some $b' \in C^0(N';\mathbb Q)$.
+Since $z'$ is a cycle, $\partial' z' = 0$, so
+$$
+\langle z', \rho^* r \rangle = \langle z', \delta'^0 b' \rangle = \langle \partial' z', b' \rangle = 0.
+$$
+But by adjointness and the cycle-lift condition,
+$$
+\langle z', \rho^* r \rangle = \langle \rho_* z', r \rangle = \langle \lambda z, r \rangle = \lambda \langle z, r \rangle.
+$$
+Since $\lambda \neq 0$ and $\langle z, r \rangle \neq 0$, this is nonzero. Contradiction. $\square$
+
+### Which refinements satisfy the theorem hypotheses
+
+The adjointness condition holds automatically for all four refinements, because
+$\rho_*$ is defined as the transpose of $\rho^*$.  The cycle-lift condition
+$\rho_* z' = \lambda z$ holds for two of the four:
+
+| Refinement | $\dim C'^1$ | Cycle-lift | $\lambda$ | $\langle z', r' \rangle$ | Proof method |
+|---|---|---|---|---|---|
+| Subdivide $U_1$ | 7 | NO | — | $-7/2$ | Direct pairing |
+| Subdivide $U_2$ | 7 | NO | — | $-4$ | Direct pairing |
+| Subdivide all regions | 20 | **YES** | $1/4$ | $-5/4 = \lambda \cdot (-5)$ | **Theorem** |
+| Insert bridge $U_1$–$U_2$ | 5 | **YES** | $1$ | $-5 = \lambda \cdot (-5)$ | **Theorem** |
+
+For **subdivide all regions**: $\rho_* z' = \tfrac{1}{4} z$, so the theorem gives
+$\langle z', \rho^* r \rangle = \tfrac{1}{4} \cdot (-5) = -\tfrac{5}{4} \neq 0$.
+
+For **insert bridge**: $\rho_* z' = z$, so $\langle z', \rho^* r \rangle = 1 \cdot (-5) = -5 \neq 0$.
+
+For **subdivide $U_1$** and **subdivide $U_2$**: the cycle-lift condition is
+*impossible* for equal-distribution transfer on a single region.
+The flow-conservation equation at the junction vertex forces
+$\rho_*(z')[e_{\rm in}] = \tfrac{1}{2} \rho_*(z')[e_{\rm out}]$,
+which breaks proportionality with $z$ unless $\lambda = 0$.
+These two refinements are therefore proved by the direct cycle-pairing
+lemma applied in $N'$, not by this theorem.
+
+Verification: `admissible_refinement_theorem.py`.
+
+---
+
+## 5. Scope of the proof
 
 What is proved:
 
-> The residue $r = (1,1,1,-2)$ on the declared finite nerve represents a nonzero $H^1$ class. This class is preserved under the five declared presentation changes and persists under the four declared refinement maps with equal-distribution transfer.
+> The residue $r = (1,1,1,-2)$ on the declared finite nerve represents a nonzero $H^1$ class. This class is preserved under the five declared presentation changes and persists under the four declared refinement maps with equal-distribution transfer. For two of the four refinements (subdivide all, insert bridge), persistence follows from the Universal Admissible Refinement Theorem. For the remaining two (subdivide $U_1$, subdivide $U_2$), persistence is proved by the direct cycle-pairing lemma applied in the refined complex.
 
 What is not yet proved:
 
 > The obstruction persists under *all* admissible refinements.
 
-To establish the stronger statement, one would need to define a class of admissible refinements and prove that each one comes with a chain map $\rho_*: C_1(N') \to C_1(N)$ such that $\langle z', \rho^* r \rangle = \langle \rho_* z', r \rangle$, and find a refined cycle $z'$ whose pushforward is $z$. Then:
-
-$$
-\langle z', \rho^* r \rangle = \langle \rho_* z', r \rangle = \langle z, r \rangle = -5 \neq 0.
-$$
-
-That general theorem is not claimed here. The declared finite tests constitute evidence; the paper should state them as proved witnesses, not as proof of universality.
+A universal result requires identifying which refinements admit a nonzero
+cycle-lift, and proving the lift exists.  The present paper does not claim
+that theorem.  The declared finite tests constitute proved witnesses.
 
 ---
 
-## 5. Certificate files
+## 6. Certificate files
 
 All computations above are certified by the files in `certificates/`:
 
@@ -191,5 +256,6 @@ All computations above are certified by the files in `certificates/`:
 | `actual_gluing_object_v1_certificate.json` | Base classification and cycle witness |
 | `actual_gluing_object_v1_invariance_report.json` | Five invariance tests |
 | `actual_gluing_object_v1_refinement_test_report.json` | Four refinement tests with pairings |
+| `admissible_refinement_theorem_certificate.json` | Theorem verification: adjointness, cycle-lift, proof method per refinement |
 
 These files are frozen; see `MANIFEST.md` for the claim licensed by them.

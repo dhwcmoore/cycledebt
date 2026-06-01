@@ -1,0 +1,1316 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\Reg}{\mathrm{Reg}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\kerop}{\operatorname{ker}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Field}{\operatorname{Field}}
+\newcommand{\Ob}{\operatorname{Ob}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\kfield}{\mathbb{k}}
+\newcommand{\Cech}{\check{C}}
+\newcommand{\CechH}{\check{H}}
+
+\title{Finite Regional Residue Obstructions Under Gluing:\\
+Associator Fields, Seam Repair, and Computable Cohomology Witnesses}
+\author{Author omitted for review}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Local algebraic operations may be associative on every region while boundary-corrected seam products fail to associate after regional data are glued. This paper studies the finite datum produced by that failure before imposing a cohomological, spectral, or verification-theoretic classification on it. The primary object is an associator field: an assignment of a boundary-supported defect to each non-empty triple overlap of a finite regional cover.
+
+Regions are taken to form a finite distributive lattice. Algebraic data are assigned to regions by injective extension maps, a support-refining multiplication rule, and boundary corrections supported on pairwise overlaps. The first main theorem proves that the associator defect of a corrected triple product is forced onto the triple overlap. Thus gluing creates a diagnostic level between pairwise compatibility and global coherence: every single region may be internally associative, and every pairwise seam may be explicitly corrected, while the threefold composition still leaves a residue at the common seam.
+
+The paper then separates three questions that are often conflated. Detection asks where the associator field is non-zero. Repair asks whether it can be removed by admissible changes of pairwise boundary bookkeeping. Obstruction asks whether a persistent component remains after all such repairs. Ordinary \v{C}ech cohomology is recovered only under additional restriction, alternation, and coherence hypotheses. Spectral Hodge analysis is available when the defect field is scalar or finite-dimensional over an inner-product field.
+
+The final part of the paper gives a computable finite obstruction witness. A four-region seam residue over \(\Q\) is shown to be a cocycle but not a coboundary, hence to define a non-zero class in \(H^1\). The proof is given twice: by an explicit linear contradiction and by a non-zero cycle pairing. The same obstruction verdict is invariant under declared presentation changes and persists under four declared refinement witnesses. The resulting claim is deliberately scoped: the paper proves the stated finite obstruction and its tested refinement witnesses, while identifying the additional pushforward-pullback pairing theorem required for a universal refinement result.
+\end{abstract}
+
+\section{Introduction}
+
+Associativity is usually presented as an internal algebraic law. An algebra is associative if
+\[
+(ab)c = a(bc)
+\]
+for all elements. That formulation is correct, but it hides a boundary problem. If an algebraic operation is assembled from local data on overlapping regions, then there are two separate questions. First, does multiplication associate inside each region? Second, does multiplication continue to associate after local products have been glued across seams?
+
+The second question is not a restatement of the first. A gluing system may have associative algebras on every local region. It may also have explicit correction terms on every pairwise overlap. Nevertheless, threefold composition may depend on parenthesisation. Schematically, the defect has the form
+\[
+a \star (b \star c) - (a \star b) \star c.
+\]
+With types restored, this defect is not an interior failure of any one algebra. It is a residue of the gluing process itself.
+
+This distinction is familiar in computational form. A module may satisfy its local specification. Two modules may satisfy a pairwise interface contract. A third module may still expose an integration failure that was invisible to the pairwise checks. Likewise, three sensor regions may maintain interval estimates of a shared quantity. Each pairwise reconciliation may be well-defined, but the two histories of threefold reconciliation may disagree at the common seam. This paper does not reduce the mathematics to these applications. It uses them to make the boundary problem visible.
+
+The paper studies that residue directly. The point is not, at first, to produce a \v{C}ech class. The point is to identify the finite field of defects generated by boundary-corrected composition. For a cover \(\mathcal U=(U_i)_{i\in I}\), the datum has the form
+\[
+(i,j,k) \longmapsto \alpha_{ijk}.
+\]
+Here \(\alpha_{ijk}\) is the associator defect associated with the triple \((U_i,U_j,U_k)\). Under the support hypotheses stated below, this defect is supported on
+\[
+U_i\wedge U_j\wedge U_k.
+\]
+The failure is therefore localised, but it is not merely local. It is produced by comparing two histories of composition across a larger gluing pattern.
+
+This distinction is the organising idea of the paper. Gluing creates a diagnostic level between pairwise compatibility and global coherence. A system can pass all unary checks, since each \(A(U_i)\) is internally associative. It can pass all binary checks, since each pairwise overlap \(U_i\wedge U_j\) carries an explicit boundary correction. It can still fail a ternary check, since the two ways of composing across \(U_i,U_j,U_k\) need not agree. The associator field is the finite record of that third level.
+
+The construction is deliberately austere. It does not try to characterise every possible failure of algebraic descent. It does not begin from the full machinery of sheaves, cosheaves, factorisation algebras, or higher categories. It isolates a small finite setting in which the phenomenon can be seen without analytic overhead: a finite point-free system of regions, local algebras with support information, and boundary corrections living on pairwise overlaps. This restriction is methodological. It keeps the phenomenon visible.
+
+The new element of the present version is that the diagnostic separation is carried through to an explicit finite obstruction witness. The paper first builds the associator-field machinery, then shows how a seam-supported residue may be classified by exact rational cohomology. This matters because a non-zero residue is not automatically an obstruction. It may be removable by changing local representatives or pairwise bookkeeping. The finite classifier asks the decisive question:
+\[
+r\in \ker \delta^1
+\qquad\text{and}\qquad
+r\notin \im \delta^0?
+\]
+When both conditions hold, the residue defines a non-zero class
+\[
+0\neq [r]\in H^1.
+\]
+
+\subsection{Main claims}
+
+The paper establishes the following claims.
+
+\begin{enumerate}[label=(\arabic*)]
+\item \textbf{Localisation.} In a supported regional algebra with support-refining boundary corrections, the associator defect of a corrected triple product is supported on the triple overlap.
+
+\item \textbf{Associator field.} For a finite cover and a family of local inputs, the localised defects assemble into a finite field indexed by the non-empty triple overlaps of the nerve.
+
+\item \textbf{Repair before obstruction.} The first classification of the field is not cohomological. It is operational: which part of the field is removed by admissible changes of pairwise boundary bookkeeping?
+
+\item \textbf{Cohomology as a special case.} If a genuine overlap coefficient system with restriction maps is supplied, if an alternating realisation of the associator field is chosen, and if the realised field satisfies the relevant fourfold coherence condition, then the field determines a \v{C}ech-type obstruction class.
+
+\item \textbf{Finite residue obstruction.} In the four-region finite example of Sections \ref{sec:finite-classifier} and \ref{sec:actual-witness}, the seam residue \(r=(1,1,1,-2)\) over \(\Q\) is a cocycle but not a coboundary. Hence it represents a non-zero class in \(H^1\).
+
+\item \textbf{Witnessed persistence.} The obstruction verdict is invariant under the declared presentation changes and persists under four declared refinement witnesses. This is a proved finite statement about the displayed witnesses, not a universal theorem about all refinements.
+\end{enumerate}
+
+The order matters. The associator field comes first. Cohomological and spectral classifications enter only after the field has been constructed and its support behaviour understood. The finite obstruction witness then shows how one such classification can be made exact and reproducible.
+
+\subsection{Running example and reader's guide}
+
+A single example will recur informally before being computed in Section \ref{sec:interval-example}. Suppose several nodes maintain interval views of a shared state. Their overlaps record shared interfaces. Pairwise boundary corrections record reconciliation costs at those interfaces. The central question is not whether each node can multiply or update its own data associatively. Nor is it only whether every pair of nodes can reconcile. The question is whether the threefold history of reconciliation is independent of parenthesisation.
+
+This running example should not be confused with the general definition. It is an interpretive aid, not a premise of the theory. The formal theory below works with finite distributive lattices, supported algebras, and bilinear boundary corrections. The interval model merely shows why the definitions have the shape they do: support tracks where a contribution lives, boundary correction tracks pairwise seam bookkeeping, and the associator field records the residue left at a triple seam.
+
+\subsection{Relation to existing work}
+
+Mac Lane's coherence theorem shows that associativity constraints in a monoidal category behave coherently once the relevant associators are supplied as natural isomorphisms \cite{MacLane1963,MacLane1998}. The present paper studies a different problem. It asks how associators arise as defects when multiplication is glued from regional data.
+
+The local-to-global pattern resembles descent theory. Classical descent asks whether local objects and compatibility data determine a global object \cite{Giraud1971,Weibel1994}. Here the compatibility datum is not an isomorphism between pullbacks. It is a boundary-corrected multiplication. The first object of study is therefore not a descent datum, but the associator residue produced when corrected binary gluing is iterated.
+
+The paper is also adjacent to sheaf and cosheaf methods \cite{KashiwaraSchapira1990}. It remains below their full generality. Rather than assuming exact gluing axioms, it asks what algebraic residue appears when gluing fails to preserve associativity. In that sense, the paper occupies an intermediate level: more structured than an informal interface-failure analogy, but less general than a full descent or factorisation-algebra framework \cite{CostelloGwilliam2017}.
+
+\section{Region systems and covers}
+
+\begin{definition}[Region system]
+A region system is a finite distributive lattice
+\[
+(\Reg,\leq,\bot,\top,\vee,\wedge).
+\]
+The elements of \(\Reg\) are called regions. The join \(\vee\) is read as regional union, and the meet \(\wedge\) as overlap. No underlying point-set representation is assumed.
+\end{definition}
+
+\begin{definition}[Finite cover]
+Let \(R\in \Reg\). A finite family \(\mathcal U=(U_i)_{i\in I}\) is a cover of \(R\) if
+\[
+R=\bigvee_{i\in I}U_i.
+\]
+For every non-empty finite subset \(J\subseteq I\), write
+\[
+U_J=\bigwedge_{j\in J}U_j.
+\]
+For \(J=\{i_0,\ldots,i_n\}\), we also write \(U_{i_0\cdots i_n}\).
+\end{definition}
+
+\begin{definition}[Nerve]
+The nerve \(N(\mathcal U)\) is the finite simplicial complex whose \(n\)-simplices are the non-empty subsets \(J\subseteq I\) with \(|J|=n+1\) and
+\[
+U_J\neq \bot.
+\]
+Thus vertices are regions, edges are non-empty pairwise overlaps, and triangles are non-empty triple overlaps.
+\end{definition}
+
+\begin{remark}[Why the nerve is not yet the answer]
+The nerve records the incidence pattern of overlaps. It does not by itself say what lives on those overlaps. The associator field constructed below uses the nerve as an index shape, but its values come from the regional algebra and its boundary corrections.
+\end{remark}
+
+\begin{definition}[Ordered simplices]
+When an ordered tuple \((i_0,\ldots,i_n)\) is used, its entries are assumed to be pairwise distinct unless explicitly stated otherwise. Such a tuple represents an oriented simplex of the nerve whenever \(U_{i_0\cdots i_n}\neq \bot\).
+\end{definition}
+
+\section{Supported regional algebras}
+
+The localisation theorem needs a disciplined notion of support. The next definition supplies it. The algebras are not required to be unital, since extension by zero is one intended model.
+
+\begin{definition}[Supported regional algebra]
+Let \(k\) be a commutative ring. A supported regional algebra on \(\Reg\) consists of the following data.
+
+\begin{enumerate}[label=(\roman*)]
+\item For each region \(R\in \Reg\), a not-necessarily-unital associative \(k\)-algebra \(A(R)\).
+
+\item For each inclusion \(R\leq S\), an injective \(k\)-algebra homomorphism
+\[
+\iota_{RS}:A(R)\to A(S),
+\]
+not required to preserve units, satisfying
+\[
+\iota_{RR}=\mathrm{id},
+\qquad
+\iota_{ST}\circ \iota_{RS}=\iota_{RT}
+\quad (R\leq S\leq T).
+\]
+
+\item An intersection support-refinement rule: if \(x\in A(S)\) is supported on \(R\leq S\), and \(y\in A(S)\) is supported on \(T\leq S\), then \(xy\) is supported on \(R\wedge T\).
+\end{enumerate}
+
+Here an element \(x\in A(S)\) is supported on \(R\leq S\) when
+\[
+x\in \im(\iota_{RS}).
+\]
+Because \(\iota_{RS}\) is injective, such an element has a unique representative in \(A(R)\), denoted \(x\rvert_R\). No minimal support is assumed: an element may be supported on several regions, and \(x\rvert_R\) always refers to the representative relative to a specified supporting region \(R\), not to a smallest such region.
+\end{definition}
+
+\begin{remark}[Running example]
+In the interval reconciliation model of Section \ref{sec:interval-example}, the primary component records an ordinary interval value or width, while a square-zero annotation channel records seam cost. Support says where that seam cost lives. The point of the support rule is to prevent a boundary contribution produced at one overlap from being silently treated as an interior contribution somewhere else.
+\end{remark}
+
+\begin{remark}[Extension is not restriction]
+The maps \(\iota_{RS}\) go from smaller regions to larger regions. They are extension maps. The notation \(x\rvert_R\) is used only when \(x\) is already known to lie in the image of \(\iota_{RS}\). It is not a general restriction map \(A(S)\to A(R)\).
+\end{remark}
+
+\begin{lemma}[Supported multiplication representative]
+Let \(R,T\leq S\). If \(x\in A(S)\) is supported on \(R\), and \(y\in A(S)\) is supported on \(T\), then \(xy\) has a unique representative
+\[
+(xy)\rvert_{R\wedge T}\in A(R\wedge T).
+\]
+\end{lemma}
+
+\begin{proof}
+By the support-refinement rule, \(xy\) is supported on \(R\wedge T\). Hence \(xy\in \im(\iota_{R\wedge T,S})\). Since \(\iota_{R\wedge T,S}\) is injective, the representative is unique.
+\end{proof}
+
+\section{Boundary corrections and corrected products}
+
+A boundary correction records a contribution assigned to the seam where two regions are glued.
+
+\begin{definition}[Boundary correction]
+A boundary correction on a supported regional algebra is a family of \(k\)-bilinear maps
+\[
+\beta_{U,V}:A(U)\otimes_k A(V)\to A(U\wedge V)
+\]
+for ordered pairs of regions \((U,V)\).
+\end{definition}
+
+\begin{definition}[Support-refining boundary correction]
+A boundary correction \(\beta\) is support-refining if the following holds. Let \(X\leq U\) and \(Y\leq V\). If \(a\in A(U)\) is supported on \(X\), and \(b\in A(V)\) is supported on \(Y\), then \(\beta_{U,V}(a,b)\in A(U\wedge V)\) is supported on
+\[
+X\wedge Y\leq U\wedge V.
+\]
+\end{definition}
+
+\begin{remark}[Running example]
+For interval reconciliation, a boundary correction can be as simple as an on-off seam annotation. One may set
+\[
+\beta_{X,Y}(a,b)=\chi(X,Y)\pi(a)\pi(b)\varepsilon,
+\]
+where \(\chi(X,Y)=1\) when two interval views properly partially overlap and \(\chi(X,Y)=0\) otherwise. The general definition allows more than this scalar toy model, but the toy model explains why \(\beta\) is bilinear and why its value belongs to the overlap algebra.
+\end{remark}
+
+\begin{definition}[Raw overlap product]
+For \(a\in A(U)\) and \(b\in A(V)\), set \(S=U\vee V\). Extend both elements to \(S\), multiply there, and take the supported representative on \(U\wedge V\):
+\[
+m_{U,V}(a,b):=\bigl(\iota_{US}(a)\iota_{VS}(b)\bigr)\rvert_{U\wedge V}\in A(U\wedge V).
+\]
+This is well-defined by Lemma 3.4.
+\end{definition}
+
+\begin{definition}[Boundary-corrected product]
+For \(a\in A(U)\) and \(b\in A(V)\), define
+\[
+a\star_{U,V} b
+:=
+\iota_{U\wedge V,U\vee V}\bigl(m_{U,V}(a,b)+\beta_{U,V}(a,b)\bigr)
+\in A(U\vee V).
+\]
+\end{definition}
+
+\begin{remark}[Boundary interaction product]
+The product \(\star_{U,V}\) is a boundary interaction product. Its value lies in the ambient algebra \(A(U\vee V)\), but its support is contained in \(U\wedge V\). This is intentional. The paper isolates the seam contribution rather than modelling arbitrary independent interior multiplication on \(U\vee V\).
+\end{remark}
+
+\begin{lemma}[Support of the corrected product]
+For \(a\in A(U)\) and \(b\in A(V)\), the element
+\[
+a\star_{U,V}b\in A(U\vee V)
+\]
+is supported on \(U\wedge V\).
+\end{lemma}
+
+\begin{proof}
+Both \(m_{U,V}(a,b)\) and \(\beta_{U,V}(a,b)\) lie in \(A(U\wedge V)\). The corrected product is obtained by applying \(\iota_{U\wedge V,U\vee V}\) to their sum.
+\end{proof}
+
+\section{The associator defect}
+
+Let \(U,V,W\in \Reg\), and let
+\[
+a\in A(U),\qquad b\in A(V),\qquad c\in A(W).
+\]
+There are two corrected ways to multiply these three elements:
+\[
+(a\star_{U,V}b)\star_{U\vee V,W}c,
+\qquad
+ a\star_{U,V\vee W}(b\star_{V,W}c).
+\]
+Both lie in \(A(U\vee V\vee W)\).
+
+\begin{definition}[Associator defect]
+The associator defect of \(a,b,c\) over \((U,V,W)\) is
+\[
+\alpha_{U,V,W}(a,b,c)
+:=
+ a\star_{U,V\vee W}(b\star_{V,W}c)
+-
+ (a\star_{U,V}b)\star_{U\vee V,W}c
+\in A(U\vee V\vee W).
+\]
+This is the right-minus-left convention used throughout the paper.
+\end{definition}
+
+\begin{lemma}[Extension preserves support]
+Let \(R\leq T\leq S\). If \(x\in A(T)\) is supported on \(R\), then \(\iota_{TS}(x)\in A(S)\) is supported on \(R\).
+\end{lemma}
+
+\begin{proof}
+Since \(x\) is supported on \(R\), there is \(x_R\in A(R)\) such that \(x=\iota_{RT}(x_R)\). Hence
+\[
+\iota_{TS}(x)=\iota_{TS}\iota_{RT}(x_R)=\iota_{RS}(x_R),
+\]
+so \(\iota_{TS}(x)\in \im(\iota_{RS})\).
+\end{proof}
+
+\begin{theorem}[Triple-overlap localisation]\label{thm:triple-localisation}
+Assume that \(\beta\) is support-refining. Then
+\[
+\alpha_{U,V,W}(a,b,c)
+\]
+is supported on
+\[
+U\wedge V\wedge W.
+\]
+Equivalently, there is a unique element
+\[
+\widetilde\alpha_{U,V,W}(a,b,c)\in A(U\wedge V\wedge W)
+\]
+such that
+\[
+\iota_{U\wedge V\wedge W,U\vee V\vee W}\bigl(\widetilde\alpha_{U,V,W}(a,b,c)\bigr)
+=
+\alpha_{U,V,W}(a,b,c).
+\]
+\end{theorem}
+
+\begin{proof}
+Set \(S=U\vee V\vee W\). Consider first the left-parenthesised product
+\[
+(a\star_{U,V}b)\star_{U\vee V,W}c.
+\]
+By Lemma 4.7, the inner product \(a\star_{U,V}b\) is supported on \(U\wedge V\) inside \(A(U\vee V)\). By Lemma 5.2, after extension to \(S\) it remains supported on \(U\wedge V\). The element \(c\), extended from \(W\) to \(S\), is supported on \(W\). By the intersection support-refinement rule, the raw outer product of these two elements is supported on
+\[
+(U\wedge V)\wedge W=U\wedge V\wedge W.
+\]
+The outer correction \(\beta_{U\vee V,W}(a\star_{U,V}b,c)\) is supported on \((U\wedge V)\wedge W=U\wedge V\wedge W\) as well, by support refinement for \(\beta\) applied to the first argument supported on \(U\wedge V\) and the second supported on \(W\). Hence the left-parenthesised product is supported on \(U\wedge V\wedge W\).
+
+The right-parenthesised product
+\[
+a\star_{U,V\vee W}(b\star_{V,W}c)
+\]
+is treated by the same argument with the roles of the union terms exchanged. By Lemma 4.7, the inner product \(b\star_{V,W}c\) is supported on \(V\wedge W\), and by Lemma 5.2 it remains so after extension to \(S\). The element \(a\) is supported on \(U\). The raw outer product is therefore supported on \(U\wedge (V\wedge W)\), and the outer correction \(\beta_{U,V\vee W}(a,b\star_{V,W}c)\) is supported on the same overlap by support refinement. Since the meet is associative,
+\[
+U\wedge (V\wedge W)=U\wedge V\wedge W,
+\]
+so the right-parenthesised product is supported on \(U\wedge V\wedge W\) as well.
+
+Both parenthesised products are therefore supported on \(U\wedge V\wedge W\), and so is their difference. The uniqueness of the representative \(\widetilde\alpha_{U,V,W}(a,b,c)\) follows from injectivity of the extension map \(\iota_{U\wedge V\wedge W,S}\).
+\end{proof}
+
+\begin{remark}[Localisation, not mere failure]
+Theorem \ref{thm:triple-localisation} says more than that associativity can fail. It says that, under explicit support discipline, the failure is forced onto the common seam of the three regions. The defect is locally supported but globally induced.
+\end{remark}
+
+\section{Associator fields}
+
+We now pass from one triple to a finite cover.
+
+\begin{definition}[Input family]
+Let \(\mathcal U=(U_i)_{i\in I}\) be a finite cover. An input family on \(\mathcal U\) is a choice
+\[
+a=(a_i)_{i\in I},
+\qquad
+ a_i\in A(U_i).
+\]
+\end{definition}
+
+\begin{definition}[Associator field]
+Let \(\mathcal U=(U_i)_{i\in I}\) be a finite cover and let \(a=(a_i)_{i\in I}\) be an input family. The associator field of \(a\) is the assignment
+\[
+\mathcal A_a:(i,j,k)\longmapsto
+\widetilde\alpha_{U_i,U_j,U_k}(a_i,a_j,a_k)
+\in A(U_i\wedge U_j\wedge U_k)
+\]
+for ordered triples of pairwise distinct indices with \(U_i\wedge U_j\wedge U_k\neq \bot\).
+\end{definition}
+
+\begin{remark}[The field is ordered, not alternating]
+No antisymmetry in \((i,j,k)\) is assumed. The field is ordered because the corrected product need not be symmetric in its inputs, so in general
+\[
+\mathcal A_a(i,j,k)\neq -\mathcal A_a(j,i,k).
+\]
+This matters later: passing to a \v{C}ech cochain requires an explicit alternation hypothesis, rather than following automatically.
+\end{remark}
+
+\begin{remark}[Field before class]
+The associator field is not automatically a cocycle, a cohomology class, or a harmonic form. It is the finite datum produced by gluing. Further structures may classify it, but they do not constitute it.
+\end{remark}
+
+The field has three primitive features.
+
+\begin{enumerate}[label=(\roman*)]
+\item \textbf{Incidence:} it is defined only where the triple overlap exists.
+\item \textbf{Support:} each value lives on the corresponding triple overlap.
+\item \textbf{History:} each value compares two parenthesised histories of composition.
+\end{enumerate}
+
+This gives the first conceptual separation:
+\[
+\text{interior validity}\neq \text{pairwise compatibility}\neq \text{triple coherence}.
+\]
+Interior validity means that each \(A(U_i)\) is associative. Pairwise compatibility means that each seam \(U_i\wedge U_j\) carries a specified correction. Triple coherence means that the corrections do not leave an associator residue on \(U_i\wedge U_j\wedge U_k\).
+
+\section{Detection, repair, obstruction}
+
+The associator field invites three different questions. They should be kept separate.
+
+\subsection{Detection}
+
+Detection asks whether and where the field is non-zero:
+\[
+\mathcal A_a(i,j,k)\neq 0.
+\]
+This is the most primitive diagnostic. It identifies triple seams at which pairwise-corrected composition still depends on parenthesisation.
+
+\subsection{Repair}
+
+Repair asks whether the defect can be removed by changing pairwise boundary bookkeeping.
+
+\begin{definition}[Boundary gauge, informal finite version]
+A boundary gauge is an admissible change
+\[
+\beta_{U,V}\longmapsto \beta_{U,V}+\Theta_{U,V},
+\]
+where each
+\[
+\Theta_{U,V}:A(U)\otimes_k A(V)\to A(U\wedge V)
+\]
+is bilinear and support-refining.
+\end{definition}
+
+\begin{definition}[Admissible gauge in the first-order regime]
+In the first-order boundary regime of Section \ref{sec:first-order}, a gauge \(\Theta\) is admissible if each \(\Theta_{U,V}\) is bilinear and support-refining, its outputs lie in the relevant boundary ideal after extension to the ambient region, and it vanishes whenever either argument lies in the relevant boundary ideal. The informal use of admissibility above is made precise by this condition once the first-order regime has been fixed.
+\end{definition}
+
+The word admissible is doing real work. A repair is not an arbitrary assignment to triple overlaps. It must be induced by changes at pairwise seams. Thus repair is a constrained problem: can pairwise changes cancel a triple-seam field?
+
+In a linearised or first-order regime, boundary gauges determine a variation map
+\[
+D:G^1\to \Field^2,
+\]
+from admissible pairwise gauges to associator fields. Here \(G^1\) denotes the \(k\)-module of admissible pairwise gauge families \((\Theta_{ij})\), and \(\Field^2\) denotes the \(k\)-module of triple-indexed assignments
+\[
+F_{ijk}\in A(U_i\wedge U_j\wedge U_k),
+\]
+both for the fixed cover and input family under discussion. A field \(\mathcal A\) is repairable when
+\[
+\mathcal A\in \im D.
+\]
+
+\begin{definition}[Repair quotient]
+In a fixed first-order regime with variation map \(D:G^1\to \Field^2\), define the repair quotient
+\[
+\Ob_D:=\Field^2/\im D.
+\]
+The class of \(\mathcal A\) in \(\Ob_D\) records the part of the associator field that is not removed by admissible pairwise boundary gauges.
+\end{definition}
+
+\begin{remark}[Why this is not yet \v{C}ech cohomology]
+The operator \(D\) need not be the ordinary \v{C}ech coboundary. It is determined by how the corrected product is parenthesised and by which boundary gauges are admissible. Ordinary \v{C}ech cohomology appears only when \(D\) can be identified with a \v{C}ech differential in a specified coefficient system.
+\end{remark}
+
+\subsection{Obstruction}
+
+Obstruction is the modal status of a defect after repair has been attempted. A non-zero value
+\[
+\mathcal A_a(i,j,k)\neq 0
+\]
+is not yet an obstruction. It may be removable by a change of pairwise bookkeeping. It becomes obstruction-like only when its class in the repair quotient is non-zero:
+\[
+[\mathcal A_a]_D\neq 0.
+\]
+Thus obstruction is not the first object. It is what remains when admissible repairs fail.
+
+\section{First-order boundary variation}\label{sec:first-order}
+
+This section records the finite first-order shape of repair. It is deliberately stated as a linearised calculation rather than as a universal theorem about all boundary-corrected products.
+
+\begin{definition}[First-order boundary regime]
+A boundary-corrected regional algebra is first-order if, for every region \(S\), there is a two-sided \(k\)-submodule ideal \(B(S)\subseteq A(S)\), called the boundary ideal, such that:
+
+\begin{enumerate}[label=(\roman*)]
+\item for every pair \(U,V\) and all inputs \(a,b\), the extended correction \(\iota_{U\wedge V,U\vee V}(\beta_{U,V}(a,b))\) and the extended gauge \(\iota_{U\wedge V,U\vee V}(\Theta_{U,V}(a,b))\) lie in \(B(U\vee V)\);
+\item \(B(S)^2=0\);
+\item multiplication by ordinary elements sends boundary elements to boundary elements;
+\item extension maps preserve the boundary ideals;
+\item for every pair \(U,V\), the maps \(\beta_{U,V}\) and every admissible gauge \(\Theta_{U,V}\) factor through
+\[
+(A(U)/B(U))\otimes_k(A(V)/B(V)),
+\]
+equivalently they vanish whenever either input lies in the relevant boundary ideal.
+\end{enumerate}
+\end{definition}
+
+In such a regime, products of two newly inserted boundary corrections vanish. The effect of changing \(\beta\) by a gauge \(\Theta\) is therefore linear to first order.
+
+\begin{remark}[Running example]
+The dual-number model \(k[\varepsilon]/(\varepsilon^2)\) is the simplest first-order regime. The ordinary channel is the coefficient of \(1\). The boundary channel is the coefficient of \(\varepsilon\). Since \(\varepsilon^2=0\), two newly inserted reconciliation annotations do not multiply into a second-order ordinary effect.
+\end{remark}
+
+\begin{proposition}[Four-term first-order variation]
+Let \(A\) be a first-order boundary regime, let \(a\in A(U)\), \(b\in A(V)\), \(c\in A(W)\), write \(\Lambda=U\wedge V\wedge W\), and let \(m_{X,Y}\) denote the uncorrected raw overlap product. If the boundary correction \(\beta\) is changed by an admissible first-order gauge \(\Theta\), then the associator defect, with the right-minus-left convention, changes by \(D\Theta_{U,V,W}(a,b,c)\), the unique element of \(A(\Lambda)\) given by
+\begin{align*}
+D\Theta_{U,V,W}(a,b,c)
+={}&
+\Bigl[\Theta_{U,V\vee W}\bigl(a,\iota_{V\wedge W,V\vee W}(m_{V,W}(b,c))\bigr)\Bigr]\rvert_\Lambda \\
+&+m_{U,V\wedge W}\bigl(a,\Theta_{V,W}(b,c)\bigr) \\
+&-\Bigl[\Theta_{U\vee V,W}\bigl(\iota_{U\wedge V,U\vee V}(m_{U,V}(a,b)),c\bigr)\Bigr]\rvert_\Lambda \\
+&-m_{U\wedge V,W}\bigl(\Theta_{U,V}(a,b),c\bigr).
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+Expand the two parenthesised products after replacing \(\beta\) by \(\beta+\Theta\). Because the regime is first-order, every term carrying two newly inserted boundary corrections vanishes, and the admissible gauge maps ignore arguments that are already boundary elements. Hence the variation is linear in \(\Theta\).
+
+The right-parenthesised product contributes two first-order terms: the outer gauge evaluated on the raw inner product, after the inner product is extended from \(V\wedge W\) to \(V\vee W\), and the raw outer product evaluated on the inner gauge. The first term initially lands in a larger overlap algebra and is reduced to \(\Lambda\) by \(\rvert_\Lambda\). These are the first two displayed terms.
+
+The left-parenthesised product contributes the corresponding two terms with negative sign, because the associator defect is right-minus-left. Every displayed map has a determined source and target. The bracketed terms require the support witnesses that identify their outputs with elements supported on \(\Lambda\). With those witnesses, support refinement places every displayed term on \(\Lambda\), and injectivity of the extension maps gives the stated representatives in \(A(\Lambda)\).
+\end{proof}
+
+\begin{remark}[The warning hidden in the formula]
+The four-term expression is the native repair operator for this parenthesised gluing problem. It is not automatically the ordinary three-face \v{C}ech formula. To obtain ordinary \v{C}ech cohomology, one must impose additional identifications that replace the mixed union terms by the corresponding face restrictions in a genuine coefficient system.
+\end{remark}
+
+\section{A first-order interval example}\label{sec:interval-example}
+
+This section gives a concrete scalar instance of the first-order calculation. It first records a scalar dual-number seam model and then specialises that model to interval reconciliation.
+
+Let all local algebras be the dual-number algebra
+\[
+D=k[\varepsilon]/(\varepsilon^2).
+\]
+Let the boundary ideal be \(k\varepsilon\). Products of two boundary corrections vanish. For this calculation, assume that all extension maps are identities and that \(U,V,W\) have non-empty triple overlap. This is a scalar coefficient reduction of the regional theory, not a faithful model of minimal support. With all extension maps taken as identities, every element is supported on every region, so the calculation computes the seam coefficients while suppressing the proof-carrying support representatives of the general theory.
+
+For constants \(\lambda_{P,Q}\in k\), define
+\[
+\beta_{P,Q}(x,y)=\lambda_{P,Q}\pi(x)\pi(y)\varepsilon,
+\]
+where
+\[
+\pi(x_0+x_1\varepsilon)=x_0.
+\]
+Thus the correction depends only on the primary channel and vanishes if either input is purely boundary. For
+\[
+a=a_0+a_1\varepsilon,
+\qquad
+b=b_0+b_1\varepsilon,
+\qquad
+c=c_0+c_1\varepsilon,
+\]
+a direct expansion gives
+\[
+\widetilde\alpha_{U,V,W}(a,b,c)=\Delta_{U,V,W}a_0b_0c_0\varepsilon,
+\]
+where
+\[
+\Delta_{U,V,W}
+=
+\lambda_{V,W}-\lambda_{U\vee V,W}+\lambda_{U,V\vee W}-\lambda_{U,V}.
+\]
+This is the native first-order boundary expression for the parenthesised gluing problem. If this expression is induced by an admissible pairwise gauge, the defect is repairable. If no admissible gauge induces it, the defect persists in the repair quotient.
+
+\begin{example}[Annotation residue of interval reconciliation]
+We instantiate the model as a distributed system whose nodes maintain interval estimates of a shared state, for instance sensor ranges, clock-synchronisation windows, or bounding boxes. The primary channel of \(D=k[\varepsilon]/(\varepsilon^2)\) carries an interval width, and the boundary ideal \(k\varepsilon\) records the square-zero reconciliation cost incurred whenever two regions must actively reconcile shared state.
+
+For regions presented as intervals, define the reconciliation indicator
+\[
+\chi(X,Y)=
+\begin{cases}
+1, & X\cap Y\neq \varnothing\text{ and neither }X\subseteq Y\text{ nor }Y\subseteq X,\\
+0, & \text{otherwise.}
+\end{cases}
+\]
+and take
+\[
+\beta_{X,Y}(a,b)=\chi(X,Y)\pi(a)\pi(b)\varepsilon.
+\]
+This is the scalar first-order seam model with \(\lambda_{X,Y}=\chi(X,Y)\).
+
+Consider three nodes holding interval projections of one variable, with local views
+\[
+U=[0,4],
+\qquad
+V=[2,6],
+\qquad
+W=[4,8].
+\]
+The pairwise interfaces are
+\[
+U\wedge V=[2,4],
+\qquad
+V\wedge W=[4,6],
+\qquad
+U\wedge W=\{4\},
+\]
+and the triple consensus seam is
+\[
+U\wedge V\wedge W=\{4\}.
+\]
+Evaluating the field on the constant weights \(a=b=c=1\), the four binary gluing sites give
+\[
+\chi(U,V)=1,
+\quad
+\chi(V,W)=1,
+\quad
+\chi(U\vee V,W)=1,
+\quad
+\chi(U,V\vee W)=1.
+\]
+Hence
+\[
+\widetilde\alpha_{U,V,W}(1,1,1)
+=(1-1+1-1)\varepsilon=0.
+\]
+In this configuration, both parenthesisations incur the same first-order reconciliation residue, and the associator field vanishes.
+
+Now reposition the third node so that its projection falls inside the combined span of the first two nodes while still crossing their interface:
+\[
+U=[0,4],
+\qquad
+V=[2,6],
+\qquad
+W=[1,5].
+\]
+Then \(W\subseteq U\vee V=[0,6]\), but \(W\) is not contained in \(U\) or \(V\) individually. The indicators are
+\[
+\chi(U,V)=1,
+\quad
+\chi(V,W)=1,
+\quad
+\chi(U,V\vee W)=1,
+\quad
+\chi(U\vee V,W)=0.
+\]
+The common triple seam is
+\[
+U\wedge V\wedge W=[2,4].
+\]
+Therefore
+\[
+\widetilde\alpha_{U,V,W}(1,1,1)
+=(1-0+1-1)\varepsilon
+=\varepsilon\neq 0.
+\]
+Thus the non-zero residue is not produced by an interior failure of any local algebra. Nor is it produced by an empty or degenerate overlap. It is produced at the triple seam \([2,4]\), where two parenthesised histories of interval reconciliation disagree.
+\end{example}
+
+The lesson is precise: pairwise reconciliation does not by itself guarantee triple coherence. The defect appears exactly when a region is absorbed by a union while still crossing the interface between the union's components.
+
+\section{When the field becomes \v{C}ech data}\label{sec:cech-data}
+
+We now state the additional structure under which the associator field may be interpreted cohomologically. This is a specialisation, not the starting point.
+
+\begin{definition}[Overlap coefficient system]
+Let \(\mathcal U=(U_i)_{i\in I}\) be a finite cover. An overlap coefficient system assigns an abelian group \(E(U_J)\) to each non-empty overlap \(U_J\), together with restriction maps
+\[
+\rho_{KJ}:E(U_K)\to E(U_J)
+\qquad(K\subseteq J),
+\]
+satisfying
+\[
+\rho_{JJ}=\mathrm{id},
+\qquad
+\rho_{JL}\circ \rho_{KJ}=\rho_{KL}
+\quad (K\subseteq J\subseteq L).
+\]
+\end{definition}
+
+\begin{remark}[Do not confuse the two variances]
+The algebraic assignment \(A\) has extension maps from smaller regions to larger regions. A \v{C}ech coefficient system has restriction maps from larger overlaps to smaller overlaps. These are different structures. One may take \(E(U_J)=A(U_J)\) only if suitable restriction maps have actually been supplied.
+\end{remark}
+
+\begin{definition}[\v{C}ech cochains on the nerve]
+Let \(E\) be an overlap coefficient system on \(\mathcal U\). For \(n\geq 0\), define \(\Cech^n(\mathcal U;E)\) to be the abelian group of alternating assignments
+\[
+c_{i_0\cdots i_n}\in E(U_{i_0\cdots i_n})
+\]
+for ordered \((n+1)\)-tuples of pairwise distinct indices with \(U_{i_0\cdots i_n}\neq \bot\). The coboundary
+\[
+\delta:\Cech^n(\mathcal U;E)\to \Cech^{n+1}(\mathcal U;E)
+\]
+is given by
+\[
+(\delta c)_{i_0\cdots i_{n+1}}
+=
+\sum_{r=0}^{n+1}(-1)^r
+\rho_{I\setminus\{i_r\},I}
+\bigl(c_{i_0\cdots \widehat{i_r}\cdots i_{n+1}}\bigr),
+\]
+where \(I=\{i_0,\ldots,i_{n+1}\}\).
+\end{definition}
+
+\begin{definition}[Coefficient realisation of the associator field]
+A coefficient realisation of the associator field is a family of maps
+\[
+\lambda_J:A(U_J)\to E(U_J)
+\]
+for non-empty overlaps. No restriction structure on \(A\) is assumed; the restriction structure needed for \v{C}ech theory is carried by \(E\). Given an input family \(a\), it produces the ordered assignment
+\[
+(\lambda\mathcal A_a)_{ijk}:=\lambda_{ijk}\bigl(\mathcal A_a(i,j,k)\bigr)
+\in E(U_{ijk})
+\]
+on ordered triples of pairwise distinct indices with \(U_{ijk}\neq \bot\).
+\end{definition}
+
+\begin{definition}[Alternating coefficient realisation]
+A coefficient realisation \(\lambda\) is alternating for the input family \(a\) if the ordered assignment satisfies
+\[
+(\lambda\mathcal A_a)_{i_{\sigma(0)}i_{\sigma(1)}i_{\sigma(2)}}
+=
+\operatorname{sgn}(\sigma)(\lambda\mathcal A_a)_{i_0i_1i_2}
+\]
+for every permutation \(\sigma\) of \(\{0,1,2\}\). In that case \(\lambda\mathcal A_a\in \Cech^2(\mathcal U;E)\).
+\end{definition}
+
+\begin{definition}[Fourfold coherence]
+The realised associator field \(\lambda\mathcal A_a\) is fourfold coherent if
+\[
+\delta(\lambda\mathcal A_a)=0
+\]
+on every non-empty quadruple overlap.
+\end{definition}
+
+\begin{proposition}[\v{C}ech class under extra hypotheses]
+If an overlap coefficient system \(E\), a coefficient realisation \(\lambda\) that is alternating for \(a\), and fourfold coherence are given, then the realised associator field defines a class
+\[
+[\lambda\mathcal A_a]\in \CechH^2(\mathcal U;E).
+\]
+\end{proposition}
+
+\begin{proof}
+Since \(\lambda\) is alternating for \(a\), the ordered assignment \(\lambda\mathcal A_a\) is a genuine \(2\)-cochain in \(\Cech^2(\mathcal U;E)\). Fourfold coherence says that its \v{C}ech coboundary vanishes. Hence it is a cocycle, and therefore determines a cohomology class.
+\end{proof}
+
+\begin{remark}[What the proposition does not say]
+The proposition does not say that every associator field is automatically a \v{C}ech cocycle. It says that a realised associator field becomes one after the correct restriction structure, alternation convention, and fourfold coherence condition have been supplied.
+\end{remark}
+
+\section{A finite residue classifier}\label{sec:finite-classifier}
+
+The preceding sections concern associator fields on triple seams. This section isolates a related but lower-degree question: once a finite seam residue has been produced, how do we decide whether it is removable or genuinely obstructive?
+
+The answer is ordinary finite cohomology over an exact coefficient field. The important point is conceptual, not technical. A non-zero residue is not yet an obstruction. It becomes an obstruction only when it is closed and not exact.
+
+Let
+\[
+C^0\xrightarrow{\delta^0}C^1\xrightarrow{\delta^1}C^2
+\]
+be a finite cochain complex over \(\Q\). A degree-one residue is an element \(r\in C^1\). It has three possible statuses.
+
+\begin{enumerate}[label=(\arabic*)]
+\item If \(\delta^1r\neq 0\), the residue is a coherence failure. It is not a degree-one obstruction class.
+\item If \(\delta^1r=0\) and there exists \(b\in C^0\) with \(\delta^0b=r\), the residue is removable by a change of local representatives.
+\item If \(\delta^1r=0\) and no such \(b\) exists, the residue represents a non-zero class in \(H^1\).
+\end{enumerate}
+
+\begin{theorem}[Soundness of the finite residue classifier]\label{thm:classifier-soundness}
+Let
+\[
+C^0\xrightarrow{\delta^0}C^1\xrightarrow{\delta^1}C^2
+\]
+be a finite cochain complex over \(\Q\). For \(r\in C^1\), the following are equivalent:
+\[
+0\neq [r]\in H^1
+\]
+and
+\[
+\delta^1r=0
+\qquad\text{and}\qquad
+r\notin \im\delta^0.
+\]
+\end{theorem}
+
+\begin{proof}
+By definition,
+\[
+H^1=\ker \delta^1/\im\delta^0.
+\]
+The class \([r]\) is defined precisely when \(r\in \ker\delta^1\), equivalently \(\delta^1r=0\). That class is zero precisely when \(r\in \im\delta^0\). Therefore \([r]\neq 0\) precisely when \(\delta^1r=0\) and \(r\notin\im\delta^0\).
+\end{proof}
+
+\begin{lemma}[Cycle-pairing certificate]\label{lem:cycle-pairing}
+Let \(C_1\) be the chain group dual to \(C^1\), let \(\partial:C_1\to C_0\) be the boundary map dual to \(\delta^0\), and let \(z\in C_1\) be a cycle, so \(\partial z=0\). If
+\[
+\langle z,r\rangle\neq 0,
+\]
+then \(r\notin \im\delta^0\).
+\end{lemma}
+
+\begin{proof}
+Assume for contradiction that \(r=\delta^0b\) for some \(b\in C^0\). Then
+\[
+\langle z,r\rangle
+=
+\langle z,\delta^0b\rangle
+=
+\langle \partial z,b\rangle
+=
+\langle 0,b\rangle
+=0.
+\]
+This contradicts \(\langle z,r\rangle\neq 0\). Hence \(r\notin \im\delta^0\).
+\end{proof}
+
+The cycle-pairing lemma is useful because it gives a small certificate. One does not need to trust a solver's failed linear-system report if one exhibits an explicit cycle whose pairing with the residue is non-zero.
+
+\section{The actual finite obstruction witness}\label{sec:actual-witness}
+
+We now give the finite object that has been checked computationally and proved by hand.
+
+Let the finite nerve have four vertices
+\[
+U_1,U_2,U_3,U_4
+\]
+and four oriented edges
+\[
+U_1U_2,
+\quad
+U_2U_3,
+\quad
+U_3U_4,
+\quad
+U_1U_4.
+\]
+There are no two-simplices. Thus
+\[
+C^0=\Q^4,
+\qquad
+C^1=\Q^4,
+\qquad
+C^2=0.
+\]
+Consider the residue
+\[
+r=(1,1,1,-2)\in C^1.
+\]
+
+With the displayed ordering of vertices and edges, the coboundary matrix is
+\[
+\delta^0=
+\begin{pmatrix}
+-1&1&0&0\\
+0&-1&1&0\\
+0&0&-1&1\\
+-1&0&0&1
+\end{pmatrix}.
+\]
+For \(b=(b_1,b_2,b_3,b_4)\), this says
+\[
+\delta^0b=(b_2-b_1,b_3-b_2,b_4-b_3,b_4-b_1).
+\]
+
+\begin{proposition}[Non-removability of the seam residue]\label{prop:nonremovable}
+The residue
+\[
+r=(1,1,1,-2)
+\]
+determines a non-zero class in \(H^1\).
+\end{proposition}
+
+\begin{proof}
+Since \(C^2=0\), we have \(\delta^1=0\), hence
+\[
+\delta^1r=0.
+\]
+It remains to show that \(r\notin \im\delta^0\). Suppose, for contradiction, that \(r=\delta^0b\) for some \(b=(b_1,b_2,b_3,b_4)\). Then
+\[
+b_2-b_1=1,
+\qquad
+b_3-b_2=1,
+\qquad
+b_4-b_3=1,
+\]
+so
+\[
+b_4-b_1
+=(b_4-b_3)+(b_3-b_2)+(b_2-b_1)
+=3.
+\]
+But the fourth component of \(\delta^0b=r\) requires
+\[
+b_4-b_1=-2.
+\]
+This is impossible. Therefore \(r\notin \im\delta^0\). By Theorem \ref{thm:classifier-soundness},
+\[
+0\neq [r]\in H^1.
+\]
+\end{proof}
+
+The same conclusion is certified by a cycle pairing. Let
+\[
+z=(-1,-1,-1,1)\in C_1.
+\]
+A direct calculation gives
+\[
+\partial z=0.
+\]
+The pairing with the residue is
+\[
+\langle z,r\rangle
+=(-1)(1)+(-1)(1)+(-1)(1)+(1)(-2)
+=-5\neq 0.
+\]
+By Lemma \ref{lem:cycle-pairing}, \(r\) is not a coboundary.
+
+\begin{corollary}[Two independent certificates]
+The non-zero class \([r]\in H^1\) is certified both by the inconsistent linear system \(\delta^0b=r\) and by the non-zero cycle pairing \(\langle z,r\rangle=-5\).
+\end{corollary}
+
+\section{Presentation invariance and refinement witnesses}\label{sec:invariance-refinement}
+
+The finite obstruction should not depend on cosmetic presentation choices. It should also not disappear under the declared refinements. This section states exactly what is proved.
+
+\subsection{Presentation invariance}
+
+The following changes preserve the obstruction verdict.
+
+\begin{enumerate}[label=(\arabic*)]
+\item Region renaming.
+\item Edge orientation reversal, with the corresponding sign change.
+\item Non-zero rational scaling of the residue.
+\item Gauge perturbation by an exact coboundary.
+\item Edge ordering permutation.
+\end{enumerate}
+
+The proof is standard. Region renaming, edge ordering, and orientation reversal are invertible changes of basis on the finite cochain complex. They induce isomorphic cohomology groups. Non-zero rational scaling preserves non-zeroness of the class. Gauge perturbation sends
+\[
+r\longmapsto r+\delta^0b,
+\]
+and therefore
+\[
+[r+\delta^0b]=[r].
+\]
+
+\begin{proposition}[Declared presentation invariance]
+For the finite object of Section \ref{sec:actual-witness}, the obstruction verdict
+\[
+0\neq [r]\in H^1
+\]
+is invariant under the five declared presentation transformations above.
+\end{proposition}
+
+\begin{proof}
+The first, second, and fifth transformations are invertible changes of basis on \(C^0\) and \(C^1\) that commute with the displayed coboundary after transport of structure. Hence they preserve membership in \(\ker\delta^1\) and \(\im\delta^0\). Non-zero scaling multiplies \([r]\) by an element of \(\Q^\times\), so it cannot turn a non-zero class into zero. Finally, exact gauge perturbation does not change the cohomology class at all. Therefore the obstruction verdict is preserved in each case.
+\end{proof}
+
+\subsection{Refinement witnesses}
+
+Refinement persistence is a more delicate claim. The present paper proves persistence for the declared refinement witnesses. It does not claim persistence under all possible refinements.
+
+Let
+\[
+\rho^*:C^1(N;\Q)\to C^1(N';\Q)
+\]
+be one of the declared transfer maps to a refined nerve, and set
+\[
+r'=\rho^*r.
+\]
+To prove \([r']\neq 0\), it is enough to exhibit a refined cycle \(z'\) such that
+\[
+\partial z'=0
+\qquad\text{and}\qquad
+\langle z',r'\rangle\neq 0.
+\]
+This is exactly Lemma \ref{lem:cycle-pairing} applied in the refined complex.
+
+The four declared refinement witnesses are as follows.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Refinement & Verdict & Pairing \\
+\midrule
+Subdivide \(U_1\) & nontrivial \(H^1\) obstruction & \(-7/2\) \\
+Subdivide \(U_2\) & nontrivial \(H^1\) obstruction & \(-4\) \\
+Subdivide all regions & nontrivial \(H^1\) obstruction & \(-5/4\) \\
+Insert bridge between \(U_1\) and \(U_2\) & nontrivial \(H^1\) obstruction & \(-5\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Each row is a self-contained obstruction certificate: a refined cycle exists and pairs non-trivially with the transferred residue. Therefore each transferred residue is not a coboundary.
+
+\begin{proposition}[Persistence under declared refinement witnesses]
+For each of the four declared refinements in the table, the transferred residue \(r'=\rho^*r\) represents a non-zero class in the refined \(H^1\).
+\end{proposition}
+
+\begin{proof}
+For each refinement, the refined certificate supplies a cycle \(z'\) with \(\partial z'=0\) and a non-zero rational pairing \(\langle z',r'\rangle\), listed in the table. By Lemma \ref{lem:cycle-pairing}, \(r'\notin \im\delta'^0\). The refined residue is a cocycle in the corresponding refined complex. Hence \([r']\neq 0\) in the refined \(H^1\).
+\end{proof}
+
+\begin{theorem}[Persistence under admissible refinement]\label{thm:admissible-refinement}
+Let \(N\) be a finite oriented nerve and let
+\(r\in C^1(N;\Q)\) be a cocycle. Suppose there exists a cycle
+\(z\in Z_1(N;\Q)\) such that
+\[
+\langle z,r\rangle\neq 0.
+\]
+Let \(\rho:N'\to N\) be a refinement equipped with maps
+\[
+\rho^*:C^1(N;\Q)\to C^1(N';\Q),
+\qquad
+\rho_*:C_1(N';\Q)\to C_1(N;\Q),
+\]
+satisfying the adjointness condition
+\[
+\langle z',\rho^*\alpha\rangle
+=
+\langle \rho_*z',\alpha\rangle
+\]
+for all \(z'\in C_1(N';\Q)\) and all \(\alpha\in C^1(N;\Q)\).
+
+If there exists a refined cycle \(z'\in Z_1(N';\Q)\) and a nonzero rational
+\(\lambda\in\Q^\times\) such that
+\[
+\rho_*z'=\lambda z,
+\]
+then
+\[
+[\rho^*r]\neq 0\in H^1(N';\Q).
+\]
+\end{theorem}
+
+\begin{proof}
+Assume, for contradiction, that \(\rho^*r\) is a coboundary. Then there exists
+\(b'\in C^0(N';\Q)\) such that
+\[
+\rho^*r=\delta'^0 b'.
+\]
+Since \(z'\) is a cycle, \(\partial' z'=0\). Hence
+\[
+\langle z',\rho^*r\rangle
+=
+\langle z',\delta'^0 b'\rangle
+=
+\langle \partial' z',b'\rangle
+=
+0.
+\]
+But by adjointness and the cycle-lift condition,
+\[
+\langle z',\rho^*r\rangle
+=
+\langle \rho_*z',r\rangle
+=
+\langle \lambda z,r\rangle
+=
+\lambda\langle z,r\rangle.
+\]
+Since \(\lambda\neq 0\) and \(\langle z,r\rangle\neq 0\), this quantity is nonzero.
+Contradiction. Therefore \(\rho^*r\) is not a coboundary, and so
+\[
+[\rho^*r]\neq 0\in H^1(N';\Q).
+\]
+\end{proof}
+
+\begin{remark}[Which declared refinements satisfy the theorem hypotheses]
+The adjointness condition holds automatically for all four declared refinements
+because \(\rho_*\) is taken to be the transpose of \(\rho^*\).
+The cycle-lift condition \(\rho_*z'=\lambda z\) holds for two of the four:
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+Refinement & Cycle-lift & \(\lambda\) & Proof method \\
+\midrule
+Subdivide \(U_1\) & No & --- & Direct pairing \\
+Subdivide \(U_2\) & No & --- & Direct pairing \\
+Subdivide all regions & Yes & \(1/4\) & Theorem \ref{thm:admissible-refinement} \\
+Insert bridge \(U_1\)--\(U_2\) & Yes & \(1\) & Theorem \ref{thm:admissible-refinement} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For the two single-region subdivisions, the cycle-lift condition is impossible
+under equal-distribution transfer: flow conservation at the junction vertex
+forces \(\rho_*(z')[e_{\mathrm{in}}] = \tfrac{1}{2}\rho_*(z')[e_{\mathrm{out}}]\),
+which breaks proportionality with \(z\) unless \(\lambda=0\).
+Those two refinements are therefore certified by the direct cycle-pairing
+Lemma \ref{lem:cycle-pairing} applied in \(N'\), not by Theorem
+\ref{thm:admissible-refinement}.
+
+The distinction is verified computationally in
+\texttt{admissible\_refinement\_theorem.py}.
+\end{remark}
+
+\begin{remark}[What remains for universality]
+A universal result would require identifying all refinements that admit a
+nonzero cycle-lift and proving the lift exists in each case.
+The present paper does not claim that theorem.
+It identifies it as the next mathematical target.
+\end{remark}
+
+\section{Spectral diagnosis of associator fields}
+
+Cohomology classifies closed defect fields up to coboundary. Before closure is known, one may still analyse the defect field spectrally. This section gives a finite-dimensional diagnostic version.
+
+Assume that the nerve \(N(\mathcal U)\) is oriented and that the realised associator field has scalar values in \(\R\), or more generally values in finite-dimensional real inner-product spaces with an induced inner product on cochains. Then the simplicial cochain spaces \(C^n(N;\R)\) carry coboundary maps
+\[
+d_n:C^n\to C^{n+1}
+\]
+and adjoints
+\[
+d_n^*:C^{n+1}\to C^n.
+\]
+The degree-two Hodge Laplacian is
+\[
+\Delta_2=d_1d_1^*+d_2^*d_2.
+\]
+Equip each cochain space \(C^n(N;\R)\) with the standard inner product
+\[
+\langle \phi,\psi\rangle=
+\sum_J \phi_J\psi_J,
+\]
+summed over the oriented \(n\)-simplices \(J\) of the nerve.
+
+\begin{theorem}[Spectral decomposition of the associator field]
+Assume the nerve \(N(\mathcal U)\) is oriented and that the realised associator field is scalar,
+\[
+\mathcal A\in C^2(N;\R).
+\]
+Then \(\mathcal A\) admits a unique orthogonal decomposition
+\[
+\mathcal A=d_1\theta+H+d_2^*\eta,
+\]
+where
+\begin{enumerate}[label=(\roman*)]
+\item \(d_1\theta\in \im(d_1)\) is the exact component;
+\item \(H\in \ker(\Delta_2)\) is the harmonic component;
+\item \(d_2^*\eta\in \im(d_2^*)\) is the coexact component.
+\end{enumerate}
+If, in addition, the scalar realisation identifies admissible pairwise repair with \(d_1\), then the exact component is repairable by pairwise gauge change. If fourfold coherence is tested by \(d_2\), then a non-zero coexact component records failure of fourfold coherence. The harmonic component is the part left by both tests.
+\end{theorem}
+
+\begin{proof}
+The degree-two Hodge Laplacian is \(\Delta_2=d_1d_1^*+d_2^*d_2\). Because \(C^2(N;\R)\) is a finite-dimensional inner-product space, finite Hodge theory yields the orthogonal direct sum
+\[
+C^2=\im(d_1)\oplus \ker(\Delta_2)\oplus \im(d_2^*).
+\]
+Projecting \(\mathcal A\) onto the three summands gives the stated decomposition. Orthogonality makes it unique. The identification of these subspaces with operational behaviour is conditional. When the chosen scalar realisation identifies the boundary gauge variation operator \(D\) with \(d_1\), the subspace \(\im(d_1)\) records the repairable directions. When fourfold coherence is tested by \(d_2\), the subspace \(\im(d_2^*)\) records the residual failure of \(d_2\)-closure. The harmonic component is then the part annihilated by both tests.
+\end{proof}
+
+\begin{remark}[Fourier language]
+The eigenvectors of \(\Delta_2\) play the role of finite Fourier modes on the gluing nerve. Expanding the associator field in these modes reveals whether the defect is concentrated on isolated seams, spread across a global pattern, or carried by harmonic modes. This is a diagnostic use of spectral theory, not a replacement for the algebraic localisation theorem.
+\end{remark}
+
+\section{A non-vanishing finite pattern}
+
+The following example shows that the indexing geometry of triple seams can support non-zero two-dimensional obstruction data.
+
+\begin{example}[Tetrahedral boundary nerve]
+Let \(\mathcal U=(U_1,U_2,U_3,U_4)\) have nerve equal to the boundary of a tetrahedron. Thus all pairwise and triple overlaps are non-empty, while the fourfold overlap is empty. With constant coefficients in a field \(k\), the nerve is a triangulated \(2\)-sphere. Hence
+\[
+H^2(N(\mathcal U);k)\cong k.
+\]
+Choose a \(2\)-cochain \(A\) whose evaluation on the oriented fundamental \(2\)-cycle is non-zero. Since there are no \(3\)-simplices, every \(2\)-cochain is closed. Since \(A\) pairs non-trivially with the fundamental class, it is not a coboundary. It therefore represents a non-zero coefficient-level obstruction class.
+\end{example}
+
+\begin{remark}[Coefficient-level example]
+The example shows that the obstruction group for the indexing nerve can be non-zero. It does not by itself prove that every non-zero class is realised by a boundary-corrected multiplication. Realisation is an additional algebraic question.
+\end{remark}
+
+\section{Computational artefact and reproducibility}
+
+The finite witness of Sections \ref{sec:finite-classifier} and \ref{sec:actual-witness} is implemented as an exact rational classifier. The implementation has five roles.
+
+\begin{enumerate}[label=(\arabic*)]
+\item It builds the finite coboundary matrices \(\delta^0\) and \(\delta^1\).
+\item It checks whether the residue is a cocycle.
+\item It solves the linear system \(\delta^0b=r\) over \(\Q\).
+\item It emits a certificate containing the cohomology summary and cycle witness.
+\item It reruns presentation, refinement, and property-based regression tests.
+\end{enumerate}
+
+The property-based regression test runs 1000 random rational residues on the four-cycle and checks the classifier against the cycle-pairing criterion:
+\[
+\langle z,r\rangle=0
+\quad\Longleftrightarrow\quad
+r\text{ is removable},
+\]
+and
+\[
+\langle z,r\rangle\neq 0
+\quad\Longleftrightarrow\quad
+r\text{ represents a nontrivial }H^1\text{ obstruction}.
+\]
+The current repository state records 1000 passed cases and zero failed cases.
+
+This computational artefact is not used as a substitute for the proof. The proof of the actual residue is the explicit contradiction and the cycle pairing. The code provides reproducibility, regression protection, and a way of generating further finite witnesses.
+
+\section{Interpretation}
+
+The central lesson is simple:
+\[
+\text{pairwise interfaces do not exhaust the structure of gluing.}
+\]
+A local correctness proof may be valid on every region \(U_i\). It may also be valid on every pairwise overlap \(U_i\wedge U_j\). The global claim can still fail at \(U_i\wedge U_j\wedge U_k\), because the two histories of pairwise composition need not leave the same residue.
+
+This is why the associator field is a useful primitive object. It does not merely announce failure. It says where the failure lives, which triples participate in it, and whether it has the form of an isolated seam residue, a repairable bookkeeping artefact, or a persistent global mode.
+
+In distributed systems, one may read regions as subsystems and overlaps as shared interfaces. The corrected product models reconciliation across an interface. The associator field then marks three-way integration failures that are not certified away by unit tests and pairwise interface tests alone.
+
+In verification, the same structure distinguishes local proof from compositional proof. A module may satisfy its local specification. A pair of modules may satisfy an interface contract. Three modules may still fail to compose coherently. The associator field is the finite witness of that failure.
+
+The finite \(H^1\) example adds a second lesson. Once a residue has been found, the correct question is not whether it is non-zero. The correct question is whether it is removable. A residue that is exact is a bookkeeping artefact. A residue that is closed and not exact is a genuine obstruction relative to the declared finite apparatus.
+
+The lesson is not that all verification problems are cohomological. That would be too strong. The lesson is that some local-to-global failures have a finite boundary structure, and that associator fields and residue classifiers provide disciplined ways of seeing that structure before choosing a classification method.
+
+\section{Limitations and next steps}
+
+The limitations are part of the construction. They mark where the current finite theory is exact, where classification requires extra structure, and where the next mathematical problems begin.
+
+\subsection{Current methodological scope}
+
+First, the support-refinement axiom is strong. It isolates seam-supported multiplication rather than arbitrary regional multiplication. This makes Theorem \ref{thm:triple-localisation} clean, but narrows the class of examples.
+
+Second, the first-order variation formula requires a genuine first-order boundary regime. Correction and gauge maps must not reintroduce higher-order dependence on already-boundary terms. This is a guardrail, not a flaw. It is what makes the variation operator linear enough to be written as the four-term expression of Section \ref{sec:first-order}.
+
+Third, spectral Hodge analysis requires scalar or finite-dimensional inner-product values. It is a diagnostic layer, not part of the basic algebraic construction.
+
+Fourth, the finite residue classifier proves a degree-one obstruction for a declared finite object. It does not by itself classify every associator field, nor does it prove that every triple-seam associator field reduces to a degree-one residue. The two constructions are related by the repair problem, but they are not identical.
+
+\subsection{Classification limits}
+
+The repair quotient \(\Field^2/\im D\) depends on the chosen class of admissible boundary gauges. Different repair regimes may produce different obstruction notions. This dependence is unavoidable, because repair is not a purely formal declaration. It is constrained by what pairwise boundary changes are allowed.
+
+\v{C}ech cohomology is also not automatic. It requires a coefficient system with restriction maps and a fourfold coherence condition. The paper deliberately keeps these structures separate from the associator field itself. Otherwise one would confuse the finite defect with one possible classification of that defect.
+
+The refinement result in Section \ref{sec:invariance-refinement} is deliberately scoped. It proves persistence for the four declared refinement witnesses. A universal refinement theorem requires a declared admissible refinement class and a proof of the pairing-preservation identity
+\[
+\langle z',\rho^*r\rangle
+=
+\langle \rho_*z',r\rangle.
+\]
+
+\subsection{Horizons for generalisation}
+
+The associator field is input-dependent. For a fixed input family \(a\), one obtains \(\mathcal A_a\). A more invariant theory would treat associators as operator-valued fields. That would replace a static residue with a transformation-level diagnostic, capable of tracking how a seam defect acts on families of inputs rather than on one selected input family.
+
+A second horizon is realisability. The theory should identify which finite triple-indexed fields can be produced by some supported regional algebra and some admissible boundary correction. Such a theorem would separate accidental examples from structurally forced patterns.
+
+A third horizon is dynamic repair. In distributed systems, the observation boundary may shift over time: sensors degrade, network partitions open and close, and interfaces appear or disappear. The present paper treats the regional cover as fixed. A dynamic version would have to track associator fields over changing nerves and changing admissible repair operators.
+
+A fourth horizon is formal verification. The executable classifier can be moved from tested Python to a verified kernel. A minimal formal theorem would state that if the checker returns \texttt{nontrivial\_H1\_obstruction}, then the supplied residue represents a non-zero \(H^1\) class. That theorem belongs in a proof assistant such as Rocq, Lean, or Agda. The executable artefact can compute certificates; the proof assistant can certify the classifier's soundness.
+
+These are not afterthoughts. They are the next tasks opened by the present construction: realisability, operator-valued associator fields, dynamic repair, universal refinement persistence, and formal verification of the finite classifier.
+
+\section{Conclusion}
+
+Gluing is not exhausted by local validity and pairwise compatibility. A finite regional system may be locally associative on every region and explicitly corrected on every pairwise seam while still producing a parenthesisation residue on a triple seam. The associator field records that residue before it is forced into any particular classification scheme.
+
+The paper has proved the basic localisation theorem: under support-refining boundary corrections, the associator defect of a corrected triple product is supported on the common triple overlap. It has then separated detection, repair, and obstruction. Cohomology and spectral analysis enter as structured classifications of the field, not as assumptions built into the field from the start.
+
+Finally, the paper has given an exact finite obstruction witness. The residue \(r=(1,1,1,-2)\) on a four-region seam cycle is a cocycle but not a coboundary. It is certified by an explicit contradiction and by the cycle pairing \(\langle z,r\rangle=-5\). Its verdict is invariant under the declared presentation changes and persists under the four declared refinement witnesses.
+
+The resulting claim is modest but sharp. The defect is not merely a non-zero value. It is a non-zero cohomology class relative to the declared finite regional apparatus. That is the point at which a seam residue becomes an obstruction.
+
+\begin{thebibliography}{99}
+
+\bibitem{BottTu1982}
+R. Bott and L. W. Tu.
+\newblock \emph{Differential Forms in Algebraic Topology}.
+\newblock Springer, 1982.
+
+\bibitem{CostelloGwilliam2017}
+K. Costello and O. Gwilliam.
+\newblock \emph{Factorization Algebras in Quantum Field Theory}, Volumes 1 and 2.
+\newblock Cambridge University Press, 2017 and 2021.
+
+\bibitem{Eckmann1944}
+B. Eckmann.
+\newblock Harmonische Funktionen und Randwertaufgaben in einem Komplex.
+\newblock \emph{Commentarii Mathematici Helvetici}, 17:240--255, 1944.
+
+\bibitem{Giraud1971}
+J. Giraud.
+\newblock \emph{Cohomologie non-abelienne}.
+\newblock Springer, 1971.
+
+\bibitem{KashiwaraSchapira1990}
+M. Kashiwara and P. Schapira.
+\newblock \emph{Sheaves on Manifolds}.
+\newblock Springer, 1990.
+
+\bibitem{MacLane1963}
+S. Mac Lane.
+\newblock Natural associativity and commutativity.
+\newblock \emph{Rice University Studies}, 49(4):28--46, 1963.
+
+\bibitem{MacLane1998}
+S. Mac Lane.
+\newblock \emph{Categories for the Working Mathematician}.
+\newblock Second edition. Springer, 1998.
+
+\bibitem{Weibel1994}
+C. A. Weibel.
+\newblock \emph{An Introduction to Homological Algebra}.
+\newblock Cambridge University Press, 1994.
+
+\end{thebibliography}
+
+\end{document}

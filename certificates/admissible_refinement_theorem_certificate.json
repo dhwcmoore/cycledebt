@@ -1,0 +1,85 @@
+{
+  "theorem": "universal_admissible_refinement",
+  "base_object": "actual_gluing_object_v1",
+  "base_pairing": "-5",
+  "base_cycle": [
+    "-1",
+    "-1",
+    "-1",
+    "1"
+  ],
+  "refinement_results": {
+    "subdivide_U1": {
+      "refinement": "Subdivide U1 \u2192 (U1a, U1b)",
+      "n_refined_edges": 7,
+      "pullback_matches_r_prime": true,
+      "adjointness_holds": true,
+      "rho_push_z_prime": [
+        "-1/2",
+        "-1",
+        "-1",
+        "1/2"
+      ],
+      "cycle_lift_holds": false,
+      "lambda": null,
+      "direct_pairing": "-7/2",
+      "theorem_pairing": null,
+      "obstruction_persists": true,
+      "proof_method": "direct_cycle_pairing"
+    },
+    "subdivide_U2": {
+      "refinement": "Subdivide U2 \u2192 (U2a, U2b)",
+      "n_refined_edges": 7,
+      "pullback_matches_r_prime": true,
+      "adjointness_holds": true,
+      "rho_push_z_prime": [
+        "-1/2",
+        "-1/2",
+        "-1",
+        "1"
+      ],
+      "cycle_lift_holds": false,
+      "lambda": null,
+      "direct_pairing": "-4",
+      "theorem_pairing": null,
+      "obstruction_persists": true,
+      "proof_method": "direct_cycle_pairing"
+    },
+    "subdivide_all": {
+      "refinement": "Subdivide all regions",
+      "n_refined_edges": 20,
+      "pullback_matches_r_prime": true,
+      "adjointness_holds": true,
+      "rho_push_z_prime": [
+        "-1/4",
+        "-1/4",
+        "-1/4",
+        "1/4"
+      ],
+      "cycle_lift_holds": true,
+      "lambda": "1/4",
+      "direct_pairing": "-5/4",
+      "theorem_pairing": "-5/4",
+      "obstruction_persists": true,
+      "proof_method": "universal_theorem"
+    },
+    "insert_bridge": {
+      "refinement": "Insert bridge between U1 and U2",
+      "n_refined_edges": 5,
+      "pullback_matches_r_prime": true,
+      "adjointness_holds": true,
+      "rho_push_z_prime": [
+        "-1",
+        "-1",
+        "-1",
+        "1"
+      ],
+      "cycle_lift_holds": true,
+      "lambda": "1",
+      "direct_pairing": "-5",
+      "theorem_pairing": "-5",
+      "obstruction_persists": true,
+      "proof_method": "universal_theorem"
+    }
+  }
+}
