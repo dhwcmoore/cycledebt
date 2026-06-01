@@ -164,19 +164,32 @@ Each nonzero pairing constitutes a proof, by the lemma above, that the transferr
 
 ## 4. Cycle-Lift Persistence Theorem
 
+**Definition (Nonzero-degree lift of a cycle).**
+Let $z \in Z_1(N;\mathbb Q)$. A cycle $z' \in Z_1(N';\mathbb Q)$ is a
+*nonzero-degree lift of $z$* if there exists $\lambda \in \mathbb Q^\times$
+such that $\rho_* z' = \lambda z$.
+
 **Definition (Cycle-faithful refinement).**
 Let $z \in Z_1(N;\mathbb Q)$. A refinement $\rho: N' \to N$ equipped with
 a chain pushforward $\rho_*: C_1(N';\mathbb Q) \to C_1(N;\mathbb Q)$ is
-*cycle-faithful relative to $z$* if
+*cycle-faithful relative to $z$* if $z$ admits a nonzero-degree lift, i.e.,
 $$
 \rho_*(Z_1(N';\mathbb Q)) \cap \mathbb Q^\times z \neq \varnothing.
 $$
-Equivalently, there exists $z' \in Z_1(N';\mathbb Q)$ and $\lambda \in \mathbb Q^\times$
-such that $\rho_* z' = \lambda z$.
 
-Cycle-faithfulness is a computational property: it holds if and only if the
-linear system $[\partial' \mid 0;\, \rho_* \mid {-z}] \cdot [z';\lambda]^T = 0$
-has a solution with $\lambda \neq 0$.  Script: `cycle_lift_test.py`.
+Cycle-faithfulness has two equivalent computational formulations:
+
+1. **Nullspace method.** Solve $[\partial' \mid 0;\, \rho_* \mid {-z}] \cdot [z';\lambda]^T = 0$
+   over $\mathbb Q$. A null vector with $\lambda \neq 0$ certifies faithfulness;
+   if only $\lambda = 0$ appears, the system proves faithfulness impossible.
+
+2. **Rank criterion.** Let $K$ be a basis matrix for $\ker \partial' = Z_1(N';\mathbb Q)$
+   and $P = \rho_*$. Then $\rho$ is cycle-faithful relative to $z$ iff
+   $$
+   \operatorname{rank}(PK) = \operatorname{rank}([PK \;\; z]).
+   $$
+
+Both methods agree on all four declared refinements (verified in `cycle_lift_test.py`).
 
 ---
 
@@ -248,7 +261,24 @@ and subdivide-$U_2$ force $\lambda = 0$ (impossible).
 
 ---
 
-## 5. Why single-region subdivisions fail cycle-faithfulness
+## 5. Rank criterion and classification table
+
+The rank criterion gives a clean algebraic read-out for each refinement.
+
+**Notation.** $B' = $ boundary matrix of $N'$; $P = \rho_*$; $K = $ basis for $\ker B'$.
+
+| Refinement | $\dim Z_1(N')$ | $\operatorname{rank}(PK)$ | $\operatorname{rank}([PK\;z])$ | Cycle-faithful |
+|---|---|---|---|---|
+| Subdivide $U_1$ | 3 | 1 | 2 | No |
+| Subdivide $U_2$ | 3 | 1 | 2 | No |
+| Subdivide all regions | 13 | 1 | 1 | Yes |
+| Insert bridge $U_1$–$U_2$ | 1 | 1 | 1 | Yes |
+
+For the non-faithful cases, $\operatorname{rank}(PK) = 1$ but $z \notin \operatorname{im}(PK)$:
+the image of $Z_1(N')$ under $\rho_*$ is a one-dimensional subspace of $C_1(N;\mathbb Q)$
+that does not contain $z$.
+
+## 6. Why single-region subdivisions fail cycle-faithfulness
 
 For subdivide-$U_1$ with equal-distribution transfer, the junction vertex $U_2$
 (an original vertex of $N$, still present in $N'$) has two new incoming edges
@@ -268,15 +298,16 @@ they either eliminate the original junction vertex ($U_2 \to U_{2a}, U_{2b}$) or
 replace $U_1$-$U_2$ with a *path* through a new vertex (Bridge), preserving
 flow balance without multiplying the parallel edges at the original vertex.
 
-**Conjecture (Balanced loop refinement).**
-Let $z$ be a simple cycle in a finite oriented nerve $N$. Suppose
-$\rho: N' \to N$ refines the support of $z$ such that no original vertex
-in $\operatorname{supp}(z) \cap V(N)$ gains new incident edges in $N'$.
-Then $\rho$ is cycle-faithful relative to $z$.
+**Conjecture (Balanced cycle-fibre).**
+Let $z$ be a simple rational cycle in a finite oriented nerve $N$.
+Let $\rho: N' \to N$ be a refinement equipped with a chain pushforward $\rho_*$.
+Suppose the full preimage of the support of $z$ contains a divergence-free
+rational circulation whose pushforward crosses every edge of $z$ with the
+same nonzero rational degree. Then $\rho$ is cycle-faithful relative to $z$.
 
 ---
 
-## 6. Scope of the proof
+## 7. Scope of the proof
 
 What is proved:
 
@@ -288,7 +319,7 @@ What is not yet proved:
 
 ---
 
-## 7. Two-layer interpretation
+## 8. Two-layer interpretation
 
 Refinement persistence has two layers:
 
@@ -305,7 +336,7 @@ The first can hold even when the second fails.
 
 ---
 
-## 8. Certificate files
+## 9. Certificate files
 
 All computations above are certified by the files in `certificates/`:
 

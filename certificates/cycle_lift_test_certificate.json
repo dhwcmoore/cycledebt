@@ -16,30 +16,41 @@
   "results": {
     "Subdivide U1 \u2192 (U1a, U1b)": {
       "cycle_faithful": false,
-      "lambda": null,
-      "z_prime": null,
-      "z_prime_edges": null,
+      "rank_PK": 1,
+      "rank_PK_augmented": 2,
+      "rank_criterion_verdict": false,
+      "dim_Z1_N_prime": 3,
+      "methods_agree": true,
       "system_dimensions": [
         9,
         8
       ],
-      "method": "null_space_over_Q",
       "failure_reason": "System forces lambda = 0; cycle-lift impossible."
     },
     "Subdivide U2 \u2192 (U2a, U2b)": {
       "cycle_faithful": false,
-      "lambda": null,
-      "z_prime": null,
-      "z_prime_edges": null,
+      "rank_PK": 1,
+      "rank_PK_augmented": 2,
+      "rank_criterion_verdict": false,
+      "dim_Z1_N_prime": 3,
+      "methods_agree": true,
       "system_dimensions": [
         9,
         8
       ],
-      "method": "null_space_over_Q",
       "failure_reason": "System forces lambda = 0; cycle-lift impossible."
     },
     "Subdivide all regions": {
       "cycle_faithful": true,
+      "rank_PK": 1,
+      "rank_PK_augmented": 1,
+      "rank_criterion_verdict": true,
+      "dim_Z1_N_prime": 13,
+      "methods_agree": true,
+      "system_dimensions": [
+        12,
+        21
+      ],
       "lambda": "1",
       "z_prime": [
         "-4",
@@ -85,21 +96,19 @@
         "U3a-U3b",
         "U4a-U4b"
       ],
-      "boundary_check_zero": true,
-      "pushforward_check": [
-        "-1",
-        "-1",
-        "-1",
-        "1"
-      ],
-      "system_dimensions": [
-        12,
-        21
-      ],
-      "method": "null_space_over_Q"
+      "boundary_check_zero": true
     },
     "Insert bridge between U1 and U2": {
       "cycle_faithful": true,
+      "rank_PK": 1,
+      "rank_PK_augmented": 1,
+      "rank_criterion_verdict": true,
+      "dim_Z1_N_prime": 1,
+      "methods_agree": true,
+      "system_dimensions": [
+        9,
+        6
+      ],
       "lambda": "1",
       "z_prime": [
         "-1",
@@ -115,18 +124,7 @@
         "U3-U4",
         "U1-U4"
       ],
-      "boundary_check_zero": true,
-      "pushforward_check": [
-        "-1",
-        "-1",
-        "-1",
-        "1"
-      ],
-      "system_dimensions": [
-        9,
-        6
-      ],
-      "method": "null_space_over_Q"
+      "boundary_check_zero": true
     }
   }
 }

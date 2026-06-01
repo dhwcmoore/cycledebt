@@ -1015,47 +1015,31 @@ Equivalently, there exists \(z'\in Z_1(N';\Q)\) and \(\lambda\in\Q^\times\) such
 that \(\rho_*z'=\lambda z\).
 \end{definition}
 
-\begin{remark}[Computational criterion]
-Cycle-faithfulness is a linear-algebra condition over \(\Q\). It holds precisely
-when the homogeneous system
+\begin{definition}[Nonzero-degree lift of a cycle]\label{def:nz-lift}
+Let \(z\in Z_1(N;\Q)\) and let \(\rho_*:C_1(N';\Q)\to C_1(N;\Q)\) be a chain
+pushforward. A cycle \(z'\in Z_1(N';\Q)\) is a \emph{nonzero-degree lift of
+\(z\)} if there exists \(\lambda\in\Q^\times\) such that
 \[
-\begin{pmatrix}\partial' & 0 \\ \rho_* & -z\end{pmatrix}
-\begin{pmatrix}z'\\\lambda\end{pmatrix}=0
+\rho_*z'=\lambda z.
 \]
-has a solution with \(\lambda\neq 0\). When no such solution exists, the system
-forces \(\lambda=0\), and cycle-faithfulness is algebraically impossible.
-\end{remark}
+The refinement \(\rho\) is cycle-faithful relative to \(z\) (Definition
+\ref{def:cycle-faithful}) precisely when a nonzero-degree lift of \(z\) exists.
+\end{definition}
 
 \begin{theorem}[Cycle-lift persistence]\label{thm:cycle-lift}
-Let \(N\) be a finite oriented nerve and let
-\(r\in C^1(N;\Q)\) be a cocycle. Suppose there exists a cycle
-\(z\in Z_1(N;\Q)\) such that
-\[
-\langle z,r\rangle\neq 0.
-\]
-Let \(\rho:N'\to N\) be a refinement equipped with maps
+Let \(r\in Z^1(N;\Q)\), and suppose there exists \(z\in Z_1(N;\Q)\) such that
+\(\langle z,r\rangle\neq 0\). Let \(\rho:N'\to N\) be a refinement with adjoint
+maps
 \[
 \rho^*:C^1(N;\Q)\to C^1(N';\Q),
 \qquad
-\rho_*:C_1(N';\Q)\to C_1(N;\Q),
+\rho_*:C_1(N';\Q)\to C_1(N;\Q)
 \]
-satisfying the adjointness condition
-\[
-\langle z',\rho^*\alpha\rangle
-=
-\langle \rho_*z',\alpha\rangle
-\]
-for all \(z'\in C_1(N';\Q)\) and all \(\alpha\in C^1(N;\Q)\).
+satisfying \(\langle z',\rho^*\alpha\rangle=\langle\rho_*z',\alpha\rangle\) for
+all \(z',\alpha\).
 
-If there exists a refined cycle \(z'\in Z_1(N';\Q)\) and a nonzero rational
-\(\lambda\in\Q^\times\) such that
-\[
-\rho_*z'=\lambda z,
-\]
-then
-\[
-[\rho^*r]\neq 0\in H^1(N';\Q).
-\]
+If \(z\) admits a nonzero-degree lift \(z'\) (Definition \ref{def:nz-lift}),
+then \([\rho^*r]\neq 0\in H^1(N';\Q)\).
 \end{theorem}
 
 \begin{proof}
@@ -1127,40 +1111,81 @@ over \(\Q\) and proves algebraically that \(\lambda=0\) is forced
 for the two single-region subdivisions.
 \end{remark}
 
+\begin{proposition}[Rank criterion for cycle-faithfulness]\label{prop:rank-criterion}
+Let \(B'\) be the boundary matrix of \(N'\), let \(P\) be the matrix of
+\(\rho_*:C_1(N';\Q)\to C_1(N;\Q)\), and let \(K\) be a matrix whose columns
+form a basis for \(\ker B'=Z_1(N';\Q)\). Then \(\rho\) is cycle-faithful
+relative to \(z\) if and only if
+\[
+\operatorname{rank}(PK)=\operatorname{rank}([PK\;\;z]).
+\]
+\end{proposition}
+
+\begin{proof}
+Cycle-faithfulness holds iff \(z\in\operatorname{im}(\rho_*|_{Z_1(N')})\).
+The columns of \(PK\) span \(\operatorname{im}(\rho_*|_{Z_1(N')})\). By the
+standard rank test for membership in a column space over a field,
+\(z\in\operatorname{span}(PK)\) iff appending \(z\) does not increase the
+rank of \(PK\).
+\end{proof}
+
+\begin{center}
+\begin{tabular}{lllll}
+\toprule
+Refinement & $\dim Z_1(N')$ & $\operatorname{rank}(PK)$ &
+$\operatorname{rank}([PK\,z])$ & Cycle-faithful \\
+\midrule
+Subdivide \(U_1\) & 3 & 1 & 2 & No \\
+Subdivide \(U_2\) & 3 & 1 & 2 & No \\
+Subdivide all regions & 13 & 1 & 1 & Yes \\
+Insert bridge \(U_1\)--\(U_2\) & 1 & 1 & 1 & Yes \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 \begin{remark}[Two layers of persistence]
 Refinement persistence has two layers.
 
-\emph{Direct obstruction persistence.} There exists a refined cycle
-\(z'\in Z_1(N';\Q)\) with \(\langle z',\rho^*r\rangle\neq 0\).
+\emph{Direct obstruction persistence.}
+There exists a refined cycle \(z'\in Z_1(N';\Q)\) with
+\(\langle z',\rho^*r\rangle\neq 0\).
 All four declared refinements satisfy this.
 Proved by Lemma \ref{lem:cycle-pairing} in \(N'\).
 
-\emph{Witness persistence (cycle-faithfulness).} The original
-obstruction cycle \(z\) admits a nonzero rational lift via
-\(\rho_*\). Two of the four declared refinements satisfy this.
-When it holds, Theorem \ref{thm:cycle-lift} applies and the
-persistence proof requires no new cycle computation.
-
-The first can hold even when the second fails.
+\emph{Witness persistence (cycle-faithfulness).}
+The original obstruction cycle \(z\) admits a nonzero-degree lift.
+Two of the four declared refinements satisfy this.
+When it holds, Theorem \ref{thm:cycle-lift} applies without computing
+a new cycle. An obstruction can persist even when its original
+witness-cycle does not lift.
 \end{remark}
 
-\begin{conjecture}[Balanced loop refinement]
-Let \(z\) be a simple cycle in a finite oriented nerve \(N\). Suppose
-\(\rho:N'\to N\) refines the support of \(z\) such that no original vertex
-in \(\operatorname{supp}(z)\cap V(N)\) gains new incident edges in \(N'\).
-Then \(\rho\) is cycle-faithful relative to \(z\).
+\begin{conjecture}[Balanced cycle-fibre]\label{conj:cycle-fibre}
+Let \(z\) be a simple rational cycle in a finite oriented nerve \(N\).
+Let \(\rho:N'\to N\) be a refinement equipped with a chain pushforward
+\(\rho_*\). Suppose the full preimage of the support of \(z\) contains
+a divergence-free rational circulation whose pushforward crosses every
+edge of \(z\) with the same nonzero rational degree. Then \(\rho\) is
+cycle-faithful relative to \(z\).
 \end{conjecture}
 
-\begin{remark}[Evidence for the conjecture]
-The two cycle-faithful refinements in Section \ref{sec:invariance-refinement}
-support this conjecture. The insert-bridge refinement replaces the edge
-\(U_1U_2\) with a path through a new vertex, leaving all original vertices
-on \(z\) unchanged in degree. The subdivide-all refinement eliminates the
-original vertices entirely, replacing each with a pair. In both cases,
-flow conservation at original vertices creates no obstruction to the lift.
-The two non-cycle-faithful refinements each leave an original vertex
-(\(U_2\) or \(U_1\)/\(U_3\)) with new incident edges, and this is
-the precise source of the algebraic impossibility.
+\begin{remark}[Evidence and rank interpretation]
+For the insert-bridge and subdivide-all refinements, such a uniform
+circulation exists: the bridge cycle traverses both halves of the split
+edge with the same weight, and the diagonal path through the fully
+subdivided complex crosses each cluster with weight \(1/4\). In both
+cases \(\operatorname{rank}(PK)=\operatorname{rank}([PK\;\;z])=1\).
+
+For the single-region subdivisions, no uniform circulation exists: the
+junction vertex forces an imbalance between the split-edge cluster and
+the unchanged adjacent edge, giving \(\operatorname{rank}(PK)=1\) but
+\(\operatorname{rank}([PK\;\;z])=2\). This confirms that the image of
+\(Z_1(N')\) under \(\rho_*\) is a one-dimensional subspace of
+\(C_1(N;\Q)\) that does not contain \(z\).
+
+Proving Conjecture \ref{conj:cycle-fibre} would give a geometric
+sufficient condition for cycle-faithfulness and turn the current
+classification into a theorem about an explicit refinement class.
 \end{remark}
 
 \section{Spectral diagnosis of associator fields}

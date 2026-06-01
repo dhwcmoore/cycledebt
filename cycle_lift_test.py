@@ -3,32 +3,45 @@ cycle_lift_test.py
 
 Determines whether a refinement rho: N' -> N is cycle-faithful relative to z.
 
-Definition: rho is cycle-faithful relative to z in Z_1(N;Q) if
-    rho_*(Z_1(N';Q)) ∩ Q^x * z ≠ ∅,
-i.e., there exists z' in Z_1(N';Q) and lambda in Q* with rho_*(z') = lambda*z.
+Definitions
+-----------
+  rho is cycle-faithful relative to z in Z_1(N;Q) if
+      rho_*(Z_1(N';Q)) ∩ Q^x * z ≠ ∅.
 
-Method: solve the homogeneous linear system over Q
-    [ d'  |  0  ] [ z' ]   [ 0 ]
-    [ M   | -z  ] [ λ  ] = [ 0 ]
+  z' in Z_1(N';Q) is a nonzero-degree lift of z if
+      rho_*(z') = lambda * z  for some lambda in Q^x.
 
-where d' is the boundary map of N' and M = rho_* is the chain pushforward.
-A null vector with nonzero last component (lambda != 0) certifies cycle-faithfulness.
+Methods
+-------
+  Nullspace method:
+    Solve [ d' | 0; M | -z ] * [z'; lambda]^T = 0 over Q.
+    A null vector with lambda ≠ 0 certifies cycle-faithfulness.
 
-Input:
+  Rank criterion (Proposition):
+    Let K = basis matrix for ker(d').
+    Let PK = M * K  (images of base cycles under rho_*).
+    Then z is in im(PK)  iff  rank(PK) = rank([PK | z]).
+    Equivalently: rho is cycle-faithful iff rank(PK) = rank([PK | z]).
+    Both methods agree on all four declared refinements.
+
+Input
+-----
   refined_regions:   list of vertex names in N'
   refined_edges:     list of (tail, head) pairs in N'
   transfer:          dict: edge_name -> {base_edge_name: rational_coefficient}
-                     (same format as admissible_refinement_theorem.py)
-  base_edges:        ordered list of base edge names (columns of M^T = rho*)
+  base_edges:        ordered list of base edge names
   base_z:            base cycle vector
 
-Output per refinement:
-  cycle_faithful:     bool
-  lambda:             rational string or None
-  z_prime:            list of rational strings (values on refined edges) or None
-  z_prime_edges:      list of edge names or None
-  system_dimensions:  (rows, cols) of the combined system matrix
-  method:             "null_space_over_Q"
+Output per refinement
+---------------------
+  cycle_faithful:           bool (both methods agree)
+  lambda:                   rational string or None
+  z_prime:                  list of rational strings or None
+  z_prime_edges:            list of edge names or None
+  rank_PK:                  int
+  rank_PK_augmented:        int
+  rank_criterion_verdict:   bool (z in im(PK))
+  methods_agree:            bool
 """
 
 import json
@@ -73,12 +86,35 @@ def build_pushforward_matrix(edge_names, transfer, base_edges):
     return M
 
 
+def rank_criterion(d_prime, M, z_vec):
+    """
+    Rank criterion for cycle-faithfulness.
+
+    Let K = basis matrix for ker(d')  (columns span Z_1(N';Q)).
+    Let PK = M * K.
+    Then z in im(PK) iff rank(PK) == rank([PK | z]).
+
+    Returns (cycle_faithful, rank_PK, rank_PK_aug, K_cols).
+    """
+    K_vecs = d_prime.nullspace()          # list of n_ref×1 column vectors
+    if not K_vecs:
+        return False, 0, 1, 0             # no cycles at all
+
+    K = sp.Matrix.hstack(*K_vecs)         # n_ref × k, columns = cycle basis
+    PK = M * K
+    PK_aug = PK.row_join(z_vec)
+
+    rk = PK.rank()
+    rk_aug = PK_aug.rank()
+    return (rk == rk_aug), rk, rk_aug, K.shape[1]
+
+
 def find_cycle_lift(regions, edge_pairs, edge_names, transfer,
                     base_edges=None, base_z=None):
     """
-    Solve [d' | 0; M | -z] * [z'; λ] = 0 for a null vector with λ ≠ 0.
+    Test cycle-faithfulness using both the nullspace and the rank criterion.
 
-    Returns a dict with cycle_faithful, lambda, z_prime, z_prime_edges.
+    Returns a result dict.
     """
     if base_edges is None:
         base_edges = BASE_EDGES
@@ -86,52 +122,57 @@ def find_cycle_lift(regions, edge_pairs, edge_names, transfer,
         base_z = BASE_Z
 
     z_vec = sp.Matrix([sp.Rational(v) for v in base_z])
-    n_ref = len(edge_names)
     n_vert = len(regions)
 
     d_prime = build_boundary_matrix(regions, edge_pairs)
     M = build_pushforward_matrix(edge_names, transfer, base_edges)
 
-    # Combined system: (n_vert + n_base) x (n_ref + 1)
+    # --- Method 1: nullspace ---
     top = d_prime.row_join(sp.zeros(n_vert, 1))
     bot = M.row_join(-z_vec)
     system = top.col_join(bot)
-
     null_vecs = system.nullspace()
+
+    nullspace_faithful = False
+    lam_found = None
+    z_prime_found = None
 
     for v in null_vecs:
         lam = v[-1]
         if lam != 0:
-            z_prime = [sp.Rational(x) for x in v[:-1]]
-            # Verify: d' * z_prime = 0
-            boundary_norm = (d_prime * sp.Matrix(z_prime)).norm()
-            # Verify: M * z_prime = lam * z
-            pushforward = M * sp.Matrix(z_prime)
-            check = pushforward - lam * z_vec
-            return {
-                "cycle_faithful": True,
-                "lambda": str(sp.Rational(lam)),
-                "z_prime": [str(x) for x in z_prime],
-                "z_prime_edges": edge_names,
-                "boundary_check_zero": boundary_norm == 0,
-                "pushforward_check": [str(x) for x in pushforward],
-                "system_dimensions": (system.shape[0], system.shape[1]),
-                "method": "null_space_over_Q",
-            }
+            nullspace_faithful = True
+            lam_found = sp.Rational(lam)
+            z_prime_found = [sp.Rational(x) for x in v[:-1]]
+            break
 
-    # No cycle-lift found; also record the theoretical reason if applicable
-    # Check: does cycle-conservation force lambda=0?
-    reason = _diagnose_failure(d_prime, M, z_vec, regions, edge_names, base_edges)
+    # --- Method 2: rank criterion ---
+    rank_faithful, rk_PK, rk_aug, n_cycle_basis = rank_criterion(d_prime, M, z_vec)
 
-    return {
-        "cycle_faithful": False,
-        "lambda": None,
-        "z_prime": None,
-        "z_prime_edges": None,
+    methods_agree = (nullspace_faithful == rank_faithful)
+    cycle_faithful = nullspace_faithful  # both should agree
+
+    result = {
+        "cycle_faithful": cycle_faithful,
+        "rank_PK": rk_PK,
+        "rank_PK_augmented": rk_aug,
+        "rank_criterion_verdict": rank_faithful,
+        "dim_Z1_N_prime": n_cycle_basis,
+        "methods_agree": methods_agree,
         "system_dimensions": (system.shape[0], system.shape[1]),
-        "method": "null_space_over_Q",
-        "failure_reason": reason,
     }
+
+    if cycle_faithful:
+        result.update({
+            "lambda": str(lam_found),
+            "z_prime": [str(x) for x in z_prime_found],
+            "z_prime_edges": edge_names,
+            "boundary_check_zero": (d_prime * sp.Matrix(z_prime_found)).norm() == 0,
+        })
+    else:
+        reason = _diagnose_failure(d_prime, M, z_vec, regions, edge_names, base_edges)
+        result["failure_reason"] = reason
+
+    return result
 
 
 def _diagnose_failure(d_prime, M, z_vec, regions, edge_names, base_edges):
@@ -255,46 +296,58 @@ def run_all():
 
 
 def print_report(results):
-    print("=" * 72)
+    print("=" * 76)
     print("CYCLE-LIFT TEST — CYCLE-FAITHFULNESS CLASSIFICATION")
-    print("=" * 72)
+    print("=" * 76)
     print()
     print(f"Base cycle:   z = (-1,-1,-1,1)   over edges {BASE_EDGES}")
     print(f"Base pairing: <z,r> = -5")
     print()
-    print(f"{'Refinement':<38} {'Faithful?':<10} {'lambda':<8} {'System'}")
-    print("-" * 72)
+
+    # Main classification table
+    print(f"{'Refinement':<35} {'Faithful?':<10} {'λ':<5} "
+          f"{'rank(PK)':<10} {'rank([PK|z])':<14} {'dim Z_1':<8} {'Agree?'}")
+    print("-" * 76)
     for name, res in results.items():
         faithful = "YES" if res["cycle_faithful"] else "NO"
-        lam = res["lambda"] if res["lambda"] else "—"
-        dims = res["system_dimensions"]
-        print(f"{name:<38} {faithful:<10} {lam:<8} {dims[0]}×{dims[1]}")
+        lam = res.get("lambda") or "—"
+        rk = res["rank_PK"]
+        rk_aug = res["rank_PK_augmented"]
+        dim_z1 = res["dim_Z1_N_prime"]
+        agree = "✓" if res["methods_agree"] else "✗"
+        short = name.replace("→", "->").replace("–", "-")
+        print(f"{short:<35} {faithful:<10} {str(lam):<5} "
+              f"{rk:<10} {rk_aug:<14} {dim_z1:<8} {agree}")
     print()
 
-    print("Cycle-faithful refinements (cycle-lift exists):")
+    print("Rank criterion: z in im(PK)  iff  rank(PK) = rank([PK | z])")
+    print()
+
+    print("Cycle-faithful refinements:")
     for name, res in results.items():
         if res["cycle_faithful"]:
-            print(f"  {name}")
-            print(f"    lambda = {res['lambda']}")
             z_nonzero = [(e, v) for e, v in zip(res['z_prime_edges'], res['z_prime'])
-                         if v != '0']
-            print(f"    z' (nonzero entries): {z_nonzero}")
-            print(f"    boundary check zero: {res['boundary_check_zero']}")
+                         if v not in ('0', '0/1')]
+            print(f"  {name}")
+            print(f"    lambda = {res['lambda']},  boundary check = {res['boundary_check_zero']}")
+            print(f"    z' nonzero: {z_nonzero}")
     print()
 
-    print("Non-cycle-faithful refinements (proved by direct cycle-pairing):")
+    print("Non-cycle-faithful refinements:")
     for name, res in results.items():
         if not res["cycle_faithful"]:
-            reason = res.get("failure_reason", "No lift found.")
             print(f"  {name}")
-            print(f"    {reason}")
+            print(f"    {res.get('failure_reason', 'No lift found.')}")
     print()
 
+    all_agree = all(r["methods_agree"] for r in results.values())
+    print(f"Both methods agree on all refinements: {all_agree}")
+    print()
     print("Interpretation:")
-    print("  Cycle-faithful: persistence follows from the Cycle-Lift Persistence Theorem.")
-    print("  Non-cycle-faithful: persistence proved by direct cycle-pairing in N'.")
-    print("  All four refinements preserve the obstruction; the classification")
-    print("  identifies which ones satisfy the stronger cycle-lift hypothesis.")
+    print("  Layer 1 (direct persistence):    all four refinements — proved by")
+    print("    direct cycle-pairing in N' (Lemma lem:cycle-pairing).")
+    print("  Layer 2 (witness persistence):   two refinements — proved by")
+    print("    Cycle-Lift Persistence Theorem (Theorem thm:cycle-lift).")
 
 
 if __name__ == "__main__":
