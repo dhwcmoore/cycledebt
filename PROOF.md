@@ -162,12 +162,27 @@ Each nonzero pairing constitutes a proof, by the lemma above, that the transferr
 
 ---
 
-## 4. Universal admissible refinement theorem
+## 4. Cycle-Lift Persistence Theorem
 
-The following theorem gives a general sufficient condition for persistence
-that subsumes the cycle-pairing argument.
+**Definition (Cycle-faithful refinement).**
+Let $z \in Z_1(N;\mathbb Q)$. A refinement $\rho: N' \to N$ equipped with
+a chain pushforward $\rho_*: C_1(N';\mathbb Q) \to C_1(N;\mathbb Q)$ is
+*cycle-faithful relative to $z$* if
+$$
+\rho_*(Z_1(N';\mathbb Q)) \cap \mathbb Q^\times z \neq \varnothing.
+$$
+Equivalently, there exists $z' \in Z_1(N';\mathbb Q)$ and $\lambda \in \mathbb Q^\times$
+such that $\rho_* z' = \lambda z$.
 
-**Theorem (Persistence under admissible refinement).**
+Cycle-faithfulness is a computational property: it holds if and only if the
+linear system $[\partial' \mid 0;\, \rho_* \mid {-z}] \cdot [z';\lambda]^T = 0$
+has a solution with $\lambda \neq 0$.  Script: `cycle_lift_test.py`.
+
+---
+
+The following theorem gives a general sufficient condition for persistence.
+
+**Theorem (Cycle-lift persistence).**
 Let $N$ be a finite oriented nerve and $r \in C^1(N;\mathbb Q)$ a cocycle.
 Suppose $z \in Z_1(N;\mathbb Q)$ with $\langle z, r \rangle \neq 0$.
 Let $\rho: N' \to N$ be a refinement equipped with maps
@@ -227,27 +242,70 @@ which breaks proportionality with $z$ unless $\lambda = 0$.
 These two refinements are therefore proved by the direct cycle-pairing
 lemma applied in $N'$, not by this theorem.
 
-Verification: `admissible_refinement_theorem.py`.
+Cycle-faithfulness is verified by `cycle_lift_test.py`, which solves the
+linear system over $\mathbb Q$ and proves algebraically that subdivide-$U_1$
+and subdivide-$U_2$ force $\lambda = 0$ (impossible).
 
 ---
 
-## 5. Scope of the proof
+## 5. Why single-region subdivisions fail cycle-faithfulness
+
+For subdivide-$U_1$ with equal-distribution transfer, the junction vertex $U_2$
+(an original vertex of $N$, still present in $N'$) has two new incoming edges
+$U_{1a}$-$U_2$ and $U_{1b}$-$U_2$ where previously there was only $U_1$-$U_2$.
+The cycle conservation law at $U_2$ in $N'$ forces:
+$$
+z'(U_{1a}\text{-}U_2) + z'(U_{1b}\text{-}U_2) = z'(U_2\text{-}U_3).
+$$
+The pushforward gives $\rho_*(z')[U_1\text{-}U_2] = \tfrac{1}{2}(z'(U_{1a}\text{-}U_2) + z'(U_{1b}\text{-}U_2))$.
+For $\rho_*(z') = \lambda z$, we need $\rho_*(z')[U_1\text{-}U_2] = \rho_*(z')[U_2\text{-}U_3]$.
+But flow conservation gives $\rho_*(z')[U_1\text{-}U_2] = \tfrac{1}{2}\rho_*(z')[U_2\text{-}U_3]$.
+So $\rho_*(z')[U_2\text{-}U_3] = \tfrac{1}{2}\rho_*(z')[U_2\text{-}U_3]$, forcing
+$\rho_*(z')[U_2\text{-}U_3] = 0$, hence $\lambda = 0$.
+
+The cycle-faithful refinements (subdivide-all, insert-bridge) avoid this because
+they either eliminate the original junction vertex ($U_2 \to U_{2a}, U_{2b}$) or
+replace $U_1$-$U_2$ with a *path* through a new vertex (Bridge), preserving
+flow balance without multiplying the parallel edges at the original vertex.
+
+**Conjecture (Balanced loop refinement).**
+Let $z$ be a simple cycle in a finite oriented nerve $N$. Suppose
+$\rho: N' \to N$ refines the support of $z$ such that no original vertex
+in $\operatorname{supp}(z) \cap V(N)$ gains new incident edges in $N'$.
+Then $\rho$ is cycle-faithful relative to $z$.
+
+---
+
+## 6. Scope of the proof
 
 What is proved:
 
-> The residue $r = (1,1,1,-2)$ on the declared finite nerve represents a nonzero $H^1$ class. This class is preserved under the five declared presentation changes and persists under the four declared refinement maps with equal-distribution transfer. For two of the four refinements (subdivide all, insert bridge), persistence follows from the Universal Admissible Refinement Theorem. For the remaining two (subdivide $U_1$, subdivide $U_2$), persistence is proved by the direct cycle-pairing lemma applied in the refined complex.
+> The residue $r = (1,1,1,-2)$ on the declared finite nerve represents a nonzero $H^1$ class. This class is preserved under the five declared presentation changes and persists under the four declared refinement maps with equal-distribution transfer. For two of the four refinements (subdivide all, insert bridge), persistence follows from the Cycle-Lift Persistence Theorem. For the remaining two (subdivide $U_1$, subdivide $U_2$), cycle-faithfulness is algebraically impossible for equal-distribution transfer; persistence is proved by the direct cycle-pairing lemma applied in the refined complex.
 
 What is not yet proved:
 
-> The obstruction persists under *all* admissible refinements.
-
-A universal result requires identifying which refinements admit a nonzero
-cycle-lift, and proving the lift exists.  The present paper does not claim
-that theorem.  The declared finite tests constitute proved witnesses.
+> A characterisation of all cycle-faithful refinements, or a proof of the Balanced Loop Refinement Conjecture.
 
 ---
 
-## 6. Certificate files
+## 7. Two-layer interpretation
+
+Refinement persistence has two layers:
+
+1. **Direct obstruction persistence.** There exists a refined cycle $z'$ in $N'$
+   with $\langle z', \rho^* r \rangle \neq 0$. All four declared refinements
+   satisfy this. This is proved by the Cycle-Pairing Certificate Lemma.
+
+2. **Witness persistence (cycle-faithfulness).** The original obstruction cycle $z$
+   admits a nonzero rational lift $z'$ in $N'$ via the pushforward. Two of the four
+   declared refinements satisfy this. When it holds, persistence follows from the
+   Cycle-Lift Persistence Theorem without computing a new cycle.
+
+The first can hold even when the second fails.
+
+---
+
+## 8. Certificate files
 
 All computations above are certified by the files in `certificates/`:
 
@@ -255,7 +313,8 @@ All computations above are certified by the files in `certificates/`:
 |---|---|
 | `actual_gluing_object_v1_certificate.json` | Base classification and cycle witness |
 | `actual_gluing_object_v1_invariance_report.json` | Five invariance tests |
-| `actual_gluing_object_v1_refinement_test_report.json` | Four refinement tests with pairings |
-| `admissible_refinement_theorem_certificate.json` | Theorem verification: adjointness, cycle-lift, proof method per refinement |
+| `actual_gluing_object_v1_refinement_test_report.json` | Four refinement tests with direct pairings |
+| `admissible_refinement_theorem_certificate.json` | Adjointness and cycle-lift check for each refinement |
+| `cycle_lift_test_certificate.json` | Linear-system proof of cycle-faithfulness / impossibility |
 
 These files are frozen; see `MANIFEST.md` for the claim licensed by them.

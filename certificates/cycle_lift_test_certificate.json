@@ -1,0 +1,132 @@
+{
+  "test": "cycle_lift_test",
+  "base_edges": [
+    "U1-U2",
+    "U2-U3",
+    "U3-U4",
+    "U1-U4"
+  ],
+  "base_cycle": [
+    "-1",
+    "-1",
+    "-1",
+    "1"
+  ],
+  "base_pairing": "-5",
+  "results": {
+    "Subdivide U1 \u2192 (U1a, U1b)": {
+      "cycle_faithful": false,
+      "lambda": null,
+      "z_prime": null,
+      "z_prime_edges": null,
+      "system_dimensions": [
+        9,
+        8
+      ],
+      "method": "null_space_over_Q",
+      "failure_reason": "System forces lambda = 0; cycle-lift impossible."
+    },
+    "Subdivide U2 \u2192 (U2a, U2b)": {
+      "cycle_faithful": false,
+      "lambda": null,
+      "z_prime": null,
+      "z_prime_edges": null,
+      "system_dimensions": [
+        9,
+        8
+      ],
+      "method": "null_space_over_Q",
+      "failure_reason": "System forces lambda = 0; cycle-lift impossible."
+    },
+    "Subdivide all regions": {
+      "cycle_faithful": true,
+      "lambda": "1",
+      "z_prime": [
+        "-4",
+        "0",
+        "0",
+        "0",
+        "-4",
+        "0",
+        "0",
+        "0",
+        "-4",
+        "0",
+        "0",
+        "0",
+        "4",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "z_prime_edges": [
+        "U1a-U2a",
+        "U1a-U2b",
+        "U1b-U2a",
+        "U1b-U2b",
+        "U2a-U3a",
+        "U2a-U3b",
+        "U2b-U3a",
+        "U2b-U3b",
+        "U3a-U4a",
+        "U3a-U4b",
+        "U3b-U4a",
+        "U3b-U4b",
+        "U1a-U4a",
+        "U1a-U4b",
+        "U1b-U4a",
+        "U1b-U4b",
+        "U1a-U1b",
+        "U2a-U2b",
+        "U3a-U3b",
+        "U4a-U4b"
+      ],
+      "boundary_check_zero": true,
+      "pushforward_check": [
+        "-1",
+        "-1",
+        "-1",
+        "1"
+      ],
+      "system_dimensions": [
+        12,
+        21
+      ],
+      "method": "null_space_over_Q"
+    },
+    "Insert bridge between U1 and U2": {
+      "cycle_faithful": true,
+      "lambda": "1",
+      "z_prime": [
+        "-1",
+        "-1",
+        "-1",
+        "-1",
+        "1"
+      ],
+      "z_prime_edges": [
+        "U1-Bridge_U1_U2",
+        "Bridge_U1_U2-U2",
+        "U2-U3",
+        "U3-U4",
+        "U1-U4"
+      ],
+      "boundary_check_zero": true,
+      "pushforward_check": [
+        "-1",
+        "-1",
+        "-1",
+        "1"
+      ],
+      "system_dimensions": [
+        9,
+        6
+      ],
+      "method": "null_space_over_Q"
+    }
+  }
+}

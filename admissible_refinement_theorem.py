@@ -1,7 +1,7 @@
 """
-Universal Admissible Refinement Theorem — verification script.
+Cycle-Lift Persistence Theorem — verification script.
 
-Theorem (Persistence under admissible refinement):
+Theorem (Cycle-lift persistence):
   Let N be a finite oriented nerve and r in C^1(N;Q) a cocycle.
   Suppose z in Z_1(N;Q) with <z,r> != 0.
   Let rho: N' -> N be a refinement with maps
@@ -266,7 +266,7 @@ if __name__ == "__main__":
         "base_cycle": ["-1", "-1", "-1", "1"],
         "refinement_results": results,
     }
-    out = Path("certificates") / "admissible_refinement_theorem_certificate.json"
+    out = Path("certificates") / "cycle_lift_persistence_certificate.json"
     out.write_text(json.dumps(cert, indent=2))
     print(f"\nCertificate saved to: {out}")
 

@@ -21,6 +21,7 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{example}[theorem]{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
 
 \newcommand{\Reg}{\mathrm{Reg}}
 \newcommand{\im}{\operatorname{im}}
@@ -1003,7 +1004,29 @@ For each of the four declared refinements in the table, the transferred residue 
 For each refinement, the refined certificate supplies a cycle \(z'\) with \(\partial z'=0\) and a non-zero rational pairing \(\langle z',r'\rangle\), listed in the table. By Lemma \ref{lem:cycle-pairing}, \(r'\notin \im\delta'^0\). The refined residue is a cocycle in the corresponding refined complex. Hence \([r']\neq 0\) in the refined \(H^1\).
 \end{proof}
 
-\begin{theorem}[Persistence under admissible refinement]\label{thm:admissible-refinement}
+\begin{definition}[Cycle-faithful refinement]\label{def:cycle-faithful}
+Let \(z\in Z_1(N;\Q)\). A refinement \(\rho:N'\to N\) equipped with a chain
+pushforward \(\rho_*:C_1(N';\Q)\to C_1(N;\Q)\) is \emph{cycle-faithful relative
+to \(z\)} if
+\[
+\rho_*(Z_1(N';\Q))\cap \Q^\times z\neq \varnothing.
+\]
+Equivalently, there exists \(z'\in Z_1(N';\Q)\) and \(\lambda\in\Q^\times\) such
+that \(\rho_*z'=\lambda z\).
+\end{definition}
+
+\begin{remark}[Computational criterion]
+Cycle-faithfulness is a linear-algebra condition over \(\Q\). It holds precisely
+when the homogeneous system
+\[
+\begin{pmatrix}\partial' & 0 \\ \rho_* & -z\end{pmatrix}
+\begin{pmatrix}z'\\\lambda\end{pmatrix}=0
+\]
+has a solution with \(\lambda\neq 0\). When no such solution exists, the system
+forces \(\lambda=0\), and cycle-faithfulness is algebraically impossible.
+\end{remark}
+
+\begin{theorem}[Cycle-lift persistence]\label{thm:cycle-lift}
 Let \(N\) be a finite oriented nerve and let
 \(r\in C^1(N;\Q)\) be a cocycle. Suppose there exists a cycle
 \(z\in Z_1(N;\Q)\) such that
@@ -1080,8 +1103,8 @@ Refinement & Cycle-lift & \(\lambda\) & Proof method \\
 \midrule
 Subdivide \(U_1\) & No & --- & Direct pairing \\
 Subdivide \(U_2\) & No & --- & Direct pairing \\
-Subdivide all regions & Yes & \(1/4\) & Theorem \ref{thm:admissible-refinement} \\
-Insert bridge \(U_1\)--\(U_2\) & Yes & \(1\) & Theorem \ref{thm:admissible-refinement} \\
+Subdivide all regions & Yes & \(1/4\) & Theorem \ref{thm:cycle-lift} \\
+Insert bridge \(U_1\)--\(U_2\) & Yes & \(1\) & Theorem \ref{thm:cycle-lift} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1092,17 +1115,52 @@ forces \(\rho_*(z')[e_{\mathrm{in}}] = \tfrac{1}{2}\rho_*(z')[e_{\mathrm{out}}]\
 which breaks proportionality with \(z\) unless \(\lambda=0\).
 Those two refinements are therefore certified by the direct cycle-pairing
 Lemma \ref{lem:cycle-pairing} applied in \(N'\), not by Theorem
-\ref{thm:admissible-refinement}.
+\ref{thm:cycle-lift}.
 
 The distinction is verified computationally in
-\texttt{admissible\_refinement\_theorem.py}.
+\texttt{cycle\_lift\_test.py}, which solves the homogeneous system
+\[
+\begin{pmatrix}\partial' & 0 \\ \rho_* & -z\end{pmatrix}
+\begin{pmatrix}z'\\\lambda\end{pmatrix}=0
+\]
+over \(\Q\) and proves algebraically that \(\lambda=0\) is forced
+for the two single-region subdivisions.
 \end{remark}
 
-\begin{remark}[What remains for universality]
-A universal result would require identifying all refinements that admit a
-nonzero cycle-lift and proving the lift exists in each case.
-The present paper does not claim that theorem.
-It identifies it as the next mathematical target.
+\begin{remark}[Two layers of persistence]
+Refinement persistence has two layers.
+
+\emph{Direct obstruction persistence.} There exists a refined cycle
+\(z'\in Z_1(N';\Q)\) with \(\langle z',\rho^*r\rangle\neq 0\).
+All four declared refinements satisfy this.
+Proved by Lemma \ref{lem:cycle-pairing} in \(N'\).
+
+\emph{Witness persistence (cycle-faithfulness).} The original
+obstruction cycle \(z\) admits a nonzero rational lift via
+\(\rho_*\). Two of the four declared refinements satisfy this.
+When it holds, Theorem \ref{thm:cycle-lift} applies and the
+persistence proof requires no new cycle computation.
+
+The first can hold even when the second fails.
+\end{remark}
+
+\begin{conjecture}[Balanced loop refinement]
+Let \(z\) be a simple cycle in a finite oriented nerve \(N\). Suppose
+\(\rho:N'\to N\) refines the support of \(z\) such that no original vertex
+in \(\operatorname{supp}(z)\cap V(N)\) gains new incident edges in \(N'\).
+Then \(\rho\) is cycle-faithful relative to \(z\).
+\end{conjecture}
+
+\begin{remark}[Evidence for the conjecture]
+The two cycle-faithful refinements in Section \ref{sec:invariance-refinement}
+support this conjecture. The insert-bridge refinement replaces the edge
+\(U_1U_2\) with a path through a new vertex, leaving all original vertices
+on \(z\) unchanged in degree. The subdivide-all refinement eliminates the
+original vertices entirely, replacing each with a pair. In both cases,
+flow conservation at original vertices creates no obstruction to the lift.
+The two non-cycle-faithful refinements each leave an original vertex
+(\(U_2\) or \(U_1\)/\(U_3\)) with new incident edges, and this is
+the precise source of the algebraic impossibility.
 \end{remark}
 
 \section{Spectral diagnosis of associator fields}
