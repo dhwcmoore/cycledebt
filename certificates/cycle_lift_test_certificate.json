@@ -49,9 +49,16 @@
           "U3-U4": "1",
           "U1-U4": "1/2"
         },
+        "split_multiplicities": {
+          "U1-U2": "2",
+          "U2-U3": "1",
+          "U3-U4": "1",
+          "U1-U4": "2"
+        },
         "ratios_uniform": false,
-        "failure_reason": "non_uniform_edge_ratios",
-        "interpretation": "im(PK) is one-dimensional (rank 1). The ratios v[e]/z[e] are non-uniform, so v is not proportional to z. Therefore z is not in im(PK) and no nonzero-degree lift exists. This is certified by rank([PK|z]) = 2 > rank(PK) = 1."
+        "multiplicities_uniform": false,
+        "failure_reason": "non_uniform_split_multiplicities",
+        "interpretation": "im(PK) is one-dimensional (rank 1). The split multiplicities m_e = z_e/v_e are non-uniform around the loop. By the Uniform Ratio Criterion (Theorem thm:uniform-ratio), no nonzero-degree lift exists. Certified by rank([PK|z]) = 2 > rank(PK) = 1."
       }
     },
     "Subdivide U2 \u2192 (U2a, U2b)": {
@@ -89,9 +96,16 @@
           "U3-U4": "1",
           "U1-U4": "1"
         },
+        "split_multiplicities": {
+          "U1-U2": "2",
+          "U2-U3": "2",
+          "U3-U4": "1",
+          "U1-U4": "1"
+        },
         "ratios_uniform": false,
-        "failure_reason": "non_uniform_edge_ratios",
-        "interpretation": "im(PK) is one-dimensional (rank 1). The ratios v[e]/z[e] are non-uniform, so v is not proportional to z. Therefore z is not in im(PK) and no nonzero-degree lift exists. This is certified by rank([PK|z]) = 2 > rank(PK) = 1."
+        "multiplicities_uniform": false,
+        "failure_reason": "non_uniform_split_multiplicities",
+        "interpretation": "im(PK) is one-dimensional (rank 1). The split multiplicities m_e = z_e/v_e are non-uniform around the loop. By the Uniform Ratio Criterion (Theorem thm:uniform-ratio), no nonzero-degree lift exists. Certified by rank([PK|z]) = 2 > rank(PK) = 1."
       }
     },
     "Subdivide all regions": {
@@ -160,15 +174,21 @@
           "U3a-U4a": "-4",
           "U1a-U4a": "4"
         },
-        "degree_per_edge": {
-          "U1-U2": "1",
-          "U2-U3": "1",
-          "U3-U4": "1",
-          "U1-U4": "1"
-        },
-        "degrees_uniform": true,
         "boundary_verified": true,
         "pushforward_verified": true,
+        "geometric_edge_ratios": {
+          "U1-U2": "1/4",
+          "U2-U3": "1/4",
+          "U3-U4": "1/4",
+          "U1-U4": "1/4"
+        },
+        "geometric_split_multiplicities": {
+          "U1-U2": "4",
+          "U2-U3": "4",
+          "U3-U4": "4",
+          "U1-U4": "4"
+        },
+        "multiplicities_uniform": true,
         "rank_PK": 1,
         "dim_Z1_N_prime": 13
       }
@@ -210,15 +230,21 @@
           "U3-U4": "-1",
           "U1-U4": "1"
         },
-        "degree_per_edge": {
+        "boundary_verified": true,
+        "pushforward_verified": true,
+        "geometric_edge_ratios": {
           "U1-U2": "1",
           "U2-U3": "1",
           "U3-U4": "1",
           "U1-U4": "1"
         },
-        "degrees_uniform": true,
-        "boundary_verified": true,
-        "pushforward_verified": true,
+        "geometric_split_multiplicities": {
+          "U1-U2": "1",
+          "U2-U3": "1",
+          "U3-U4": "1",
+          "U1-U4": "1"
+        },
+        "multiplicities_uniform": true,
         "rank_PK": 1,
         "dim_Z1_N_prime": 1
       }

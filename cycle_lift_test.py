@@ -222,16 +222,21 @@ def build_witness_certificate(d_prime, M, z_vec, edge_names, base_edges, result)
             im_gen = col
             break
 
+    # Compute geometric split multiplicities from PK generator (consistent for all cases)
+    # m_e = z_e / v_e  where v is the im(PK) generator
+    geometric_m = {}
+    geometric_ratio = {}
+    if im_gen is not None:
+        for i, e in enumerate(base_edges):
+            if z_vec[i] != 0 and im_gen[i, 0] != 0:
+                rat = sp.Rational(im_gen[i, 0]) / z_vec[i]
+                geometric_ratio[e] = str(rat)
+                geometric_m[e] = str(sp.Rational(1) / rat)
+
     if result["cycle_faithful"]:
         lam = sp.Rational(result["lambda"])
         z_prime = sp.Matrix([sp.Rational(v) for v in result["z_prime"]])
         pushforward = M * z_prime
-
-        # Compute per-edge degree: rho_*(z')[e] / z[e] for each e in supp(z)
-        degree_per_edge = {}
-        for i, e in enumerate(base_edges):
-            if z_vec[i] != 0:
-                degree_per_edge[e] = str(sp.Rational(pushforward[i]) / z_vec[i])
 
         return {
             "type": "cycle_lift_witness_certificate",
@@ -241,24 +246,18 @@ def build_witness_certificate(d_prime, M, z_vec, edge_names, base_edges, result)
                 for i in range(len(edge_names))
                 if result["z_prime"][i] not in ("0", "0/1")
             },
-            "degree_per_edge": degree_per_edge,
-            "degrees_uniform": len(set(degree_per_edge.values())) == 1,
             "boundary_verified": (d_prime * z_prime).norm() == 0,
             "pushforward_verified": (pushforward == lam * z_vec),
+            "geometric_edge_ratios": geometric_ratio,
+            "geometric_split_multiplicities": geometric_m,
+            "multiplicities_uniform": len(set(geometric_m.values())) == 1,
             "rank_PK": result["rank_PK"],
             "dim_Z1_N_prime": result["dim_Z1_N_prime"],
         }
 
     else:
-        # Compute ratios v[e]/z[e] for the im(PK) generator v
-        ratios = {}
-        if im_gen is not None:
-            for i, e in enumerate(base_edges):
-                if z_vec[i] != 0:
-                    ratios[e] = str(sp.Rational(im_gen[i]) / z_vec[i])
-
-        ratio_vals = list(ratios.values())
-        ratios_uniform = len(set(ratio_vals)) == 1 and ratio_vals
+        ratio_vals = list(geometric_ratio.values())
+        ratios_uniform = len(set(ratio_vals)) == 1 and bool(ratio_vals)
 
         return {
             "type": "cycle_lift_failure_certificate",
@@ -266,22 +265,22 @@ def build_witness_certificate(d_prime, M, z_vec, edge_names, base_edges, result)
             "rank_PK": result["rank_PK"],
             "rank_augmented": result["rank_PK_augmented"],
             "im_PK_generator": (
-                {base_edges[i]: str(im_gen[i]) for i in range(len(base_edges))}
+                {base_edges[i]: str(im_gen[i, 0]) for i in range(len(base_edges))}
                 if im_gen is not None else None
             ),
             "base_cycle": {base_edges[i]: str(z_vec[i]) for i in range(len(base_edges))},
-            "edge_ratios": ratios,
-            "ratios_uniform": bool(ratios_uniform),
-            "failure_reason": (
-                "non_uniform_edge_ratios" if not ratios_uniform
-                else result.get("failure_reason", "no_lift_found")
-            ),
+            "edge_ratios": geometric_ratio,
+            "split_multiplicities": geometric_m,
+            "ratios_uniform": ratios_uniform,
+            "multiplicities_uniform": len(set(geometric_m.values())) == 1,
+            "failure_reason": "non_uniform_split_multiplicities",
             "interpretation": (
                 "im(PK) is one-dimensional (rank 1). "
-                "The ratios v[e]/z[e] are non-uniform, so v is not proportional to z. "
-                "Therefore z is not in im(PK) and no nonzero-degree lift exists. "
-                "This is certified by rank([PK|z]) = "
-                f"{result['rank_PK_augmented']} > rank(PK) = {result['rank_PK']}."
+                "The split multiplicities m_e = z_e/v_e are non-uniform around the loop. "
+                "By the Uniform Ratio Criterion (Theorem thm:uniform-ratio), "
+                "no nonzero-degree lift exists. "
+                f"Certified by rank([PK|z]) = {result['rank_PK_augmented']} > "
+                f"rank(PK) = {result['rank_PK']}."
             ),
         }
 
