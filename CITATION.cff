@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "Obstruction Persistence and Witness Failure in Finite Regional Cohomology"
+authors:
+  - family-names: "YourLastName"
+    given-names: "YourFirstName"
+    orcid: ""
+affiliation: ""
+version: "0.1.0"
+url: "https://github.com/yourusername/residue-test"
+date-released: "2026-06-01"
+keywords:
+  - topology
+  - cohomology
+  - computational topology
+  - reproducibility
+preferred-citation: |
+  YourFirstName YourLastName (2026). Obstruction Persistence and Witness Failure in Finite Regional Cohomology. https://github.com/yourusername/residue-test

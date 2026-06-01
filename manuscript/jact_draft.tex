@@ -1,0 +1,42 @@
+% LaTeX skeleton for JACT-style manuscript
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Obstruction Persistence and Witness Failure in Finite Regional Cohomology}
+\author{Your Name}
+\date{June 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a finite cohomological obstruction classifier with machine‑readable
+certificates for seam residues in finite regional covers. The framework
+distinguishes direct obstruction persistence in refined nerves from witness
+(cycle) persistence, and characterizes cycle‑faithfulness via rational rank
+tests. We give algorithms to produce audit‑grade JSON certificates and
+rank/failure witnesses, prove correctness of the tests, and demonstrate
+persistence (or its certified failure) across several refinement strategies.
+All code, inputs, and certificates are provided for full reproducibility.
+\end{abstract}
+
+\section{Introduction}
+\input{../PROOF.md}
+
+\section{Background and notation}
+\section{Classification algorithm}
+\section{Invariance under presentation}
+\section{Refinements and transfer maps}
+\section{Cycle-faithfulness and rational rank tests}
+\section{Experiments and certificates}
+\section{Discussion and open problems}
+\section*{Reproducibility}
+The repository includes scripts to regenerate all certificates and reports.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
