@@ -153,8 +153,8 @@ The four declared refinement maps all use equal-distribution transfer ($r'_e = r
 
 | Refinement | $\dim C'^0$ | $\dim C'^1$ | $\langle z', r' \rangle$ | Verdict |
 |---|---|---|---|---|
-| Subdivide $U_1 \to (U_{1a}, U_{1b})$ | 5 | 6 | $-7/2$ | $[r'] \neq 0$ |
-| Subdivide $U_2 \to (U_{2a}, U_{2b})$ | 5 | 6 | $-4$ | $[r'] \neq 0$ |
+| Subdivide $U_1 \to (U_{1a}, U_{1b})$ | 5 | 7 | $-7/2$ | $[r'] \neq 0$ |
+| Subdivide $U_2 \to (U_{2a}, U_{2b})$ | 5 | 7 | $-4$ | $[r'] \neq 0$ |
 | Subdivide all regions | 8 | 20 | $-5/4$ | $[r'] \neq 0$ |
 | Insert bridge between $U_1$ and $U_2$ | 5 | 5 | $-5$ | $[r'] \neq 0$ |
 

@@ -148,9 +148,9 @@ refinement_tests/
   },
   "cycle_witness": {
     "cycle_edges": ["U1-U2", "U2-U3", "U3-U4", "U1-U4"],
-    "cycle_vector": ["1", "1", "1", "1"],
+    "cycle_vector": ["-1", "-1", "-1", "1"],
     "boundary_of_cycle": "0",
-    "pairing_with_residue": "1",
+    "pairing_with_residue": "-5",
     "conclusion": "residue_not_coboundary_by_nonzero_pairing"
   }
 }
