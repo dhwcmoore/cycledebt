@@ -27,31 +27,31 @@
       ],
       "failure_reason": "System forces lambda = 0; cycle-lift impossible.",
       "witness_certificate": {
-        "type": "cycle_lift_obstruction",
-        "im_PK_generator": [
-          "-1/2",
-          "-1",
-          "-1",
-          "1/2"
-        ],
-        "im_PK_generator_edges": [
-          "U1-U2",
-          "U2-U3",
-          "U3-U4",
-          "U1-U4"
-        ],
-        "ratio_im_gen_to_z": {
+        "type": "cycle_lift_failure_certificate",
+        "cycle_faithful": false,
+        "rank_PK": 1,
+        "rank_augmented": 2,
+        "im_PK_generator": {
+          "U1-U2": "-1/2",
+          "U2-U3": "-1",
+          "U3-U4": "-1",
+          "U1-U4": "1/2"
+        },
+        "base_cycle": {
+          "U1-U2": "-1",
+          "U2-U3": "-1",
+          "U3-U4": "-1",
+          "U1-U4": "1"
+        },
+        "edge_ratios": {
           "U1-U2": "1/2",
           "U2-U3": "1",
           "U3-U4": "1",
           "U1-U4": "1/2"
         },
         "ratios_uniform": false,
-        "rank_PK": 1,
-        "rank_PK_augmented": 2,
-        "z_is_in_im_PK": false,
-        "failure_reason": "System forces lambda = 0; cycle-lift impossible.",
-        "interpretation": "All cycles in N' push forward to multiples of im_PK_generator. Since the ratios im_PK_generator[e] / z[e] are not uniform, z is not in the image."
+        "failure_reason": "non_uniform_edge_ratios",
+        "interpretation": "im(PK) is one-dimensional (rank 1). The ratios v[e]/z[e] are non-uniform, so v is not proportional to z. Therefore z is not in im(PK) and no nonzero-degree lift exists. This is certified by rank([PK|z]) = 2 > rank(PK) = 1."
       }
     },
     "Subdivide U2 \u2192 (U2a, U2b)": {
@@ -67,31 +67,31 @@
       ],
       "failure_reason": "System forces lambda = 0; cycle-lift impossible.",
       "witness_certificate": {
-        "type": "cycle_lift_obstruction",
-        "im_PK_generator": [
-          "-1/2",
-          "-1/2",
-          "-1",
-          "1"
-        ],
-        "im_PK_generator_edges": [
-          "U1-U2",
-          "U2-U3",
-          "U3-U4",
-          "U1-U4"
-        ],
-        "ratio_im_gen_to_z": {
+        "type": "cycle_lift_failure_certificate",
+        "cycle_faithful": false,
+        "rank_PK": 1,
+        "rank_augmented": 2,
+        "im_PK_generator": {
+          "U1-U2": "-1/2",
+          "U2-U3": "-1/2",
+          "U3-U4": "-1",
+          "U1-U4": "1"
+        },
+        "base_cycle": {
+          "U1-U2": "-1",
+          "U2-U3": "-1",
+          "U3-U4": "-1",
+          "U1-U4": "1"
+        },
+        "edge_ratios": {
           "U1-U2": "1/2",
           "U2-U3": "1/2",
           "U3-U4": "1",
           "U1-U4": "1"
         },
         "ratios_uniform": false,
-        "rank_PK": 1,
-        "rank_PK_augmented": 2,
-        "z_is_in_im_PK": false,
-        "failure_reason": "System forces lambda = 0; cycle-lift impossible.",
-        "interpretation": "All cycles in N' push forward to multiples of im_PK_generator. Since the ratios im_PK_generator[e] / z[e] are not uniform, z is not in the image."
+        "failure_reason": "non_uniform_edge_ratios",
+        "interpretation": "im(PK) is one-dimensional (rank 1). The ratios v[e]/z[e] are non-uniform, so v is not proportional to z. Therefore z is not in im(PK) and no nonzero-degree lift exists. This is certified by rank([PK|z]) = 2 > rank(PK) = 1."
       }
     },
     "Subdivide all regions": {
@@ -152,7 +152,7 @@
       ],
       "boundary_check_zero": true,
       "witness_certificate": {
-        "type": "cycle_lift_witness",
+        "type": "cycle_lift_witness_certificate",
         "lambda": "1",
         "z_prime_nonzero": {
           "U1a-U2a": "-4",
@@ -160,18 +160,15 @@
           "U3a-U4a": "-4",
           "U1a-U4a": "4"
         },
-        "pushforward_equals_lambda_z": {
-          "U1-U2": "-1",
-          "U2-U3": "-1",
-          "U3-U4": "-1",
+        "degree_per_edge": {
+          "U1-U2": "1",
+          "U2-U3": "1",
+          "U3-U4": "1",
           "U1-U4": "1"
         },
-        "im_PK_generator": [
-          "-1/4",
-          "-1/4",
-          "-1/4",
-          "1/4"
-        ],
+        "degrees_uniform": true,
+        "boundary_verified": true,
+        "pushforward_verified": true,
         "rank_PK": 1,
         "dim_Z1_N_prime": 13
       }
@@ -204,7 +201,7 @@
       ],
       "boundary_check_zero": true,
       "witness_certificate": {
-        "type": "cycle_lift_witness",
+        "type": "cycle_lift_witness_certificate",
         "lambda": "1",
         "z_prime_nonzero": {
           "U1-Bridge_U1_U2": "-1",
@@ -213,18 +210,15 @@
           "U3-U4": "-1",
           "U1-U4": "1"
         },
-        "pushforward_equals_lambda_z": {
-          "U1-U2": "-1",
-          "U2-U3": "-1",
-          "U3-U4": "-1",
+        "degree_per_edge": {
+          "U1-U2": "1",
+          "U2-U3": "1",
+          "U3-U4": "1",
           "U1-U4": "1"
         },
-        "im_PK_generator": [
-          "-1",
-          "-1",
-          "-1",
-          "1"
-        ],
+        "degrees_uniform": true,
+        "boundary_verified": true,
+        "pushforward_verified": true,
         "rank_PK": 1,
         "dim_Z1_N_prime": 1
       }

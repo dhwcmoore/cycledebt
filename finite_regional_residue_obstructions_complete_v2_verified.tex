@@ -1129,6 +1129,33 @@ standard rank test for membership in a column space over a field,
 rank of \(PK\).
 \end{proof}
 
+\begin{proposition}[One-dimensional cycle-image criterion]\label{prop:rank1-criterion}
+Let \(K\), \(P\), and \(z\) be as in Proposition \ref{prop:rank-criterion}.
+Suppose \(\operatorname{rank}(PK)=1\), and let \(v\neq 0\) be any generator of
+\(\operatorname{im}(PK)\). Then \(\rho\) is cycle-faithful relative to \(z\)
+if and only if \(v\) is proportional to \(z\), equivalently if and only if
+the ratios
+\[
+\frac{v_e}{z_e}
+\]
+are all defined, nonzero, and equal to the same \(\lambda\in\Q^\times\).
+\end{proposition}
+
+\begin{proof}
+Since the columns of \(K\) span \(Z_1(N';\Q)\), the columns of \(PK\) span
+\(\rho_*(Z_1(N';\Q))\). Under the rank-one hypothesis, this image is the
+one-dimensional subspace \(\Q v\). Therefore
+\[
+z\in \rho_*(Z_1(N';\Q))
+\quad\Longleftrightarrow\quad
+z\in \Q v
+\quad\Longleftrightarrow\quad
+v=\lambda z
+\]
+for some \(\lambda\in\Q^\times\). Written componentwise on the support of \(z\),
+this is precisely the condition that all ratios \(v_e/z_e\) are equal and nonzero.
+\end{proof}
+
 \begin{center}
 \begin{tabular}{lllll}
 \toprule
@@ -1160,39 +1187,45 @@ a new cycle. An obstruction can persist even when its original
 witness-cycle does not lift.
 \end{remark}
 
-\begin{conjecture}[Balanced cycle-fibre]\label{conj:cycle-fibre}
-Let \(z\) be a simple rational cycle in a finite oriented nerve \(N\).
-Let \(\rho:N'\to N\) be a refinement equipped with a chain pushforward
-\(\rho_*\). Suppose the full preimage of the support of \(z\) contains
-a divergence-free rational circulation whose pushforward crosses every
-edge of \(z\) with the same nonzero rational degree. Then \(\rho\) is
-cycle-faithful relative to \(z\).
+\begin{conjecture}[Balanced loop refinement]\label{conj:balanced-loop}
+Let \(z\) be a simple rational cycle in \(N\), and let
+\(\rho:N'\to N\) be a refinement equipped with a chain pushforward \(\rho_*\)
+such that \(\operatorname{rank}(P|_{Z_1(N')})=1\). Let \(v\neq 0\) be a
+generator of \(\operatorname{im}(P|_{Z_1(N')})\). Then \(\rho\) is
+cycle-faithful relative to \(z\) if and only if the ratios \(v_e/z_e\)
+are uniform and nonzero for all edges \(e\) of \(z\).
 \end{conjecture}
 
-\begin{remark}[Evidence and rank interpretation]
-For the insert-bridge and subdivide-all refinements, such a uniform
-circulation exists: the bridge cycle traverses both halves of the split
-edge with the same weight, and the diagonal path through the fully
-subdivided complex crosses each cluster with weight \(1/4\). In both
-cases \(\operatorname{rank}(PK)=\operatorname{rank}([PK\;\;z])=1\).
+\begin{remark}[Failure certificates]
+Under the rank-one hypothesis, Conjecture \ref{conj:balanced-loop} is a
+direct corollary of Proposition \ref{prop:rank1-criterion}: the generator
+\(v\) characterises the image completely, and uniformity of the ratios
+\(v_e/z_e\) is precisely the condition \(v\in\Q z\). The genuinely open
+problem is the geometric one: which refinement operations guarantee that
+\(\operatorname{im}(P|_{Z_1(N')})\) is one-dimensional with uniform ratios?
 
-For the single-region subdivisions, no uniform circulation exists.
-The generator of \(\operatorname{im}(P|_{Z_1(N')})\) has a non-uniform
-ratio relative to \(z\). For subdivide-\(U_1\):
-\[
-\text{generator} = (-\tfrac{1}{2},-1,-1,\tfrac{1}{2}),
-\quad
-\frac{\text{gen}[e]}{z[e]} =
-\begin{cases}\tfrac{1}{2} & e\in\{U_1U_2,U_1U_4\}\\1 & e\in\{U_2U_3,U_3U_4\}\end{cases}.
-\]
-The split edges (those incident to the subdivided \(U_1\)) contribute
-ratio \(\tfrac{1}{2}\); the unchanged edges contribute ratio \(1\).
-No scalar multiple of this generator equals \(z\), so
-\(\operatorname{rank}([PK\;\;z])=2\) and \(z\notin\operatorname{im}(PK)\).
+For the two non-faithful refinements, the failure is certified by an explicit
+non-uniform ratio vector, not merely by absence of a witness:
 
-Proving Conjecture \ref{conj:cycle-fibre} would give a geometric
-sufficient condition for cycle-faithfulness. The two theorems below
-provide partial progress.
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+Refinement & Generator \(v\) & Ratios \(v_e/z_e\) \\
+\midrule
+Subdivide \(U_1\) & \((-\tfrac{1}{2},-1,-1,\tfrac{1}{2})\) &
+\((\tfrac{1}{2},1,1,\tfrac{1}{2})\) \\
+Subdivide \(U_2\) & \((-\tfrac{1}{2},-\tfrac{1}{2},-1,1)\) &
+\((\tfrac{1}{2},\tfrac{1}{2},1,1)\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+In each case, split edges (incident to the subdivided region) contribute
+degree \(\tfrac{1}{2}\) while unchanged edges contribute degree \(1\).
+The failure is certified by \(\operatorname{rank}([PK\;\;z])=2>\operatorname{rank}(PK)=1\)
+and the non-uniform ratio vector, both computed over \(\Q\) by
+\texttt{cycle\_lift\_test.py}.
 \end{remark}
 
 \begin{definition}[Cycle-covering refinement]\label{def:cycle-covering}

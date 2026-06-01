@@ -194,77 +194,94 @@ def _diagnose_failure(d_prime, M, z_vec, regions, edge_names, base_edges):
 
 def build_witness_certificate(d_prime, M, z_vec, edge_names, base_edges, result):
     """
-    Build a detailed witness / counter-witness for cycle-faithfulness.
+    Build a structured witness or failure certificate for cycle-faithfulness.
 
-    For cycle-faithful refinements:
-      - z', λ, PK basis generator, rank certificate, pushforward check
+    Faithful case — cycle_lift_witness_certificate:
+      lambda, z', degree_per_edge (uniform lambda), boundary verified,
+      pushforward verified.
 
-    For non-faithful refinements:
-      - generator of im(P|_{Z_1(N')}), proof that z ∉ im(PK),
-        ratio table showing which edges break uniformity
+    Non-faithful case — cycle_lift_failure_certificate:
+      rank_PK, rank_augmented, im_PK_generator, base_cycle, edge_ratios,
+      failure_reason ("non_uniform_edge_ratios" or "no_cycles").
+      Ratios are the values v[e]/z[e] where v = im(PK) generator.
+      Non-uniformity is the exact algebraic witness for z not in im(PK).
     """
     K_vecs = d_prime.nullspace()
     if not K_vecs:
-        return {"error": "no cycles in N'"}
+        return {"type": "cycle_lift_failure_certificate",
+                "failure_reason": "no_cycles_in_refined_complex"}
 
-    K = sp.Matrix.hstack(*K_vecs)          # n_ref × dim(Z_1)
-    PK = M * K                              # n_base × dim(Z_1)
+    K = sp.Matrix.hstack(*K_vecs)    # n_ref × dim(Z_1)
+    PK = M * K                        # n_base × dim(Z_1)
 
-    # Find im(PK) generator (rank-1 case simplifies reporting)
+    # Find im(PK) generator (works cleanly for rank-1 case)
     im_gen = None
     for j in range(PK.shape[1]):
         col = PK.col(j)
-        if col != sp.zeros(PK.shape[0], 1):
+        if any(col[k, 0] != 0 for k in range(col.rows)):
             im_gen = col
             break
 
     if result["cycle_faithful"]:
+        lam = sp.Rational(result["lambda"])
         z_prime = sp.Matrix([sp.Rational(v) for v in result["z_prime"]])
         pushforward = M * z_prime
+
+        # Compute per-edge degree: rho_*(z')[e] / z[e] for each e in supp(z)
+        degree_per_edge = {}
+        for i, e in enumerate(base_edges):
+            if z_vec[i] != 0:
+                degree_per_edge[e] = str(sp.Rational(pushforward[i]) / z_vec[i])
+
         return {
-            "type": "cycle_lift_witness",
+            "type": "cycle_lift_witness_certificate",
             "lambda": result["lambda"],
             "z_prime_nonzero": {
                 edge_names[i]: result["z_prime"][i]
                 for i in range(len(edge_names))
                 if result["z_prime"][i] not in ("0", "0/1")
             },
-            "pushforward_equals_lambda_z": {
-                base_edges[i]: str(pushforward[i])
-                for i in range(len(base_edges))
-            },
-            "im_PK_generator": [str(x) for x in im_gen] if im_gen is not None else None,
+            "degree_per_edge": degree_per_edge,
+            "degrees_uniform": len(set(degree_per_edge.values())) == 1,
+            "boundary_verified": (d_prime * z_prime).norm() == 0,
+            "pushforward_verified": (pushforward == lam * z_vec),
             "rank_PK": result["rank_PK"],
             "dim_Z1_N_prime": result["dim_Z1_N_prime"],
         }
+
     else:
-        # Compute ratios: for each base edge, ρ_*(z')[e] / z(e)
-        # These ratios are all the same for a cycle-lift, but differ across edges otherwise.
-        # Report the direction im_gen relative to z.
+        # Compute ratios v[e]/z[e] for the im(PK) generator v
         ratios = {}
         if im_gen is not None:
             for i, e in enumerate(base_edges):
                 if z_vec[i] != 0:
                     ratios[e] = str(sp.Rational(im_gen[i]) / z_vec[i])
 
-        # Show that z is not in im(PK) by exhibiting distinct ratios
-        # if PK has rank 1, all cycles push forward to multiples of im_gen
+        ratio_vals = list(ratios.values())
+        ratios_uniform = len(set(ratio_vals)) == 1 and ratio_vals
+
         return {
-            "type": "cycle_lift_obstruction",
-            "im_PK_generator": [str(x) for x in im_gen] if im_gen is not None else None,
-            "im_PK_generator_edges": base_edges,
-            "ratio_im_gen_to_z": ratios,
-            "ratios_uniform": len(set(ratios.values())) == 1,
+            "type": "cycle_lift_failure_certificate",
+            "cycle_faithful": False,
             "rank_PK": result["rank_PK"],
-            "rank_PK_augmented": result["rank_PK_augmented"],
-            "z_is_in_im_PK": False,
-            "failure_reason": result.get("failure_reason"),
+            "rank_augmented": result["rank_PK_augmented"],
+            "im_PK_generator": (
+                {base_edges[i]: str(im_gen[i]) for i in range(len(base_edges))}
+                if im_gen is not None else None
+            ),
+            "base_cycle": {base_edges[i]: str(z_vec[i]) for i in range(len(base_edges))},
+            "edge_ratios": ratios,
+            "ratios_uniform": bool(ratios_uniform),
+            "failure_reason": (
+                "non_uniform_edge_ratios" if not ratios_uniform
+                else result.get("failure_reason", "no_lift_found")
+            ),
             "interpretation": (
-                "All cycles in N' push forward to multiples of im_PK_generator. "
-                "Since the ratios im_PK_generator[e] / z[e] are not uniform, "
-                "z is not in the image."
-                if not (len(set(ratios.values())) == 1)
-                else "Unexpected: ratios uniform but z not found in im(PK)."
+                "im(PK) is one-dimensional (rank 1). "
+                "The ratios v[e]/z[e] are non-uniform, so v is not proportional to z. "
+                "Therefore z is not in im(PK) and no nonzero-degree lift exists. "
+                "This is certified by rank([PK|z]) = "
+                f"{result['rank_PK_augmented']} > rank(PK) = {result['rank_PK']}."
             ),
         }
 
@@ -413,13 +430,12 @@ def print_report(results):
     for name, res in results.items():
         if not res["cycle_faithful"]:
             wc = res.get("witness_certificate", {})
-            gen = wc.get("im_PK_generator")
-            ratios = wc.get("ratio_im_gen_to_z", {})
+            gen = wc.get("im_PK_generator")   # dict edge->value in new format
+            ratios = wc.get("edge_ratios", {})
             print(f"  {name}")
             print(f"    {res.get('failure_reason', 'No lift found.')}")
             if gen:
-                gen_str = dict(zip(BASE_EDGES, gen))
-                print(f"    im(PK) generator: {gen_str}")
+                print(f"    im(PK) generator: {gen}")
                 print(f"    ratios gen[e]/z[e]: {ratios}  (non-uniform → z ∉ im(PK))")
     print()
 

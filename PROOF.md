@@ -339,12 +339,37 @@ Same non-uniformity pattern.
 
 ---
 
-**Conjecture (Balanced cycle-fibre).**
-Let $z$ be a simple rational cycle in a finite oriented nerve $N$.
-Let $\rho: N' \to N$ be a refinement equipped with a chain pushforward $\rho_*$.
-Suppose the full preimage of the support of $z$ contains a divergence-free
-rational circulation whose pushforward crosses every edge of $z$ with the
-same nonzero rational degree. Then $\rho$ is cycle-faithful relative to $z$.
+**Proposition (One-dimensional cycle-image criterion).**
+Suppose $\operatorname{rank}(PK) = 1$ and let $v \neq 0$ be any generator of
+$\operatorname{im}(PK)$. Then $\rho$ is cycle-faithful relative to $z$ if and
+only if all ratios $v_e / z_e$ (for $e$ in the support of $z$) are defined,
+nonzero, and equal to the same $\lambda \in \mathbb Q^\times$.
+
+*Proof.* $\operatorname{im}(PK) = \mathbb Q v$ (rank 1). So $z \in \operatorname{im}(PK)$
+iff $z \in \mathbb Q v$, iff $v = \lambda z$, iff all ratios $v_e/z_e$ are equal
+and nonzero. $\square$
+
+**Conjecture (Balanced loop refinement).**
+Let $z$ be a simple rational cycle in $N$, and let $\rho: N' \to N$ be a
+refinement with $\operatorname{rank}(P|_{Z_1(N')}) = 1$. Let $v \neq 0$ be a
+generator of $\operatorname{im}(P|_{Z_1(N')})$. Then $\rho$ is cycle-faithful
+relative to $z$ iff the ratios $v_e/z_e$ are uniform and nonzero for all edges $e$
+of $z$.
+
+*(Under the rank-1 hypothesis, this is a direct corollary of the One-dimensional
+cycle-image criterion. The open geometric question is: which refinement operations
+guarantee rank-1 image with uniform ratios?)*
+
+**Failure certificates for non-faithful refinements:**
+
+| Refinement | Generator $v$ | Ratios $v_e/z_e$ | Failure reason |
+|---|---|---|---|
+| Subdivide $U_1$ | $(-\tfrac{1}{2},-1,-1,\tfrac{1}{2})$ | $(\tfrac{1}{2},1,1,\tfrac{1}{2})$ | non-uniform |
+| Subdivide $U_2$ | $(-\tfrac{1}{2},-\tfrac{1}{2},-1,1)$ | $(\tfrac{1}{2},\tfrac{1}{2},1,1)$ | non-uniform |
+
+The failure is not inferred from absence of a witness. It is certified by a rank
+separation $\operatorname{rank}([PK\,z]) = 2 > 1 = \operatorname{rank}(PK)$ and a
+non-uniform ratio vector, both computed over $\mathbb Q$ by `cycle_lift_test.py`.
 
 ---
 
