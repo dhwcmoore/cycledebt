@@ -1,0 +1,171 @@
+% Full JACT-style manuscript
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{fancyvrb}
+\geometry{margin=1in}
+
+\title{Obstruction Persistence and Witness Failure in Finite Regional Cohomology}
+\author{Duston Moore\\Independent Researcher, Edmonton, Canada\\dhwcmoore@gmail.com}
+\date{June 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a finite cohomological obstruction classifier with machine‑readable
+certificates for seam residues in finite regional covers. The framework
+distinguishes direct obstruction persistence in refined nerves from witness
+ (cycle) persistence, and characterizes cycle‑faithfulness via rational rank
+tests. We give algorithms to produce audit‑grade JSON certificates and
+rank/failure witnesses, prove correctness of the tests, and demonstrate
+persistence (or its certified failure) across several refinement strategies.
+All code, inputs, and certificates are provided for full reproducibility.
+\end{abstract}
+
+\section{Introduction}
+We study finite regional cohomological obstructions arising from seam residues
+in combinatorial covers. The main contributions are:
+\begin{itemize}
+  \item A practical classifier that tests whether a residue is a cocycle and
+    whether it is a coboundary; the implementation emits machine‑readable JSON
+    certificates that include cohomological summaries and cycle witnesses.
+  \item A distinction between two persistence notions under refinement:
+    direct persistence (a refined cycle pairs nontrivially with the transferred
+    residue) and witness persistence (the original witness cycle lifts to the
+    refined nerve up to a nonzero rational factor). We prove algebraic
+    criteria distinguishing them.
+  \item Rational rank tests (nullspace and rank criteria) that certify
+    cycle‑faithfulness or provide failure witnesses via non‑uniform edge ratios.
+\end{itemize}
+
+This paper is accompanied by a reproducible repository containing the code,
+the JSON inputs and certificates, and scripts to reproduce all experiments.
+
+\section{Background and notation}
+Let $N$ be a finite oriented nerve with regions $U_i$. We work over $\mathbb{Q}$.
+Denote cochain groups by $C^k(N;\mathbb{Q})$ with coboundary operators
+$\delta^k:C^k\to C^{k+1}$. For a residue $r\in C^1$, we test the cocycle
+condition $\delta^1 r = 0$ and whether $r$ lies in the image of $\delta^0$.
+The cohomology group is $H^1 = \ker\delta^1/\operatorname{im}\delta^0$.
+
+\section{Classification algorithm}
+The classifier proceeds in two steps:
+\begin{enumerate}
+  \item Cocycle test: verify $\delta^1 r = 0$ (trivial when $C^2=0$).
+  \item Coboundary test: solve the rational linear system $\delta^0 b = r$.
+    If no solution exists, the residue represents a nonzero $H^1$ class.
+\end{enumerate}
+
+Implementation details: we use exact rational arithmetic (SymPy) to avoid
+floating point error. The classifier emits a JSON certificate with fields
+including `cohomology_summary`, `cycle_witness` (if available), and an audit trail.
+
+\section{Invariance under presentation}
+We prove the classification is invariant under the five tested presentation
+changes: region renaming, edge orientation reversal, nonzero rational scaling,
+gauge perturbation ($r\mapsto r+\delta^0 b$), and edge order permutation.
+Each operation induces an isomorphism or leaves cohomology classes unchanged.
+The implementation verifies these operations on the base object and reports
+`stable_under_tested_presentations` in the invariance report.
+
+\section{Refinements and transfer maps}
+We consider refinements $\rho: N'\to N$ with transfer maps $\rho^*:C^1(N)\to C^1(N')$.
+Our primary transfer strategy is equal‑distribution: split an old edge value
+equally across the refined edges replacing it; internal refined edges receive 0.
+
+Two persistence notions:
+\begin{description}
+\item[Direct persistence:] There exists $z'\in Z_1(N')$ with $\langle z',\rho^* r\rangle\ne0$.
+\item[Witness persistence (cycle‑faithfulness):] There exists $z'\in Z_1(N')$ and
+  $\lambda\in\mathbb{Q}^\times$ with $\rho_* z' = \lambda z$ for an original
+  cycle $z$ pairing nontrivially with $r$.
+\end{description}
+
+We prove the Cycle‑Lift Persistence Theorem: if $\rho_* z' = \lambda z$ then
+$[\rho^* r]\ne0$ whenever $\langle z,r\rangle\ne0$, by adjointness of $\rho^*$ and $\rho_*$.
+
+\section{Cycle‑faithfulness and rational rank tests}
+Cycle‑faithfulness can be decided by two algebraic methods:
+\begin{itemize}
+\item Nullspace method: solve a linear system for $(z',\lambda)$ certifying a nonzero lift.
+\item Rank criterion: let $K$ be a basis for $Z_1(N')$ and $P=\rho_*$. Then $\rho$ is
+  cycle‑faithful iff $\operatorname{rank}(PK)=\operatorname{rank}([PK\; z])$.
+\end{itemize}
+
+When $\operatorname{rank}(PK)=1$, faithfulness reduces to checking uniformity
+of ratios $v_e/z_e$ for a generator $v$ of $\operatorname{im}(PK)$.
+Failure is certified by a non‑uniform ratio vector (a short, exact rational witness).
+
+\section{Experiments and certificates}
+We applied the classifier to the canonical examples and to the actual object
+`actual_gluing_object_v1`. The base classification and certificate summary:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l l}
+\toprule
+Item & Value \\
+\midrule
+Classification & nontrivial\_H1\_obstruction \\
+Is cocycle & true \\
+Is coboundary & false \\
+Pairing (cycle witness) & -5 \\
+$\dim H^1$ & 1 \\
+\bottomrule
+\end{tabular}
+\caption{Base object classification summary (from certificate).}
+\end{table}
+
+Refinement experiment summary (pairings shown):
+\begin{table}[h]
+\centering
+\begin{tabular}{l r r}
+\toprule
+Refinement & Pairing & Obstruction persists? \\
+\midrule
+Subdivide $U_1$ & -7/2 & Yes \\
+Subdivide $U_2$ & -4 & Yes \\
+Subdivide all regions & -5/4 & Yes \\
+Insert bridge $U_1$–$U_2$ & -5 & Yes \\
+\bottomrule
+\end{tabular}
+\caption{Refinement pairings (direct persistence).}
+\end{table}
+
+Implementation and reproducibility: the repository contains the code used to
+generate the certificates and reports. Full JSON certificates are archived in
+`certificates/`; a summary of their key fields appears in Appendix~\ref{app:certs}.
+
+\section{Discussion}
+The experiments highlight an important distinction: obstruction persistence is
+more robust than witness persistence. Equal‑distribution transfer maps can
+preserve a nonzero cohomology class while making the original cycle fail to lift
+proportionally. The rank criterion and failure witnesses provide exact, checkable
+certificates for both outcomes.
+
+\section*{Acknowledgements}
+This work started as an independent project and benefited from feedback during
+informal seminars. The author thanks colleagues for suggestions on reproducibility.
+
+\appendix
+\section{Summary tables of certificates}
+\label{app:certs}
+Key certificate fields (base object):
+\begin{tabular}{ll}
+Residue & (1,1,1,-2) \\
+Support & U1-U2, U2-U3, U3-U4, U1-U4 \\
+Pairing & -5 \\
+dim C0, C1 & 4, 4 \\
+dim H1 & 1 \\
+\end{tabular}
+
+\section{Full proofs (from repository)}
+\label{app:proof}
+The complete formal proofs are reproduced from `PROOF.md` for completeness.
+\VerbatimInput{../PROOF.md}
+
+\end{document}

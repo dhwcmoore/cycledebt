@@ -1,10 +1,11 @@
 cff-version: 1.2.0
 title: "Obstruction Persistence and Witness Failure in Finite Regional Cohomology"
 authors:
-  - family-names: "YourLastName"
-    given-names: "YourFirstName"
+  - family-names: "Moore"
+    given-names: "Duston"
     orcid: ""
-affiliation: ""
+    affiliation: "Independent Researcher, Edmonton, Canada"
+    email: "dhwcmoore@gmail.com"
 version: "0.1.0"
 url: "https://github.com/yourusername/residue-test"
 date-released: "2026-06-01"
