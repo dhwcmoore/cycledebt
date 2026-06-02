@@ -35,11 +35,13 @@ oriented nerves. The main contributions are:
 \begin{itemize}
   \item \textbf{General finite regional obstruction theorem
     (Section~\ref{sec:general}).}
-    For any finite connected oriented overlap graph, a residue is non-removable
-    if and only if it has nonzero circulation around at least one cycle. This
-    is a general, computable, coefficient-field-independent criterion.
-    The classifier handles arbitrary graph inputs, not just the four-region
-    example.
+    For any finite connected oriented graph, the four conditions
+    gauge-admissibility, global consistency, zero cycle pairings, and $[r]=0$
+    are equivalent (full proof with explicit dimension count). The four-cycle
+    result is a corollary: the one-cycle case with $Z_1=\operatorname{span}(z)$.
+    Extended to simplicial complexes via the Hodge Laplacian and harmonic
+    1-cochains. The engine (\texttt{finite\_nerve\_warrant\_debt.py}) handles
+    both graphs and nerves via JSON input.
   \item \textbf{Complete four-cycle classification (Theorem~\ref{thm:classifier}).}
     For the four-region loop nerve, the circulation $q(a,b,c,d)=-a-b-c+d$ is
     the complete $H^1$ invariant. The actual object is a corollary with
@@ -74,53 +76,71 @@ The cohomology group is $H^1(N;R) = \ker\delta^1/\operatorname{im}\delta^0$.
 
 \section{General finite regional obstruction theorem}\label{sec:general}
 
-Let $G$ be a finite connected oriented graph (vertices $V$, edges $E$, no
-2-faces) over a field $k$. Every $r\in C^1(G;k)$ is automatically a cocycle.
-The cycle space $Z_1(G;k)=\ker(\delta^{0,T})$ has dimension $|E|-|V|+1$.
+\subsection*{Finite Graph Period Classification Theorem}
 
-\textbf{Theorem (General cycle-detection).}\label{thm:general}
-For $r\in C^1(G;k)$:
-\[
-[r]=0\in H^1(G;k)
-\;\Longleftrightarrow\;
-\langle z,r\rangle=0 \text{ for all } z\in Z_1(G;k).
-\]
+Let $G=(V,E)$ be a finite connected oriented graph over a field $k$. Every
+$r\in C^1(G;k)$ is automatically a cocycle. The cycle space
+$Z_1(G;k)=\ker((\delta^0)^T)$ has dimension $|E|-|V|+1$.
+
+\textbf{Theorem.}\label{thm:general}
+For $r\in C^1(G;k)$, the following are equivalent:
+\begin{enumerate}
+\item Gauge-admissible: $\exists\,b$ with $\delta^0 b=r$.
+\item Globally consistent: $\exists\,\Phi$ with $\Phi_j-\Phi_i=r_{ij}$.
+\item Zero cycle pairings: $\langle z,r\rangle=0$ for all $z\in Z_1(G;k)$.
+\item Cohomologically trivial: $[r]=0\in H^1(G;k)$.
+\end{enumerate}
 
 \textit{Proof.}
-$(\Rightarrow)$: trivial (coboundaries pair to zero with cycles). $(\Leftarrow)$:
-by rank-nullity over $k$, $\dim Z_1+\dim\operatorname{im}\delta^0=\dim C^1$, and
-$\operatorname{im}\delta^0\subseteq Z_1^\perp$, so they are equal. Therefore
-$r\perp Z_1$ implies $r\in\operatorname{im}\delta^0$. $\square$
+(1)$\Leftrightarrow$(4): definition. (1)$\Leftrightarrow$(2): bridge theorem.
+(1)$\Rightarrow$(3): $r=\delta^0 b\Rightarrow\langle z,r\rangle=\langle(\delta^0)^Tz,b\rangle=0$.
+(3)$\Rightarrow$(1): by the dimension count $\dim Z_1+\dim\operatorname{im}\delta^0
+= (|E|-|V|+1)+(|V|-1)=|E|=\dim C^1$, and $\operatorname{im}\delta^0\subseteq Z_1^\perp$,
+so $\operatorname{im}\delta^0=Z_1^\perp$. Hence $r\perp Z_1\Rightarrow r\in\operatorname{im}\delta^0$.
+$\square$
 
-\textbf{Corollary.}
-A residue is structurally non-removable if and only if it has nonzero
-circulation around at least one cycle. Obstruction is cycle-detectable.
-$\dim H^1(G;k) = |E|-|V|+1$ equals the circuit rank of $G$.
+\textbf{Corollary (Section~\ref{thm:classifier}).}
+The four-cycle is the one-cycle case: $Z_1=\operatorname{span}(z)$, $z=(-1,-1,-1,1)$.
+The complete invariant is $q(r)=\langle z,r\rangle$. The actual object has
+$q(r)=-5\neq0$, so $[r]\neq0$.
 
-For simplicial complexes $N$ with 2-faces, the same criterion applies to
-cocycles: $[r]=0$ iff $\delta^1 r=0$ and all cycle pairings vanish.
+\subsection*{Nerve extension}
 
-The classifier (\texttt{residue\_test.py}) implements this as a general engine,
-not a demo: it takes any finite regional overlap graph as input and returns the
-complete obstruction data. Table~\ref{tab:graph-types} summarises the seven
-graph types verified by \texttt{general\_obstruction\_classifier.py}.
+For a simplicial complex $N$ with 2-faces, $H^1(N;k)=\ker(\delta^1)/\operatorname{im}(\delta^0)$.
+The Hodge Laplacian on $C^1$ is $L_1=\delta^0(\delta^0)^T+(\delta^1)^T\delta^1$,
+and the harmonic 1-cochains are $\mathcal{H}^1=\ker(L_1)=\ker((\delta^0)^T)\cap\ker(\delta^1)$.
+
+\textbf{Theorem (Nerve Extension).}
+For $r\in\ker(\delta^1)$:
+\[
+[r]=0\in H^1(N;k)
+\;\Longleftrightarrow\;
+\langle h,r\rangle=0 \text{ for all } h\in\mathcal{H}^1.
+\]
+
+The general debt formula $D(r)=p(r)^TG^{-1}p(r)$ uses the harmonic basis
+for $\mathcal{H}^1$. For graphs ($\delta^1=0$): $\mathcal{H}^1=Z_1$ and
+$D=p^TG^{-1}p$ as in Section~\ref{sec:gram}.
+
+Table~\ref{tab:graph-types} summarises all verified graph and nerve types.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{l r l}
+\begin{tabular}{l r l l}
 \toprule
-Graph & $\dim H^1$ & Notes \\
+Graph & $\dim H^1$ & Type & Verified by \\
 \midrule
-Path $P_3$ & 0 & No cycles; every residue removable \\
-3-cycle $C_3$ (no face) & 1 & One invariant: the circulation \\
-4-cycle $C_4$ (our object) & 1 & Period $-5$; Theorems~\ref{thm:classifier},\ref{thm:modular} \\
-5-cycle $C_5$ & 1 & One invariant \\
-4-cycle + chord (diamond) & 2 & Two independent invariants \\
-Filled triangle & 0 & Face kills the cycle; $H^1=0$ \\
-Complete graph $K_4$ & 3 & Three independent invariants \\
+Path $P_3$ & 0 & Graph & \texttt{general\_obstruction\_classifier.py} \\
+3-cycle $C_3$ (no face) & 1 & Graph & same \\
+4-cycle $C_4$ (our object) & 1 & Graph & all scripts \\
+5-cycle $C_5$ & 1 & Graph & \texttt{general\_obstruction\_classifier.py} \\
+4-cycle + chord (diamond) & 2 & Graph & \texttt{general\_warrant\_debt.py} \\
+Complete graph $K_4$ & 3 & Graph & \texttt{general\_warrant\_debt.py} \\
+Filled triangle & 0 & Nerve & \texttt{finite\_nerve\_warrant\_debt.py} \\
+4-cycle minus one face & 0 & Nerve & same \\
 \bottomrule
 \end{tabular}
-\caption{Graph types and their obstruction groups, verified by the general engine.}
+\caption{Graph and nerve types verified by the general engine.}
 \label{tab:graph-types}
 \end{table}
 

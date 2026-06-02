@@ -1,0 +1,168 @@
+{
+  "engine": "finite_nerve_warrant_debt",
+  "theorem": "Finite Graph Period Classification + Nerve Extension",
+  "formula": "D(r) = p^T G^{-1} p  via Hodge Laplacian ker(L_1)",
+  "results": [
+    {
+      "label": "four_cycle  [graph, H1=Q, D=25/4]",
+      "residue": [
+        "1",
+        "1",
+        "1",
+        "-2"
+      ],
+      "dim_H1": 1,
+      "is_cocycle": true,
+      "is_admissible": false,
+      "classification": "nontrivial_H1_obstruction",
+      "G": [
+        [
+          "4"
+        ]
+      ],
+      "p": [
+        "-5"
+      ],
+      "D_gram": "25/4",
+      "D_harmonic_check": "25/4",
+      "gram_harmonic_agree": true,
+      "expected_D": "25/4"
+    },
+    {
+      "label": "four_cycle admissible  [graph, H1=Q, D=0]",
+      "residue": [
+        "1",
+        "1",
+        "1",
+        "3"
+      ],
+      "dim_H1": 1,
+      "is_cocycle": true,
+      "is_admissible": true,
+      "classification": "coboundary_removable",
+      "G": [
+        [
+          "4"
+        ]
+      ],
+      "p": [
+        "0"
+      ],
+      "D_gram": "0",
+      "D_harmonic_check": "0",
+      "gram_harmonic_agree": true,
+      "expected_D": "0"
+    },
+    {
+      "label": "diamond  [graph, H1=Q^2, D=51/8]",
+      "residue": [
+        "1",
+        "1",
+        "1",
+        "-2",
+        "0"
+      ],
+      "dim_H1": 2,
+      "is_cocycle": true,
+      "is_admissible": false,
+      "classification": "nontrivial_H1_obstruction",
+      "G": [
+        [
+          "4",
+          "2"
+        ],
+        [
+          "2",
+          "3"
+        ]
+      ],
+      "p": [
+        "-5",
+        "-2"
+      ],
+      "D_gram": "51/8",
+      "D_harmonic_check": "51/8",
+      "gram_harmonic_agree": true,
+      "expected_D": "51/8"
+    },
+    {
+      "label": "complete K4  [graph, H1=Q^3, D=13]",
+      "residue": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "-5"
+      ],
+      "dim_H1": 3,
+      "is_cocycle": true,
+      "is_admissible": false,
+      "classification": "nontrivial_H1_obstruction",
+      "G": [
+        [
+          "3",
+          "1",
+          "-1"
+        ],
+        [
+          "1",
+          "3",
+          "1"
+        ],
+        [
+          "-1",
+          "1",
+          "3"
+        ]
+      ],
+      "p": [
+        "1",
+        "1",
+        "-5"
+      ],
+      "D_gram": "13",
+      "D_harmonic_check": "13",
+      "gram_harmonic_agree": true,
+      "expected_D": "13"
+    },
+    {
+      "label": "filled triangle  [nerve, H1=0, D=0 for cocycle]",
+      "residue": [
+        "1",
+        "2",
+        "3"
+      ],
+      "dim_H1": 0,
+      "is_cocycle": true,
+      "is_admissible": true,
+      "classification": "coboundary_removable",
+      "G": [],
+      "p": [],
+      "D_gram": "0",
+      "D_harmonic_check": "0",
+      "gram_harmonic_agree": true,
+      "expected_D": "0"
+    },
+    {
+      "label": "four_cycle minus one face  [nerve, H1=0]",
+      "residue": [
+        "1",
+        "2",
+        "3",
+        "1"
+      ],
+      "dim_H1": 0,
+      "is_cocycle": true,
+      "is_admissible": true,
+      "classification": "coboundary_removable",
+      "G": [],
+      "p": [],
+      "D_gram": "0",
+      "D_harmonic_check": "0",
+      "gram_harmonic_agree": true,
+      "expected_D": "0"
+    }
+  ],
+  "all_passed": true
+}

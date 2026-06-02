@@ -47,11 +47,13 @@ $$
 
 ## 0. General Finite Regional Obstruction Theorem
 
-This section states the general theory. Sections 1–2 apply it to the specific
-four-region loop nerve.
+This section states and proves the general theory. Sections 1–2 are corollaries
+for the specific four-region loop nerve.
 
-**Setup.** Let $G$ be a finite connected oriented graph with vertex set $V$ and
-edge set $E$, with no 2-faces. The cochain complex is:
+### §0a. Finite Graph Period Classification Theorem
+
+**Setup.** Let $G = (V, E)$ be a finite connected oriented graph. The cochain
+complex over $\mathbb{Q}$ is:
 $$
 C^0(G;\mathbb{Q}) = \mathbb{Q}^{|V|}
 \xrightarrow{\delta^0}
@@ -59,60 +61,115 @@ C^1(G;\mathbb{Q}) = \mathbb{Q}^{|E|}
 \xrightarrow{0} 0.
 $$
 Every $r \in C^1$ is automatically a cocycle. The cycle space
-$Z_1(G;\mathbb{Q}) = \ker(\delta^{0,T})$ has dimension
-$|E| - |V| + 1$ (for connected $G$).
+$Z_1(G;\mathbb{Q}) = \ker((\delta^0)^T)$ and the cut space $\operatorname{im}\delta^0$
+are orthogonal complements in $C^1$ with respect to the standard inner product.
 
-**Theorem (General cycle-detection).** For $r \in C^1(G;\mathbb{Q})$:
-$$
-[r] = 0 \in H^1(G;\mathbb{Q})
-\quad\Longleftrightarrow\quad
-\langle z, r\rangle = 0 \text{ for every } z \in Z_1(G;\mathbb{Q}).
-$$
+**Theorem (Finite Graph Period Classification).** For $r \in C^1(G;\mathbb{Q})$,
+the following four conditions are equivalent:
+
+1. **Gauge-admissible:** $\exists\, b \in C^0$ with $\delta^0 b = r$.
+2. **Globally consistent:** $\exists\, \Phi$ with $\Phi_j - \Phi_i = r_{ij}$ at every overlap.
+3. **Zero cycle pairings:** $\langle z, r\rangle = 0$ for every $z \in Z_1(G;\mathbb{Q})$.
+4. **Cohomologically trivial:** $[r] = 0 \in H^1(G;\mathbb{Q})$.
 
 **Proof.**
-$(\Rightarrow)$ If $r = \delta^0 b$ then $\langle z, r\rangle = \langle\delta^{0,T}z, b\rangle = 0$ for all $z \in Z_1$.
 
-$(\Leftarrow)$ Over $\mathbb{Q}$, the rank-nullity theorem gives
-$\dim Z_1 + \dim\operatorname{im}\delta^0 = \dim C^1$. Since $\operatorname{im}\delta^0 \subseteq Z_1^\perp$
-(by $(\Rightarrow)$) and both have the same dimension, they are equal:
-$\operatorname{im}\delta^0 = Z_1^\perp$. Therefore $r \perp Z_1$ implies
-$r \in \operatorname{im}\delta^0$. $\square$
+$(1) \Leftrightarrow (4)$: Definition of $H^1 = C^1/\operatorname{im}\delta^0$.
 
-For a simplicial complex $N$ with 2-faces, the same conclusion holds restricted
-to cocycles: $[r] = 0$ in $H^1(N;\mathbb{Q})$ iff $\delta^1 r = 0$ and
-$\langle z, r\rangle = 0$ for all $z \in Z_1(N;\mathbb{Q})$.
+$(1) \Leftrightarrow (2)$: Proved in §11b (the Residue-Admissibility Bridge Theorem).
 
-**Consequence: finite obstruction is cycle-detectable.**
-A residue is structurally non-removable if and only if it has nonzero circulation
-around at least one cycle. There is no other obstruction. The theorem gives the
-complete criterion:
+$(1) \Rightarrow (3)$: If $r = \delta^0 b$ then
+$\langle z, r\rangle = \langle (\delta^0)^T z, b\rangle = \langle 0, b\rangle = 0$
+for every $z \in Z_1 = \ker((\delta^0)^T)$.
+
+$(3) \Rightarrow (1)$: We show $\operatorname{im}\delta^0 = Z_1^\perp$.
+
+Dimension count for connected $G$:
+$$
+\dim Z_1 = |E| - |V| + 1, \qquad
+\dim\operatorname{im}\delta^0 = \operatorname{rank}(\delta^0) = |V| - 1.
+$$
+(The rank is $|V|-1$ because $\ker\delta^0 = \mathbb{Q}$, the constant functions.)
+
+Sum: $(|E| - |V| + 1) + (|V| - 1) = |E| = \dim C^1$.
+
+By $(1)\Rightarrow(3)$, $\operatorname{im}\delta^0 \subseteq Z_1^\perp$. Since both sides
+have dimension $|V|-1$ and $|E|-(|V|-1) = |E|-|V|+1 = \dim Z_1$, they are equal:
+$$
+\operatorname{im}\delta^0 = Z_1^\perp.
+$$
+Therefore $r \perp Z_1$ implies $r \in Z_1^\perp = \operatorname{im}\delta^0$. $\square$
+
+**Corollary (Cycle-period criterion).**
 $$
 [r] \neq 0 \quad\Longleftrightarrow\quad \exists\, z \in Z_1 \text{ with } \langle z,r\rangle \neq 0.
 $$
 
-**Dimension and structure of $H^1$.**
-For a connected graph $G$:
+**Dimension and structure.** For a connected graph $G$:
 $$
 \dim H^1(G;\mathbb{Q}) = |E| - |V| + 1 = \text{circuit rank of } G.
 $$
-The obstruction group is a free abelian group of rank equal to the number of
-independent cycles.
 
-| Graph type | $H^1$ | Obstruction |
+| Graph | $H^1$ | Obstruction space |
 |---|---|---|
-| Path (tree) | $0$ | None: every residue removable |
-| Single cycle ($n$-gon) | $\mathbb{Q}$ | One invariant: the circulation |
-| Cycle with chord | $\mathbb{Q}^2$ | Two independent invariants |
-| Complete graph $K_4$ | $\mathbb{Q}^3$ | Three independent invariants |
-| Any complex with filled cycles | depends on faces | Faces can kill cycles |
+| Path or tree | $0$ | Every residue removable |
+| $n$-cycle | $\mathbb{Q}$ | One invariant: the circulation |
+| 4-cycle + chord | $\mathbb{Q}^2$ | Two independent pairings |
+| Complete $K_4$ | $\mathbb{Q}^3$ | Three independent pairings |
 
-Verified computationally for path $P_3$, triangles $C_3$, four-cycle $C_4$,
-five-cycle $C_5$, diamond (4-cycle + chord), filled triangle ($H^1 = 0$), and
-complete $K_4$ by `general_obstruction_classifier.py`.
+Verified on seven graph types by `general_obstruction_classifier.py`.
+
+### §0b. Nerve Extension (Simplicial Complexes with Faces)
+
+For a simplicial complex $N$ with 2-faces, the cochain complex extends:
+$$
+C^0(N;\mathbb{Q}) \xrightarrow{\delta^0} C^1(N;\mathbb{Q}) \xrightarrow{\delta^1} C^2(N;\mathbb{Q}).
+$$
+A residue $r$ now requires the cocycle condition $\delta^1 r = 0$ to represent
+an $H^1$ class. The obstruction group is:
+$$
+H^1(N;\mathbb{Q}) = \ker(\delta^1) / \operatorname{im}(\delta^0).
+$$
+
+**Hodge decomposition.** The Hodge Laplacian on $C^1$ is:
+$$
+L_1 = \delta^0 (\delta^0)^T + (\delta^1)^T \delta^1 \;:\; C^1 \to C^1.
+$$
+Its kernel is the space of **harmonic 1-cochains**:
+$$
+\mathcal{H}^1 = \ker(L_1) = \ker((\delta^0)^T) \cap \ker(\delta^1).
+$$
+The orthogonal decomposition $C^1 = \operatorname{im}\delta^0 \oplus \mathcal{H}^1 \oplus \operatorname{im}((\delta^1)^T)$
+gives a canonical isomorphism $H^1(N;\mathbb{Q}) \cong \mathcal{H}^1$.
+
+**Theorem (Nerve Extension).** For $r \in \ker(\delta^1)$ (a cocycle):
+$$
+[r] = 0 \in H^1(N;\mathbb{Q})
+\quad\Longleftrightarrow\quad
+\langle h, r\rangle = 0 \text{ for every harmonic } h \in \mathcal{H}^1.
+$$
+
+*Proof.* The same dimension argument applies within $\ker(\delta^1)$: $\mathcal{H}^1$
+is the orthogonal complement of $\operatorname{im}\delta^0$ inside $\ker(\delta^1)$. $\square$
+
+**Consequence for warrant debt.** The general debt formula $D(r) = p(r)^T G^{-1} p(r)$
+uses the harmonic basis $\{h_1, \ldots, h_k\}$ for $\mathcal{H}^1$:
+$$
+p_i(r) = \langle h_i, r\rangle, \qquad G_{ij} = \langle h_i, h_j\rangle.
+$$
+For graphs ($\delta^1 = 0$), $\mathcal{H}^1 = Z_1$ and this reduces to the Gram matrix
+formula in §11d.
+
+Verified on graphs (four-cycle, diamond, $K_4$) and nerves (filled triangle,
+four-cycle minus face) by `finite_nerve_warrant_debt.py`.
 
 ---
 
 ## 1. Complete Four-Cycle Classification Theorem
+
+*This section is a corollary of §0a: the four-region loop nerve is the case
+where $Z_1$ is one-dimensional, generated by $z = (-1,-1,-1,1)$, so the cycle
+period is a single number $q(r) = \langle z, r\rangle$.*
 
 **Theorem (Complete four-cycle $H^1$ classifier).** For the four-region loop
 nerve $N$ with the coboundary matrix $\delta^0$ defined above, the *circulation
