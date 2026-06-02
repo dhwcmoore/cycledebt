@@ -163,6 +163,38 @@ formula in §11d.
 Verified on graphs (four-cycle, diamond, $K_4$) and nerves (filled triangle,
 four-cycle minus face) by `finite_nerve_warrant_debt.py`.
 
+### §0c. Finite Nerve Warrant Debt Theorem (Capstone)
+
+This collects §0a, §0b, and the bridge theorem (§11b) into a single statement.
+
+**Theorem (Finite Nerve Warrant Debt).** Let $N$ be a finite nerve over $\mathbb{Q}$,
+with cochain complex $C^0 \xrightarrow{\delta^0} C^1 \xrightarrow{\delta^1} C^2$.
+Let $r \in C^1(N;\mathbb{Q})$ be a seam residue. Define $D(r) = \|P_{\mathcal{H}^1} r\|^2$
+(standard inner product, harmonic projection via $L_1$). Then:
+
+| Certificate output | Mathematical fact | Theorem |
+|---|---|---|
+| $\delta^1 r \neq 0$ | Local coherence fails; $H^1$ question does not arise | computation |
+| $\delta^1 r = 0$, $D(r) = 0$ | $[r] = 0 \in H^1$; globally consistent claim exists | §0b + §11b |
+| $\delta^1 r = 0$, $D(r) > 0$ | $[r] \neq 0 \in H^1$; warrant debt, no global claim | §0b + §11b |
+
+**Soundness.** The engine `finite_nerve_warrant_debt.py` computes exactly these three cases.
+Its output is formally accountable: each case directly corresponds to a proved theorem.
+
+**Precision (when $D_\mathrm{gram} = D_\mathrm{harmonic}$).**
+The Gram formula $D = p^T G^{-1} p$ agrees with the harmonic projection formula
+$D = \|P_{\mathcal{H}^1} r\|^2$ **if and only if** the period basis $\{h_i\}$ spans
+the correct obstruction space $\mathcal{H}^1 = \ker(L_1)$.
+
+Using raw graph-cycle vectors without accounting for faces gives incorrect results
+for nerves. Example: a filled triangle has $\ker(L_1) = \{0\}$ (the face kills the
+apparent graph cycle), so $D = 0$ for any cocycle. A naive graph-cycle computation
+using the boundary vector $z$ would give $\langle z, r\rangle = \delta^1 r = 0$
+for any cocycle — which also gives zero — but this coincidence holds only because
+$z$ is itself the face boundary. For more complex nerves where graph cycles are
+partially killed by faces, naive cycle-pairing can give wrong answers. The Hodge
+Laplacian implementation is the safe canonical choice.
+
 ---
 
 ## 1. Complete Four-Cycle Classification Theorem

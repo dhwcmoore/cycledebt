@@ -140,13 +140,40 @@ def analyse(regions, edges, faces, residue, label=""):
     D_check = r_debt.dot(r_debt)
     agree = bool(D == D_check)
 
+    # Certificate soundness: determine which theorem case applies
+    if not base["is_cocycle"]:
+        case = "coherence_failure"
+        theorem = (
+            "delta^1 r != 0: local coherence fails. "
+            "The H^1 admissibility question does not arise. "
+            "[PROOF.md §0b]"
+        )
+    elif base["is_coboundary"]:
+        case = "globally_admissible"
+        theorem = (
+            "[r] = 0 in H^1(N;Q): D(r) = ||P_{H^1} r||^2 = 0. "
+            "A global consistent claim Phi exists. "
+            "[PROOF.md §0b + §11b]"
+        )
+    else:
+        case = "warrant_debt"
+        theorem = (
+            "[r] != 0 in H^1(N;Q): D(r) = ||P_{H^1} r||^2 > 0. "
+            "No global consistent claim exists. "
+            "[PROOF.md §0b + §11b]"
+        )
+
     return {
         "label": label,
         "residue": [str(sp.Rational(v)) for v in residue],
         "dim_H1": len(basis),
         "is_cocycle": base["is_cocycle"],
         "is_admissible": base["is_coboundary"],
-        "classification": base["classification"],
+        "case": case,
+        "theorem_invoked": theorem,
+        "basis_type": (
+            "harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1) via Hodge Laplacian"
+        ),
         "G": [[str(G[i, j]) for j in range(G.shape[1])]
               for i in range(G.shape[0])],
         "p": [str(v) for v in p],
@@ -220,6 +247,14 @@ TEST_CASES = [
         "expected_D": "0",
     },
     {
+        "label": "filled triangle incoherent  [coherence_failure]",
+        "regions": ["A","B","C"],
+        "edges":   [["A","B"],["B","C"],["A","C"]],
+        "faces":   [["A","B","C"]],
+        "residue": [1, 1, 1],           # NOT a cocycle: 1-1+1=1 != 0
+        "expected_D": "0",              # D=0 because harmonic space is empty (H1=0)
+    },
+    {
         "label": "four_cycle minus one face  [nerve, H1=0]",
         # Four-cycle with the triangle A-B-D filled (adds edge A-D already present)
         # Use a simpler example: 3-cycle with filled face, then extra edge
@@ -239,9 +274,12 @@ def print_report(results):
     print("FINITE NERVE WARRANT DEBT ENGINE — GENERAL PIPELINE")
     print("=" * 72)
     print()
-    print("Theorem: D(r) = p^T G^{-1} p  (harmonic projection via Hodge Laplacian)")
+    print("Theorem: D(r) = ||P_{H^1} r||^2 = p^T G^{-1} p")
+    print("Basis:   harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1)")
+    print("Caution: D_gram correct only with this harmonic basis; raw graph cycles")
+    print("         give wrong D for nerves with faces (see PROOF.md §0c).")
     print()
-    hdr = f"  {'Case':<45} {'H1':>4} {'D':>8} {'adm':>5} {'agree':>7} {'chk':>5}"
+    hdr = f"  {'Case':<42} {'H1':>4} {'D':>8} {'cert-case':>18} {'chk':>5}"
     print(hdr)
     print("  " + "-" * 72)
     all_ok = True
@@ -251,23 +289,33 @@ def print_report(results):
         if not d_ok:
             all_ok = False
         chk = "OK" if d_ok else "FAIL"
-        adm = "Y" if res["is_admissible"] else "n"
-        agree = "Y" if res["gram_harmonic_agree"] else "N"
-        label = res["label"][:44]
-        print(f"  {label:<45} {res['dim_H1']:>4} {res['D_gram']:>8} {adm:>5} "
-              f"{agree:>7} {chk:>5}")
+        label = res["label"][:41]
+        ccase = res.get("case", "?")[:17]
+        print(f"  {label:<42} {res['dim_H1']:>4} {res['D_gram']:>8} {ccase:>18} {chk:>5}")
     print()
     print(f"  {'Gram==Harmonic for all':50} "
           f"{'ALL OK' if all(r['gram_harmonic_agree'] for r in results) else 'FAIL'}")
     print(f"  {'Expected D matched':50} "
           f"{'ALL OK' if all_ok else 'FAIL'}")
     print()
-    # Show Gram matrix for actual object
+    # Show soundness breakdown
+    cases = {"coherence_failure": 0, "globally_admissible": 0, "warrant_debt": 0}
+    for r in results:
+        cases[r.get("case", "?")] = cases.get(r.get("case", "?"), 0) + 1
+    print("  Certificate soundness (three-case breakdown):")
+    print(f"    coherence_failure:   {cases['coherence_failure']}  "
+          f"(delta^1 r != 0; H^1 question does not arise)")
+    print(f"    globally_admissible: {cases['globally_admissible']}  "
+          f"([r]=0; D=0; global claim exists)")
+    print(f"    warrant_debt:        {cases['warrant_debt']}  "
+          f"([r]!=0; D>0; no global claim)")
+    print()
+    # Show actual object
     act = next((r for r in results if "four_cycle" in r["label"] and "25/4" in r["label"]), None)
     if act:
-        print(f"  Actual object:  G = {act['G']}  p = {act['p']}  D = {act['D_gram']}")
-        print(f"  Four-cycle formula D = p²/4: p={act['p'][0]}, "
-              f"D = {act['p'][0]}²/4 = {sp.Rational(act['p'][0])**2/4}")
+        print(f"  Actual object:  G={act['G']}  p={act['p']}  D={act['D_gram']}")
+        print(f"  Four-cycle formula: D = p^2/4 = {act['p'][0]}^2/4 = "
+              f"{sp.Rational(act['p'][0])**2/4}")
 
 
 if __name__ == "__main__":

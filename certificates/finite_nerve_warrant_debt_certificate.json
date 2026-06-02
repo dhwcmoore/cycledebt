@@ -14,7 +14,9 @@
       "dim_H1": 1,
       "is_cocycle": true,
       "is_admissible": false,
-      "classification": "nontrivial_H1_obstruction",
+      "case": "warrant_debt",
+      "theorem_invoked": "[r] != 0 in H^1(N;Q): D(r) = ||P_{H^1} r||^2 > 0. No global consistent claim exists. [PROOF.md \u00a70b + \u00a711b]",
+      "basis_type": "harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1) via Hodge Laplacian",
       "G": [
         [
           "4"
@@ -39,7 +41,9 @@
       "dim_H1": 1,
       "is_cocycle": true,
       "is_admissible": true,
-      "classification": "coboundary_removable",
+      "case": "globally_admissible",
+      "theorem_invoked": "[r] = 0 in H^1(N;Q): D(r) = ||P_{H^1} r||^2 = 0. A global consistent claim Phi exists. [PROOF.md \u00a70b + \u00a711b]",
+      "basis_type": "harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1) via Hodge Laplacian",
       "G": [
         [
           "4"
@@ -65,7 +69,9 @@
       "dim_H1": 2,
       "is_cocycle": true,
       "is_admissible": false,
-      "classification": "nontrivial_H1_obstruction",
+      "case": "warrant_debt",
+      "theorem_invoked": "[r] != 0 in H^1(N;Q): D(r) = ||P_{H^1} r||^2 > 0. No global consistent claim exists. [PROOF.md \u00a70b + \u00a711b]",
+      "basis_type": "harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1) via Hodge Laplacian",
       "G": [
         [
           "4",
@@ -98,7 +104,9 @@
       "dim_H1": 3,
       "is_cocycle": true,
       "is_admissible": false,
-      "classification": "nontrivial_H1_obstruction",
+      "case": "warrant_debt",
+      "theorem_invoked": "[r] != 0 in H^1(N;Q): D(r) = ||P_{H^1} r||^2 > 0. No global consistent claim exists. [PROOF.md \u00a70b + \u00a711b]",
+      "basis_type": "harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1) via Hodge Laplacian",
       "G": [
         [
           "3",
@@ -136,7 +144,29 @@
       "dim_H1": 0,
       "is_cocycle": true,
       "is_admissible": true,
-      "classification": "coboundary_removable",
+      "case": "globally_admissible",
+      "theorem_invoked": "[r] = 0 in H^1(N;Q): D(r) = ||P_{H^1} r||^2 = 0. A global consistent claim Phi exists. [PROOF.md \u00a70b + \u00a711b]",
+      "basis_type": "harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1) via Hodge Laplacian",
+      "G": [],
+      "p": [],
+      "D_gram": "0",
+      "D_harmonic_check": "0",
+      "gram_harmonic_agree": true,
+      "expected_D": "0"
+    },
+    {
+      "label": "filled triangle incoherent  [coherence_failure]",
+      "residue": [
+        "1",
+        "1",
+        "1"
+      ],
+      "dim_H1": 0,
+      "is_cocycle": false,
+      "is_admissible": false,
+      "case": "coherence_failure",
+      "theorem_invoked": "delta^1 r != 0: local coherence fails. The H^1 admissibility question does not arise. [PROOF.md \u00a70b]",
+      "basis_type": "harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1) via Hodge Laplacian",
       "G": [],
       "p": [],
       "D_gram": "0",
@@ -155,7 +185,9 @@
       "dim_H1": 0,
       "is_cocycle": true,
       "is_admissible": true,
-      "classification": "coboundary_removable",
+      "case": "globally_admissible",
+      "theorem_invoked": "[r] = 0 in H^1(N;Q): D(r) = ||P_{H^1} r||^2 = 0. A global consistent claim Phi exists. [PROOF.md \u00a70b + \u00a711b]",
+      "basis_type": "harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1) via Hodge Laplacian",
       "G": [],
       "p": [],
       "D_gram": "0",

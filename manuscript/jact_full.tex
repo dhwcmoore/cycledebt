@@ -16,17 +16,17 @@
 \maketitle
 
 \begin{abstract}
-We develop a finite regional obstruction theory based on simplicial cohomology
-of overlap graphs and nerves. The central theorem states that a residue is
-non-removable if and only if it has nonzero circulation around at least one
-cycle: a purely cycle-detectable criterion for any finite connected overlap
-graph. For the four-region loop nerve we prove a complete classification, and
-for the actual seam residue $r=(1,1,1,-2)$ the integral period is $-5$, giving
-a nonzero class in $H^1(N;\mathbb{Z})\cong\mathbb{Z}$. The Residue-Admissibility
-Bridge Theorem shows this is equivalent to the non-existence of a globally
-consistent claim: the H¹ class is the \emph{warrant debt}, quantified by the
-harmonic decomposition $r=r^{\mathrm{adm}}+r^{\mathrm{debt}}$ with
-$r^{\mathrm{debt}}=(-5/4)z$. All results carry machine-readable certificates.
+Warrant debt for finite regional systems is the non-zero harmonic $H^1$-component
+of a coherent seam residue. We prove the Finite Nerve Warrant Debt Theorem: for
+any finite nerve over $\mathbb{Q}$, a seam residue $r$ carries warrant debt
+($[r]\neq0\in H^1$) if and only if no globally consistent claim exists. The
+theorem applies to both overlap graphs and simplicial complexes; in graph cases
+it reduces to cycle-period detection, and in the original four-cycle example
+to $D=p^2/4$. Debt magnitude $D(r)=\|P_{\mathcal{H}^1}r\|^2$ is computed via
+the Hodge Laplacian $L_1=\delta^0(\delta^0)^T+(\delta^1)^T\delta^1$, whose
+null space gives the harmonic obstruction basis correctly accounting for faces.
+For the actual seam residue $r=(1,1,1,-2)$, the integral period is $-5$ and
+$D=25/4$. All results carry audit-grade machine-readable certificates.
 \end{abstract}
 
 \section{Introduction}
@@ -112,15 +112,30 @@ and the harmonic 1-cochains are $\mathcal{H}^1=\ker(L_1)=\ker((\delta^0)^T)\cap\
 
 \textbf{Theorem (Nerve Extension).}
 For $r\in\ker(\delta^1)$:
-\[
-[r]=0\in H^1(N;k)
-\;\Longleftrightarrow\;
-\langle h,r\rangle=0 \text{ for all } h\in\mathcal{H}^1.
-\]
+$[r]=0\in H^1(N;k)$ iff $\langle h,r\rangle=0$ for all $h\in\mathcal{H}^1$.
 
-The general debt formula $D(r)=p(r)^TG^{-1}p(r)$ uses the harmonic basis
-for $\mathcal{H}^1$. For graphs ($\delta^1=0$): $\mathcal{H}^1=Z_1$ and
-$D=p^TG^{-1}p$ as in Section~\ref{sec:gram}.
+\subsection*{Finite Nerve Warrant Debt Theorem (capstone)}
+
+Combining the above with the bridge theorem (Section~\ref{sec:bridge}):
+
+\textbf{Theorem.}
+Let $N$ be a finite nerve over $\mathbb{Q}$ and $r\in C^1$ a seam residue.
+Define $D(r)=\|P_{\mathcal{H}^1}r\|^2$.
+\begin{itemize}
+\item $\delta^1 r\neq0$: local coherence fails; $H^1$ question does not arise.
+\item $\delta^1 r=0$, $D(r)=0$: $[r]=0$; globally consistent claim exists.
+\item $\delta^1 r=0$, $D(r)>0$: $[r]\neq0$; warrant debt, no global claim.
+\end{itemize}
+
+The engine \texttt{finite\_nerve\_warrant\_debt.py} returns exactly these three
+certificate cases, each invoking the proved theorem.
+
+\textbf{Precision note.}
+The Gram formula $D=p^TG^{-1}p$ agrees with $\|P_{\mathcal{H}^1}r\|^2$ only
+when $\{h_i\}$ is a basis for $\mathcal{H}^1=\ker(L_1)$, not for the raw graph
+cycle space. Faces kill apparent graph cycles: for the filled triangle, the
+loop is a boundary so $\mathcal{H}^1=\{0\}$ and $D=0$. The Hodge Laplacian
+implementation is the safe canonical choice.
 
 Table~\ref{tab:graph-types} summarises all verified graph and nerve types.
 
