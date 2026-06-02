@@ -1,0 +1,229 @@
+{
+  "script": "classification_theorem.py",
+  "base_object": "actual_gluing_object_v1",
+  "residue": [
+    1,
+    1,
+    1,
+    -2
+  ],
+  "cycle_witness": [
+    -1,
+    -1,
+    -1,
+    1
+  ],
+  "theorem_1_complete_classifier": {
+    "theorem": "complete_four_cycle_classifier",
+    "samples_tested": 100,
+    "failures": [],
+    "passed": true
+  },
+  "theorem_2_integral_period": {
+    "theorem": "integral_period",
+    "surjectivity_witness": {
+      "e4": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "q_e4": "1"
+    },
+    "kernel_equals_image_over_Z": true,
+    "kernel_tests": [
+      {
+        "r": [
+          "1",
+          "1",
+          "1",
+          "3"
+        ],
+        "q": "0",
+        "b_explicit": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "delta0_b_equals_r": true,
+        "d_equals_a_plus_b_plus_c": true
+      },
+      {
+        "r": [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "q": "0",
+        "b_explicit": [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "delta0_b_equals_r": true,
+        "d_equals_a_plus_b_plus_c": true
+      },
+      {
+        "r": [
+          "3",
+          "-1",
+          "2",
+          "4"
+        ],
+        "q": "0",
+        "b_explicit": [
+          "0",
+          "3",
+          "2",
+          "4"
+        ],
+        "delta0_b_equals_r": true,
+        "d_equals_a_plus_b_plus_c": true
+      },
+      {
+        "r": [
+          "1",
+          "0",
+          "-1",
+          "0"
+        ],
+        "q": "0",
+        "b_explicit": [
+          "0",
+          "1",
+          "1",
+          "0"
+        ],
+        "delta0_b_equals_r": true,
+        "d_equals_a_plus_b_plus_c": true
+      }
+    ],
+    "integral_period": "-5",
+    "H1_Z_iso": "Z",
+    "class_in_H1_Z": "-5",
+    "passed": true
+  },
+  "theorem_3_modular_sensitivity": {
+    "theorem": "modular_sensitivity",
+    "residue": [
+      1,
+      1,
+      1,
+      -2
+    ],
+    "integral_period": -5,
+    "prime_results": [
+      {
+        "p": 2,
+        "period_mod_p": 1,
+        "class_vanishes": false,
+        "detail": {
+          "circulation_mod_p": 1
+        }
+      },
+      {
+        "p": 3,
+        "period_mod_p": 1,
+        "class_vanishes": false,
+        "detail": {
+          "circulation_mod_p": 1
+        }
+      },
+      {
+        "p": 5,
+        "period_mod_p": 0,
+        "class_vanishes": true,
+        "detail": {
+          "coboundary_certificate_mod_p": {
+            "b": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "edge_checks": [
+              {
+                "edge_index": 0,
+                "diff_mod_p": 1,
+                "r_mod_p": 1,
+                "matches": true
+              },
+              {
+                "edge_index": 1,
+                "diff_mod_p": 1,
+                "r_mod_p": 1,
+                "matches": true
+              },
+              {
+                "edge_index": 2,
+                "diff_mod_p": 1,
+                "r_mod_p": 1,
+                "matches": true
+              },
+              {
+                "edge_index": 3,
+                "diff_mod_p": 3,
+                "r_mod_p": 3,
+                "matches": true
+              }
+            ],
+            "verified": true
+          }
+        }
+      },
+      {
+        "p": 7,
+        "period_mod_p": 2,
+        "class_vanishes": false,
+        "detail": {
+          "circulation_mod_p": 2
+        }
+      },
+      {
+        "p": 11,
+        "period_mod_p": 6,
+        "class_vanishes": false,
+        "detail": {
+          "circulation_mod_p": 6
+        }
+      },
+      {
+        "p": 13,
+        "period_mod_p": 8,
+        "class_vanishes": false,
+        "detail": {
+          "circulation_mod_p": 8
+        }
+      },
+      {
+        "p": 17,
+        "period_mod_p": 12,
+        "class_vanishes": false,
+        "detail": {
+          "circulation_mod_p": 12
+        }
+      },
+      {
+        "p": 19,
+        "period_mod_p": 14,
+        "class_vanishes": false,
+        "detail": {
+          "circulation_mod_p": 14
+        }
+      },
+      {
+        "p": 23,
+        "period_mod_p": 18,
+        "class_vanishes": false,
+        "detail": {
+          "circulation_mod_p": 18
+        }
+      }
+    ],
+    "theorem_holds_for_tested_primes": true,
+    "passed": true
+  }
+}

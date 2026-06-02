@@ -45,7 +45,161 @@ $$
 
 ---
 
-## 1. Base obstruction
+## 0. General Finite Regional Obstruction Theorem
+
+This section states the general theory. Sections 1–2 apply it to the specific
+four-region loop nerve.
+
+**Setup.** Let $G$ be a finite connected oriented graph with vertex set $V$ and
+edge set $E$, with no 2-faces. The cochain complex is:
+$$
+C^0(G;\mathbb{Q}) = \mathbb{Q}^{|V|}
+\xrightarrow{\delta^0}
+C^1(G;\mathbb{Q}) = \mathbb{Q}^{|E|}
+\xrightarrow{0} 0.
+$$
+Every $r \in C^1$ is automatically a cocycle. The cycle space
+$Z_1(G;\mathbb{Q}) = \ker(\delta^{0,T})$ has dimension
+$|E| - |V| + 1$ (for connected $G$).
+
+**Theorem (General cycle-detection).** For $r \in C^1(G;\mathbb{Q})$:
+$$
+[r] = 0 \in H^1(G;\mathbb{Q})
+\quad\Longleftrightarrow\quad
+\langle z, r\rangle = 0 \text{ for every } z \in Z_1(G;\mathbb{Q}).
+$$
+
+**Proof.**
+$(\Rightarrow)$ If $r = \delta^0 b$ then $\langle z, r\rangle = \langle\delta^{0,T}z, b\rangle = 0$ for all $z \in Z_1$.
+
+$(\Leftarrow)$ Over $\mathbb{Q}$, the rank-nullity theorem gives
+$\dim Z_1 + \dim\operatorname{im}\delta^0 = \dim C^1$. Since $\operatorname{im}\delta^0 \subseteq Z_1^\perp$
+(by $(\Rightarrow)$) and both have the same dimension, they are equal:
+$\operatorname{im}\delta^0 = Z_1^\perp$. Therefore $r \perp Z_1$ implies
+$r \in \operatorname{im}\delta^0$. $\square$
+
+For a simplicial complex $N$ with 2-faces, the same conclusion holds restricted
+to cocycles: $[r] = 0$ in $H^1(N;\mathbb{Q})$ iff $\delta^1 r = 0$ and
+$\langle z, r\rangle = 0$ for all $z \in Z_1(N;\mathbb{Q})$.
+
+**Consequence: finite obstruction is cycle-detectable.**
+A residue is structurally non-removable if and only if it has nonzero circulation
+around at least one cycle. There is no other obstruction. The theorem gives the
+complete criterion:
+$$
+[r] \neq 0 \quad\Longleftrightarrow\quad \exists\, z \in Z_1 \text{ with } \langle z,r\rangle \neq 0.
+$$
+
+**Dimension and structure of $H^1$.**
+For a connected graph $G$:
+$$
+\dim H^1(G;\mathbb{Q}) = |E| - |V| + 1 = \text{circuit rank of } G.
+$$
+The obstruction group is a free abelian group of rank equal to the number of
+independent cycles.
+
+| Graph type | $H^1$ | Obstruction |
+|---|---|---|
+| Path (tree) | $0$ | None: every residue removable |
+| Single cycle ($n$-gon) | $\mathbb{Q}$ | One invariant: the circulation |
+| Cycle with chord | $\mathbb{Q}^2$ | Two independent invariants |
+| Complete graph $K_4$ | $\mathbb{Q}^3$ | Three independent invariants |
+| Any complex with filled cycles | depends on faces | Faces can kill cycles |
+
+Verified computationally for path $P_3$, triangles $C_3$, four-cycle $C_4$,
+five-cycle $C_5$, diamond (4-cycle + chord), filled triangle ($H^1 = 0$), and
+complete $K_4$ by `general_obstruction_classifier.py`.
+
+---
+
+## 1. Complete Four-Cycle Classification Theorem
+
+**Theorem (Complete four-cycle $H^1$ classifier).** For the four-region loop
+nerve $N$ with the coboundary matrix $\delta^0$ defined above, the *circulation
+functional*
+$$
+q(a,b,c,d) \;=\; -a - b - c + d \;=\; \langle z, r\rangle, \quad z = (-1,-1,-1,1),
+$$
+is the complete invariant of the cohomology class: for any residue
+$r = (a,b,c,d) \in C^1$,
+$$
+[r] = 0 \in H^1(N;\mathbb{Q})
+\quad\Longleftrightarrow\quad
+-a - b - c + d = 0.
+$$
+
+**Proof.** $(\Rightarrow)$ If $r = \delta^0 b$ then $\langle z, r\rangle =
+\langle \delta^{0,T}z, b\rangle = \langle 0, b\rangle = 0$, so $q(r) = 0$.
+
+$(\Leftarrow)$ Suppose $q(r) = 0$, i.e., $d = a + b + c$. Set
+$$
+b^* = \bigl(0,\; a,\; a+b,\; a+b+c\bigr).
+$$
+Then $(\delta^0 b^*)_e = b^*_j - b^*_i$ for each oriented edge $U_iU_j$:
+$$
+b^*_2 - b^*_1 = a,\quad
+b^*_3 - b^*_2 = b,\quad
+b^*_4 - b^*_3 = c,\quad
+b^*_4 - b^*_1 = a+b+c = d.
+$$
+So $\delta^0 b^* = (a,b,c,d) = r$, and $r \in \operatorname{im}\delta^0$. $\square$
+
+**Corollary (Actual object).** For $r = (1,1,1,-2)$:
+$$
+q(r) = -1 - 1 - 1 + (-2) = -5 \neq 0,
+$$
+so $[r] \neq 0 \in H^1(N;\mathbb{Q})$. $\square$
+
+The theorem classifies every residue on the four-cycle completely. The actual
+object is a corollary, not merely an example.
+
+---
+
+## 2. Integral Cohomology and Modular Sensitivity
+
+**Theorem (Integral period).** Over $\mathbb{Z}$, the circulation map
+$q : \mathbb{Z}^4 \to \mathbb{Z}$ induces an isomorphism
+$$
+H^1(N;\mathbb{Z}) \;=\; \mathbb{Z}^4 / \operatorname{im}\delta^0 \;\cong\; \mathbb{Z}.
+$$
+The actual residue $r = (1,1,1,-2)$ satisfies $[r] = -5 \in \mathbb{Z} \cong H^1(N;\mathbb{Z})$.
+
+**Proof.** The map $q$ is surjective over $\mathbb{Z}$ since $q(0,0,0,1) = 1$.
+By Theorem 1 (whose constructive direction works integrally: if $-a-b-c+d = 0$
+then $b^* \in \mathbb{Z}^4$), we have $\ker q = \operatorname{im}\delta^0$ over
+$\mathbb{Z}$. Therefore
+$$
+\mathbb{Z}^4 / \operatorname{im}\delta^0 = \mathbb{Z}^4/\ker q \;\cong\; \mathbb{Z}.
+$$
+The class of $r$ is $q(r) = -5$. $\square$
+
+**Theorem (Modular sensitivity).** Let $k$ be any field. Then
+$$
+[r] \neq 0 \in H^1(N;k)
+\quad\Longleftrightarrow\quad
+\operatorname{char}(k) \nmid 5.
+$$
+
+**Proof.** Over $k$, the same analysis gives $H^1(N;k) \cong k$ via $q_k$,
+where $q_k(a,b,c,d) = -a-b-c+d$ in $k$. Then $[r] = -5 \cdot 1_k \in k$.
+This is zero if and only if $\operatorname{char}(k) \mid 5$, i.e., $\operatorname{char}(k) = 5$.
+
+In particular:
+- $[r] \neq 0$ over $\mathbb{Q},\,\mathbb{R},\,\mathbb{C},\,\mathbb{F}_2,\,\mathbb{F}_3,\,\mathbb{F}_7,\ldots$
+- $[r] = 0$ over $\mathbb{F}_5$, with explicit coboundary certificate $b = (0,1,2,3)$,
+  since $b_4 - b_1 = 3 \equiv -2 \pmod{5}$. $\square$
+
+The obstruction is not an absolute binary. It is an arithmetic quantity: its
+detectability depends on the characteristic of the coefficient field. Over
+$\mathbb{Z}$, the invariant is the integer $-5$; over $\mathbb{F}_5$, that integer
+vanishes and the obstruction disappears.
+
+This is verified computationally for primes $2, 3, 5, 7, 11, 13, 17, 19, 23$ by
+`classification_theorem.py`, which emits a machine-readable certificate.
+
+---
+
+## 3. Base obstruction
 
 **Proposition.** $0 \neq [r] \in H^1(N;\mathbb{Q})$.
 
@@ -101,7 +255,7 @@ The cycle witness is the stronger proof artifact: it is a single rational comput
 
 ---
 
-## 2. Presentation invariance
+## 4. Presentation invariance
 
 **Claim.** The verdict $[r] \neq 0$ is stable under the following presentation changes:
 
@@ -129,7 +283,7 @@ The invariance test suite (`invariance_test.py`) verifies that the classifier im
 
 ---
 
-## 3. Refinement persistence (proved for declared refinements)
+## 5. Refinement persistence (proved for declared refinements)
 
 **Lemma (cycle witness for refinement).** Let
 
@@ -162,7 +316,7 @@ Each nonzero pairing constitutes a proof, by the lemma above, that the transferr
 
 ---
 
-## 4. Cycle-Lift Persistence Theorem
+## 6. Cycle-Lift Persistence Theorem
 
 **Definition (Nonzero-degree lift of a cycle).**
 Let $z \in Z_1(N;\mathbb Q)$. A cycle $z' \in Z_1(N';\mathbb Q)$ is a
@@ -261,7 +415,7 @@ and subdivide-$U_2$ force $\lambda = 0$ (impossible).
 
 ---
 
-## 5. Rank criterion and classification table
+## 7. Rank criterion and classification table
 
 The rank criterion gives a clean algebraic read-out for each refinement.
 
@@ -278,7 +432,7 @@ For the non-faithful cases, $\operatorname{rank}(PK) = 1$ but $z \notin \operato
 the image of $Z_1(N')$ under $\rho_*$ is a one-dimensional subspace of $C_1(N;\mathbb Q)$
 that does not contain $z$.
 
-## 6. Why single-region subdivisions fail cycle-faithfulness
+## 8. Why single-region subdivisions fail cycle-faithfulness
 
 For subdivide-$U_1$ with equal-distribution transfer, the junction vertex $U_2$
 (an original vertex of $N$, still present in $N'$) has two new incoming edges
@@ -373,19 +527,29 @@ non-uniform ratio vector, both computed over $\mathbb Q$ by `cycle_lift_test.py`
 
 ---
 
-## 7. Scope of the proof
+## 9. Scope of the proof
 
 What is proved:
 
-> The residue $r = (1,1,1,-2)$ on the declared finite nerve represents a nonzero $H^1$ class. This class is preserved under the five declared presentation changes and persists under the four declared refinement maps with equal-distribution transfer. For two of the four refinements (subdivide all, insert bridge), persistence follows from the Cycle-Lift Persistence Theorem. For the remaining two (subdivide $U_1$, subdivide $U_2$), cycle-faithfulness is algebraically impossible for equal-distribution transfer; persistence is proved by the direct cycle-pairing lemma applied in the refined complex.
+1. **General theory.** For any finite connected oriented overlap graph, a residue is non-removable if and only if it has nonzero circulation around at least one cycle (§0).
+
+2. **Complete classification.** Every residue on the four-region loop is classified by the circulation $q = -a-b-c+d$ (§1). The actual object is the corollary $q(r) = -5 \neq 0$.
+
+3. **Integral and modular.** $H^1(N;\mathbb{Z}) \cong \mathbb{Z}$ with integral period $-5$. The obstruction persists over every field of characteristic $\neq 5$ (§2).
+
+4. **Presentation invariance.** The verdict is stable under five declared presentation changes (§4).
+
+5. **Refinement persistence.** The class persists under four declared refinements; two by the Cycle-Lift Theorem, two by direct pairing (§5–8).
+
+6. **Admissibility bridge.** Non-zero residue is equivalent to the impossibility of a globally consistent claim. The warrant debt decomposes as $r = r^{\mathrm{adm}} + r^{\mathrm{debt}}$ with $r^{\mathrm{debt}} = (-5/4)z$ for the actual object (§12).
 
 What is not yet proved:
 
-> A characterisation of all cycle-faithful refinements, or a proof of the Balanced Loop Refinement Conjecture.
+> A characterisation of all cycle-faithful refinements, or a proof of the Balanced Loop Refinement Conjecture. A dynamic (time-indexed) version of the warrant-debt trajectory.
 
 ---
 
-## 8. Two-layer interpretation
+## 10. Two-layer interpretation
 
 Refinement persistence has two layers:
 
@@ -402,7 +566,230 @@ The first can hold even when the second fails.
 
 ---
 
-## 9. Certificate files
+## 11b. Residue-Admissibility Bridge Theorem
+
+This section connects the cohomological obstruction to the failure of global
+observational consistency. It is the bridge to warrant-debt theory.
+
+### Setup
+
+Let $N$ be a finite regional nerve with regions $\{U_i\}$ and oriented overlaps
+$\{(U_i, U_j)\}$. An **observation map** assigns to each overlap an
+independently-measured discrepancy $r_{ij} \in \mathbb{Q}$.
+
+A **global admissible claim** $\Phi$ is an assignment of values $\Phi_i \in
+\mathbb{Q}$ to each region, consistent with all seam data:
+$$
+\Phi_j - \Phi_i = r_{ij} \quad\text{for every overlap } (U_i, U_j).
+$$
+In terms of the cochain complex, this is: $(\delta^0 \Phi)_{ij} = r_{ij}$, i.e.,
+$r = \delta^0 \Phi$.
+
+### Theorem (Residue-Admissibility Bridge)
+
+For $r \in C^1(N;\mathbb{Q})$ satisfying the cocycle condition $\delta^1 r = 0$,
+the following are equivalent:
+
+1. **Gauge-admissible:** $\exists\, b \in C^0$ with $\delta^0 b = r$.
+2. **Globally consistent:** $\exists\, \Phi$ (global claim) with $\Phi_j - \Phi_i = r_{ij}$ at every overlap.
+3. **Cohomologically trivial:** $[r] = 0 \in H^1(N;\mathbb{Q})$.
+
+**Proof.** (1)$\Leftrightarrow$(3) is the definition of $H^1 = C^1/\operatorname{im}\delta^0$.
+For (2)$\Leftrightarrow$(1): if $\Phi$ exists, set $b = \Phi$; then
+$(\delta^0 b)_{ij} = b_j - b_i = r_{ij}$. Conversely, if $\delta^0 b = r$, define
+$\Phi_i := b_i$; the consistency condition holds by construction. $\square$
+
+**Corollary (Warrant Debt).** If $[r] \neq 0$, no globally consistent claim
+exists. The class $[r] \in H^1(N;\mathbb{Q})$ is the **warrant debt**: a
+quantified, gauge-invariant, irremovable inconsistency in the seam data.
+
+### Warrant Debt Decomposition
+
+**Caveat.** The decomposition below depends on the choice of inner product on
+$C^1$. The cohomology class $[r]$ and the obstruction period $\langle z,r\rangle$
+are basis- and inner-product-independent. The split $r = r^{\mathrm{adm}} +
+r^{\mathrm{debt}}$ and the magnitude $\|r^{\mathrm{debt}}\|^2$ are stated
+relative to the standard rational inner product on the declared edge basis.
+
+Over $\mathbb{Q}$ with the standard inner product, the cochain group decomposes
+orthogonally:
+$$
+C^1 = \operatorname{im}\delta^0 \;\oplus\; Z_1.
+$$
+
+Any seam residue splits uniquely as:
+$$
+r = r^{\mathrm{adm}} + r^{\mathrm{debt}},
+\qquad
+r^{\mathrm{debt}} = \frac{\langle r, z\rangle}{\langle z,z\rangle}\,z
+$$
+(for a single-cycle system), where:
+
+- $r^{\mathrm{adm}} \in \operatorname{im}\delta^0$: the **admissible component** — the closest consistent residue.
+- $r^{\mathrm{debt}} \in Z_1$: the **warrant debt** — irremovable; no gauge touches it.
+
+The gauge $b^*$ with $\delta^0 b^* = r^{\mathrm{adm}}$ gives the nearest-admissible
+system.
+
+### Computation for the Actual Object
+
+For $r = (1,1,1,-2)$, `admissibility_bridge.py` computes:
+
+| Quantity | Value |
+|---|---|
+| Admissible? | No |
+| Obstruction period $\langle z,r\rangle$ | $-5$ |
+| $\langle z,z\rangle$ | $4$ |
+| $r^{\mathrm{adm}}$ | $(-1/4,\,-1/4,\,-1/4,\,-3/4)$ |
+| $r^{\mathrm{debt}} = \frac{-5}{4}\,z$ | $(5/4,\,5/4,\,5/4,\,-5/4)$ |
+| $\|r^{\mathrm{debt}}\|^2 = 25/4$ | $p^2/\|z\|^2$ |
+| Closest admissible gauge $b^*$ | $(3/4,\,1/2,\,1/4,\,0)$ |
+
+The coefficient $-5/4$ comes from $p/\|z\|^2 = -5/4$: the obstruction period
+divided by the cycle norm. The integer $-5$ is the invariant; the $4$ is the
+norm of the four-edge primitive cycle under the chosen inner product.
+
+For comparison, $r = (1,1,1,3)$ (zero circulation) is globally admissible with
+consistent global claim $\Phi = (-3,-2,-1,0)$.
+
+### What the theorem means
+
+The bridge theorem says: the only reason a finite regional system cannot have a
+globally consistent claim is that its seam residue fails to be a coboundary.
+There is no other obstruction. The H¹ class IS the warrant debt, completely and
+exactly.
+
+In plain language:
+
+> **A residue is structurally irremovable if and only if the local observations
+> cannot be reconciled by any global assessment. The cohomology class measures
+> how irremovable it is.**
+
+---
+
+## 11c. Dynamic Warrant Debt Theorem
+
+**Caveat.** The warrant debt magnitude $D(t)$ and the cumulative load $W(T)$
+are relative to the standard rational inner product. The period $p(t)$ and the
+admissibility verdict are inner-product-independent.
+
+**Setup.** Let $(r_t)_{t \geq 0}$ be a time-indexed sequence of residues on a
+fixed finite regional nerve $N$. For each $r_t$, let
+$$
+r_t = r_t^{\mathrm{adm}} + r_t^{\mathrm{debt}}
+$$
+be the harmonic decomposition, and define the **warrant debt magnitude**:
+$$
+D(t) = \|r_t^{\mathrm{debt}}\|^2.
+$$
+
+**Theorem (Dynamic Warrant Debt).**
+$$
+D(t) = 0
+\;\Longleftrightarrow\;
+[r_t] = 0
+\;\Longleftrightarrow\;
+\text{system is globally admissible at time } t.
+$$
+$$
+D(t) > 0
+\;\Longleftrightarrow\;
+\text{system carries irremovable warrant debt at time } t.
+$$
+
+**Four-Cycle Debt Formula.** For the four-region loop nerve with primitive cycle
+$z$ (single-cycle system, $\|z\|^2 = 4$):
+$$
+D(t) = \frac{p(t)^2}{\|z\|^2} = \frac{p(t)^2}{4},
+\qquad p(t) = \langle z, r_t\rangle.
+$$
+
+This gives a closed-form debt magnitude from the obstruction period alone.
+
+**Derived quantities:**
+
+| Quantity | Formula | Meaning |
+|---|---|---|
+| Period | $p(t) = \langle z, r_t\rangle$ | Obstruction circulation at time $t$ |
+| Debt magnitude | $D(t) = p(t)^2/\|z\|^2$ | Irremovable component size |
+| Fatigue | $F(t_0, t_1) = D(t_1) - D(t_0)$ | Change in debt |
+| Cumulative load | $W(T) = \sum_{t=0}^T D(t)$ | Total debt accumulated |
+
+**Toy model.** Set $r_t = (1, 1, 1, 3 - \epsilon_t)$:
+- $p(t) = -\epsilon_t$, $D(t) = \epsilon_t^2/4$
+- At $\epsilon_t = 0$: admissible, $D = 0$
+- At $\epsilon_t = 5$: $r_t = (1,1,1,-2)$ — the actual object, $D = 25/4$
+
+| $\epsilon_t$ | $r_t$ | $p(t)$ | $D(t)$ |
+|---:|---|---:|---:|
+| 0 | $(1,1,1,3)$ | $0$ | $0$ |
+| 1 | $(1,1,1,2)$ | $-1$ | $1/4$ |
+| 2 | $(1,1,1,1)$ | $-2$ | $1$ |
+| 3 | $(1,1,1,0)$ | $-3$ | $9/4$ |
+| 4 | $(1,1,1,-1)$ | $-4$ | $4$ |
+| 5 | $(1,1,1,-2)$ | $-5$ | $25/4$ |
+
+Cumulative load: $W(5) = 55/4$.
+
+The fatigue scenario (onset, partial recovery, re-escalation over 10 steps) gives
+$W(9) = 45/2$, verified by `dynamic_warrant_debt.py`. The actual object held
+fixed gives $W(5) = 75/2$.
+
+---
+
+## 11d. General Warrant Debt Formula (Gram Matrix)
+
+The four-cycle formula $D(t) = p(t)^2/4$ is a special case of a general result
+that holds for any finite nerve with an arbitrary cycle basis.
+
+**Theorem (General Gram Matrix Debt Formula).** Let $G$ be a finite connected
+oriented graph with cycle basis $\{z_1, \ldots, z_k\}$. Define the Gram matrix
+$$
+G_{ij} = \langle z_i, z_j\rangle
+$$
+and the period vector
+$$
+p_i(r) = \langle z_i, r\rangle.
+$$
+Then the warrant debt magnitude relative to the standard inner product is:
+$$
+D(r) = p(r)^T G^{-1} p(r).
+$$
+
+**Proof.** The harmonic component is $r^{\mathrm{debt}} = \sum_i c_i z_i$ where
+$c = G^{-1} p$. Then:
+$$
+\|r^{\mathrm{debt}}\|^2 = c^T G c = (G^{-1}p)^T G (G^{-1}p) = p^T G^{-1} p. \;\square
+$$
+
+**Special cases:**
+- $k = 1$ (four-cycle, single cycle): $D = p^2/\|z\|^2$. With $\|z\|^2 = 4$: $D = p^2/4$.
+- Orthogonal basis: $G = \operatorname{diag}(\|z_1\|^2,\ldots,\|z_k\|^2)$, $D = \sum_i p_i^2/\|z_i\|^2$.
+- General (non-orthogonal): the off-diagonal terms in $G^{-1}$ couple the period components.
+
+**Gram matrices for tested graphs:**
+
+| Graph | $\dim H^1$ | $G$ | $D$ for test residue |
+|---|---|---|---|
+| Four-cycle $C_4$ | 1 | $(4)$ | $25/4$ |
+| Diamond | 2 | $\begin{pmatrix}4&2\\2&3\end{pmatrix}$ | $51/8$ |
+| Complete $K_4$ | 3 | $\begin{pmatrix}3&1&-1\\1&3&1\\-1&1&3\end{pmatrix}$ | $13$ |
+
+The off-diagonal entries in the diamond and $K_4$ Gram matrices reflect the
+non-orthogonality of the natural cycle basis. The formula $D = p^T G^{-1} p$
+accounts for this coupling exactly.
+
+**Dynamic version.** For time-indexed $(r_t)$:
+$$
+D(t) = p(t)^T G^{-1} p(t), \qquad W(T) = \sum_{t=0}^T D(t).
+$$
+
+Verified on four trajectories (four-cycle, diamond simultaneous onset, diamond
+second-cycle-only, $K_4$ single-edge drift) by `general_warrant_debt.py`.
+
+---
+
+## 12. Certificate files
 
 All computations above are certified by the files in `certificates/`:
 
@@ -413,5 +800,9 @@ All computations above are certified by the files in `certificates/`:
 | `actual_gluing_object_v1_refinement_test_report.json` | Four refinement tests with direct pairings |
 | `admissible_refinement_theorem_certificate.json` | Adjointness and cycle-lift check for each refinement |
 | `cycle_lift_test_certificate.json` | Linear-system proof of cycle-faithfulness / impossibility |
+| `classification_theorem_certificate.json` | Complete classifier, integral period, and modular sensitivity |
+| `general_obstruction_classifier_certificate.json` | General theorem verified on seven graph types |
+| `admissibility_bridge_certificate.json` | Residue-Admissibility Bridge: warrant debt decomposition |
+| `dynamic_warrant_debt_certificate.json` | Dynamic Warrant Debt: three trajectories, formula $D=p^2/4$ verified |
 
 These files are frozen; see `MANIFEST.md` for the claim licensed by them.

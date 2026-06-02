@@ -16,37 +16,171 @@
 \maketitle
 
 \begin{abstract}
-We present a finite cohomological obstruction classifier with machine-readable
-JSON certificates for seam residues in finite regional covers. The classifier
-tests cocycle and coboundary status over $\mathbb{Q}$, distinguishes direct
-obstruction persistence from witness persistence, and decides cycle-faithfulness
-with exact rational rank criteria. We prove the correctness of these tests and
-document the results with audit-grade certificates and reproducible inputs.
+We develop a finite regional obstruction theory based on simplicial cohomology
+of overlap graphs and nerves. The central theorem states that a residue is
+non-removable if and only if it has nonzero circulation around at least one
+cycle: a purely cycle-detectable criterion for any finite connected overlap
+graph. For the four-region loop nerve we prove a complete classification, and
+for the actual seam residue $r=(1,1,1,-2)$ the integral period is $-5$, giving
+a nonzero class in $H^1(N;\mathbb{Z})\cong\mathbb{Z}$. The Residue-Admissibility
+Bridge Theorem shows this is equivalent to the non-existence of a globally
+consistent claim: the H¹ class is the \emph{warrant debt}, quantified by the
+harmonic decomposition $r=r^{\mathrm{adm}}+r^{\mathrm{debt}}$ with
+$r^{\mathrm{debt}}=(-5/4)z$. All results carry machine-readable certificates.
 \end{abstract}
 
 \section{Introduction}
 We study finite regional cohomology obstructions arising from seam residues in
 oriented nerves. The main contributions are:
 \begin{itemize}
-  \item A classifier that decides whether a residue is a cocycle and whether it
-    is a coboundary. The implementation produces machine-readable JSON
-    certificates that encode cohomology summaries, cycle witnesses, and audit
-    data.
-  \item A separation of persistence notions under refinement: direct persistence
-    versus witness persistence. We give algebraic criteria that distinguish them.
-  \item Exact rational rank tests for cycle-faithfulness. When faithfulness
-    fails, the implementation outputs a short rational witness.
+  \item \textbf{General finite regional obstruction theorem
+    (Section~\ref{sec:general}).}
+    For any finite connected oriented overlap graph, a residue is non-removable
+    if and only if it has nonzero circulation around at least one cycle. This
+    is a general, computable, coefficient-field-independent criterion.
+    The classifier handles arbitrary graph inputs, not just the four-region
+    example.
+  \item \textbf{Complete four-cycle classification (Theorem~\ref{thm:classifier}).}
+    For the four-region loop nerve, the circulation $q(a,b,c,d)=-a-b-c+d$ is
+    the complete $H^1$ invariant. The actual object is a corollary with
+    $q(1,1,1,-2)=-5$.
+  \item \textbf{Integral and modular coefficient theorem (Theorem~\ref{thm:modular}).}
+    $H^1(N;\mathbb{Z})\cong\mathbb{Z}$ with integral period $-5$. The obstruction
+    persists over every field of characteristic not equal to $5$, and vanishes
+    over $\mathbb{F}_5$ with an explicit coboundary certificate.
+  \item \textbf{Separation of persistence notions.} Direct obstruction persistence
+    and witness persistence are distinguished by exact rational rank criteria.
+  \item \textbf{Dynamic warrant debt (Section~\ref{sec:dynamic}).}
+    For a time-indexed residue sequence, the warrant debt magnitude
+    $D(t)=\|r_t^{\mathrm{debt}}\|^2$ is zero iff the system is globally
+    admissible at time $t$. The Four-Cycle Debt Formula $D(t)=p(t)^2/4$ gives
+    closed-form debt from the period alone. Fatigue, recovery, and cumulative
+    load are computed for three trajectories including the toy model that
+    terminates at the actual object.
+  \item \textbf{Machine-readable certificates.} All results are backed by
+    audit-grade JSON certificates emitted by reproducible scripts.
 \end{itemize}
 
 The repository contains the code, the JSON inputs, the certificates, and the
-scripts needed to reproduce all experiments.
+scripts needed to reproduce all results.
 
 \section{Background and notation}
-Let $N$ be a finite oriented nerve with regions $U_i$. We work over $\mathbb{Q}$.
-Denote cochain groups by $C^k(N;\mathbb{Q})$ with coboundary operators
-$\delta^k:C^k\to C^{k+1}$. For a residue $r\in C^1$, we test the cocycle
+Let $N$ be a finite oriented nerve with regions $U_i$. We work primarily over
+$\mathbb{Q}$ but state integral and modular results where available.
+Denote cochain groups by $C^k(N;R)$ with coboundary operators
+$\delta^k:C^k\to C^{k+1}$ for a ring $R$. For a residue $r\in C^1$, we test the cocycle
 condition $\delta^1 r = 0$ and whether $r$ lies in the image of $\delta^0$.
-The cohomology group is $H^1 = \ker\delta^1/\operatorname{im}\delta^0$.
+The cohomology group is $H^1(N;R) = \ker\delta^1/\operatorname{im}\delta^0$.
+
+\section{General finite regional obstruction theorem}\label{sec:general}
+
+Let $G$ be a finite connected oriented graph (vertices $V$, edges $E$, no
+2-faces) over a field $k$. Every $r\in C^1(G;k)$ is automatically a cocycle.
+The cycle space $Z_1(G;k)=\ker(\delta^{0,T})$ has dimension $|E|-|V|+1$.
+
+\textbf{Theorem (General cycle-detection).}\label{thm:general}
+For $r\in C^1(G;k)$:
+\[
+[r]=0\in H^1(G;k)
+\;\Longleftrightarrow\;
+\langle z,r\rangle=0 \text{ for all } z\in Z_1(G;k).
+\]
+
+\textit{Proof.}
+$(\Rightarrow)$: trivial (coboundaries pair to zero with cycles). $(\Leftarrow)$:
+by rank-nullity over $k$, $\dim Z_1+\dim\operatorname{im}\delta^0=\dim C^1$, and
+$\operatorname{im}\delta^0\subseteq Z_1^\perp$, so they are equal. Therefore
+$r\perp Z_1$ implies $r\in\operatorname{im}\delta^0$. $\square$
+
+\textbf{Corollary.}
+A residue is structurally non-removable if and only if it has nonzero
+circulation around at least one cycle. Obstruction is cycle-detectable.
+$\dim H^1(G;k) = |E|-|V|+1$ equals the circuit rank of $G$.
+
+For simplicial complexes $N$ with 2-faces, the same criterion applies to
+cocycles: $[r]=0$ iff $\delta^1 r=0$ and all cycle pairings vanish.
+
+The classifier (\texttt{residue\_test.py}) implements this as a general engine,
+not a demo: it takes any finite regional overlap graph as input and returns the
+complete obstruction data. Table~\ref{tab:graph-types} summarises the seven
+graph types verified by \texttt{general\_obstruction\_classifier.py}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l r l}
+\toprule
+Graph & $\dim H^1$ & Notes \\
+\midrule
+Path $P_3$ & 0 & No cycles; every residue removable \\
+3-cycle $C_3$ (no face) & 1 & One invariant: the circulation \\
+4-cycle $C_4$ (our object) & 1 & Period $-5$; Theorems~\ref{thm:classifier},\ref{thm:modular} \\
+5-cycle $C_5$ & 1 & One invariant \\
+4-cycle + chord (diamond) & 2 & Two independent invariants \\
+Filled triangle & 0 & Face kills the cycle; $H^1=0$ \\
+Complete graph $K_4$ & 3 & Three independent invariants \\
+\bottomrule
+\end{tabular}
+\caption{Graph types and their obstruction groups, verified by the general engine.}
+\label{tab:graph-types}
+\end{table}
+
+\section{Complete four-cycle classification}\label{thm:classifier}
+For the four-region loop nerve $N$ (regions $U_1,U_2,U_3,U_4$, edges
+$U_1U_2,U_2U_3,U_3U_4,U_1U_4$, no 2-faces), the coboundary matrix is
+\[
+\delta^0 =
+\begin{pmatrix}
+-1&1&0&0\\0&-1&1&0\\0&0&-1&1\\-1&0&0&1
+\end{pmatrix}.
+\]
+
+\textbf{Theorem (Complete $H^1$ classifier).}
+The circulation functional $q(a,b,c,d)=-a-b-c+d$ is the complete invariant:
+\[
+[r]=0\in H^1(N;\mathbb{Q})
+\;\Longleftrightarrow\;
+q(r)=0.
+\]
+
+\textit{Proof.}
+If $r=\delta^0 b$ then $q(r)=\langle z,r\rangle=\langle\delta^{0,T}z,b\rangle=0$.
+Conversely, if $q(r)=0$ then $b^*=(0,a,a+b,a+b+c)$ satisfies $\delta^0 b^*=r$
+(all four edge equations are verified directly). $\square$
+
+\textbf{Corollary.}
+For $r=(1,1,1,-2)$: $q(r)=-5\neq 0$, so $[r]\neq 0$. The computation
+classifies \emph{all} residues on the four-cycle; the actual object is the
+special case $q=-5$.
+
+Verified for 100 random rational residues by \texttt{classification\_theorem.py}.
+
+\section{Integral cohomology and modular sensitivity}\label{thm:modular}
+
+\textbf{Theorem (Integral period).}
+$H^1(N;\mathbb{Z})\cong\mathbb{Z}$ via $q$. The actual residue has integral
+period $q(1,1,1,-2)=-5$, so $[r]=-5\in\mathbb{Z}$.
+
+\textit{Proof.}
+$q:\mathbb{Z}^4\to\mathbb{Z}$ is surjective ($q(0,0,0,1)=1$). The constructive
+direction above works integrally, so $\ker q=\operatorname{im}\delta^0$ over
+$\mathbb{Z}$. Therefore $H^1(N;\mathbb{Z})=\mathbb{Z}^4/\ker q\cong\mathbb{Z}$,
+and $[r]=q(r)=-5$. $\square$
+
+\textbf{Theorem (Modular sensitivity).}
+For any field $k$: $[r]\neq 0\in H^1(N;k)$ if and only if
+$\operatorname{char}(k)\nmid 5$.
+
+\textit{Proof.}
+Over $k$, $H^1(N;k)\cong k$ via $q_k$, and $[r]=-5\cdot 1_k$. This vanishes
+iff $\operatorname{char}(k)=5$.
+Explicit $\mathbb{F}_5$-certificate: $b=(0,1,2,3)$ satisfies
+$\delta^0 b\equiv(1,1,1,-2)\pmod{5}$. $\square$
+
+The obstruction is not a binary yes/no. Its detectability depends on the
+arithmetic of the coefficient field: the integer $-5$ is the exact measure of
+resistance.
+
+Verified for all primes $p\le 23$ by \texttt{classification\_theorem.py}.
 
 \section{Classification algorithm}
 The classifier proceeds in two steps:
@@ -96,6 +230,11 @@ of ratios $v_e/z_e$ for a generator $v$ of $\operatorname{im}(PK)$.
 Failure is certified by a non‑uniform ratio vector (a short, exact rational witness).
 
 \section{Experiments and certificates}
+The theorems in Sections~\ref{thm:classifier} and~\ref{thm:modular} explain
+\emph{why} the computations produce the values they do. The scripts do not
+provide evidence for the theorems; they supply reproducible certificates for the
+concrete object.
+
 We applied the classifier to canonical examples and to the actual object
 \texttt{actual\_gluing\_object\_v1}. The base classification summary is:
 
@@ -132,14 +271,182 @@ Insert bridge $U_1$--$U_2$ & -5 & Yes \\
 \end{table}
 
 The repository contains the code used to generate the certificates and reports.
-Full JSON certificates are archived in \texttt{certificates/}; a summary of key
-fields appears in Appendix~\ref{app:certs}.
+Full JSON certificates are archived in \texttt{certificates/}, including
+\texttt{classification\_theorem\_certificate.json} which records the complete
+classifier verification, the integral period $-5$, and the modular sensitivity
+results for all primes $p\le 23$. A summary of key fields appears in
+Appendix~\ref{app:certs}.
+
+\section{Residue-admissibility bridge and warrant debt}\label{sec:bridge}
+
+The theorems above establish that $[r]\neq0$ in $H^1(N;\mathbb{Q})$. This
+section connects that cohomological fact to the failure of observational
+consistency.
+
+\subsection*{Setup}
+A \emph{global admissible claim} $\Phi$ is a choice of values $\Phi_i\in\mathbb{Q}$
+for each region, consistent with all seam data: $\Phi_j-\Phi_i=r_{ij}$ at
+every overlap. In cochain terms, $\delta^0\Phi=r$.
+
+\subsection*{Theorem (Residue-Admissibility Bridge)}
+For $r\in C^1(N;\mathbb{Q})$ with $\delta^1 r=0$, the following are equivalent:
+\begin{enumerate}
+\item \textbf{Gauge-admissible:} $\exists\,b\in C^0$ with $\delta^0 b=r$.
+\item \textbf{Globally consistent:} $\exists\,\Phi$ with $\Phi_j-\Phi_i=r_{ij}$
+  for every overlap.
+\item \textbf{Cohomologically trivial:} $[r]=0\in H^1(N;\mathbb{Q})$.
+\end{enumerate}
+\textit{Proof.} (1)$\Leftrightarrow$(3): definition of $H^1$.
+(2)$\Leftrightarrow$(1): a consistent $\Phi$ is exactly a gauge; conversely,
+a gauge is a consistent claim. $\square$
+
+\textbf{Corollary (Warrant Debt).}
+Since $[r]=-5\neq0$, no globally consistent claim exists for the actual object.
+The class $[r]$ is the \emph{warrant debt}: a quantified, irremovable
+inconsistency in the seam data.
+
+\subsection*{Warrant Debt Decomposition}
+The orthogonal splitting $C^1=\operatorname{im}\delta^0\oplus Z_1$ over
+$\mathbb{Q}$ yields $r=r^{\mathrm{adm}}+r^{\mathrm{debt}}$:
+\begin{itemize}
+\item $r^{\mathrm{adm}}\in\operatorname{im}\delta^0$: the \emph{closest
+  consistent residue}, achievable by gauge $b^*$.
+\item $r^{\mathrm{debt}}\in Z_1$: the \emph{irremovable warrant debt},
+  unchanged by any gauge choice.
+\end{itemize}
+
+For $r=(1,1,1,-2)$ (\texttt{admissibility\_bridge.py} certificate):
+\begin{align*}
+r^{\mathrm{adm}} &= (-\tfrac{1}{4},\,-\tfrac{1}{4},\,-\tfrac{1}{4},\,-\tfrac{3}{4}), \\
+r^{\mathrm{debt}} &= (\tfrac{5}{4},\,\tfrac{5}{4},\,\tfrac{5}{4},\,-\tfrac{5}{4})
+  = -\tfrac{5}{4}\,z, \\
+\|r^{\mathrm{debt}}\|^2 &= \tfrac{25}{4}, \quad
+b^* = (\tfrac{3}{4},\,\tfrac{1}{2},\,\tfrac{1}{4},\,0).
+\end{align*}
+
+The warrant debt is $(-5/4)$-multiples of the primitive obstruction cycle.
+The integer $-5$ is the \emph{obstruction period}. Under the standard edge
+inner product, this period normalises to the orthogonal debt component:
+$r^{\mathrm{debt}} = \tfrac{\langle r,z\rangle}{\langle z,z\rangle} z
+= \tfrac{-5}{4} z$, where the denominator $4 = \|z\|^2$ comes from the four-edge
+cycle norm, not from the obstruction itself.
+
+\section{Dynamic warrant debt}\label{sec:dynamic}
+
+\subsection*{Setup and theorem}
+Let $(r_t)_{t\ge0}$ be a time-indexed sequence of residues on a fixed finite
+regional nerve $N$. For each $r_t$, let $D(t)=\|r_t^{\mathrm{debt}}\|^2$ be the
+warrant debt magnitude (standard rational inner product).
+
+\textbf{Theorem (Dynamic Warrant Debt).}
+\[
+D(t)=0 \;\Longleftrightarrow\; [r_t]=0 \;\Longleftrightarrow\;
+\text{globally admissible at time }t.
+\]
+
+Derived quantities: fatigue $F(t_0,t_1)=D(t_1)-D(t_0)$ and cumulative debt load
+$W(T)=\sum_{t=0}^T D(t)$.
+
+\subsection*{Four-Cycle Debt Formula}
+For the four-cycle with $\|z\|^2=4$, the debt has a closed form from the period alone:
+\[
+D(t) = \frac{p(t)^2}{\|z\|^2} = \frac{p(t)^2}{4}, \qquad p(t)=\langle z,r_t\rangle.
+\]
+All three scenarios in Table~\ref{tab:dynamic} satisfy this formula exactly
+(verified by \texttt{dynamic\_warrant\_debt.py}).
+
+\subsection*{Toy model and actual object}
+Set $r_t=(1,1,1,3-\varepsilon_t)$. Then $p(t)=-\varepsilon_t$ and
+$D(t)=\varepsilon_t^2/4$. When $\varepsilon_t=0$ the system is admissible.
+When $\varepsilon_t=5$ we recover the actual object $r=(1,1,1,-2)$ with $D=25/4$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{r l r r r}
+\toprule
+$t$ & $r_t$ & $p(t)$ & $D(t)$ & admissible \\
+\midrule
+0 & $(1,1,1,3)$  & $0$  & $0$    & yes \\
+1 & $(1,1,1,2)$  & $-1$ & $1/4$  & no  \\
+2 & $(1,1,1,1)$  & $-2$ & $1$    & no  \\
+3 & $(1,1,1,0)$  & $-3$ & $9/4$  & no  \\
+4 & $(1,1,1,-1)$ & $-4$ & $4$    & no  \\
+5 & $(1,1,1,-2)$ & $-5$ & $25/4$ & no  \\
+\bottomrule
+\end{tabular}
+\caption{Toy model trajectory: onset from admissible state to actual object.
+Cumulative load $W(5)=55/4$.}
+\label{tab:dynamic}
+\end{table}
+
+\textbf{Caveat.} $D(t)$ and $W(T)$ depend on the inner product.
+The period $p(t)$ and admissibility verdict are inner-product-independent.
+
+\section{General Gram matrix debt formula}\label{sec:gram}
+
+\subsection*{Theorem}
+For a finite connected oriented graph with cycle basis $\{z_1,\ldots,z_k\}$,
+define the Gram matrix $G_{ij}=\langle z_i,z_j\rangle$ and period vector
+$p_i(r)=\langle z_i,r\rangle$. Then:
+\[
+D(r) \;=\; p(r)^T G^{-1} p(r).
+\]
+\textit{Proof.}
+The harmonic component is $r^{\mathrm{debt}}=\sum_i c_i z_i$ with
+$c=G^{-1}p$. Then $\|r^{\mathrm{debt}}\|^2=c^TGc=(G^{-1}p)^TG(G^{-1}p)=p^TG^{-1}p$. $\square$
+
+Special cases: for $k=1$, $D=p^2/\|z\|^2$ (four-cycle: $D=p^2/4$).
+For an orthogonal basis, $D=\sum_i p_i^2/\|z_i\|^2$ (decoupled). In general, the
+off-diagonal entries of $G^{-1}$ couple the period components.
+
+\subsection*{Gram matrices for tested graphs}
+\begin{table}[h]
+\centering
+\begin{tabular}{l r l r}
+\toprule
+Graph & $\dim H^1$ & $G$ & $D$ (test) \\
+\midrule
+Four-cycle $C_4$ & 1 & $(4)$ & $25/4$ \\
+Diamond & 2 & $\begin{pmatrix}4&2\\2&3\end{pmatrix}$ & $51/8$ \\
+Complete $K_4$ & 3 & $\begin{pmatrix}3&1&{-1}\\1&3&1\\{-1}&1&3\end{pmatrix}$ & $13$ \\
+\bottomrule
+\end{tabular}
+\caption{Gram matrices and debt magnitudes for three graph types.
+Verified by \texttt{general\_warrant\_debt.py}.}
+\end{table}
+
+The dynamic version $D(t)=p(t)^TG^{-1}p(t)$ with cumulative load $W(T)=\sum D(t)$
+applies to all graphs. All four trajectories (four-cycle toy model, diamond
+simultaneous onset, diamond second-cycle-only, $K_4$ single-edge drift) are
+verified in the certificate.
 
 \section{Discussion}
-Direct persistence is strictly weaker than witness persistence. Equal-distribution
-transfers can preserve a nonzero cohomology class. The original cycle may
-nevertheless fail to lift proportionally. The rank test and failure witnesses
-give exact, checkable certificates for both outcomes.
+The work has four layers of strength.
+
+First, the general theorem (Section~\ref{sec:general}) shows that obstruction
+is cycle-detectable across any finite regional overlap graph: no hidden algebraic
+mechanism, only circulation.
+
+Second, the classification theorem (Section~\ref{thm:classifier}) proves the
+complete invariant for the four-cycle: $q=0$ iff admissible. The actual object
+is the corollary $q(r)=-5$.
+
+Third, the integral and modular theorem (Section~\ref{thm:modular}) gives
+arithmetic precision. The obstruction is the integer $-5$, not a binary
+yes/no. Detectability depends on the coefficient field.
+
+Fourth, the bridge theorem (Section~\ref{sec:bridge}) connects the algebra to
+admissibility. The H¹ class is not just a topological invariant — it is the
+exact measure of how far the system is from having a globally consistent
+description. The harmonic decomposition $r=r^{\mathrm{adm}}+r^{\mathrm{debt}}$
+separates what is fixable from what is structurally irremovable.
+
+Fifth, the dynamic warrant debt theorem (Section~\ref{sec:dynamic}) makes the
+theory temporal. Warrant debt is not merely the presence of an obstruction but a
+trajectory quantity: it can accumulate, partially recover, or hold constant. The
+closed-form $D(t)=p(t)^2/4$ makes debt directly computable from the period
+sequence. This connects the finite obstruction theory to the monitoring of
+structural fatigue under evolving observational constraint.
 
 \section*{Acknowledgements}
 This work began as an independent project and benefited from feedback in

@@ -1,0 +1,153 @@
+{
+  "theorem": "general_finite_graph_cycle_detection",
+  "statement": "[r] = 0 in H^1(G; Q) iff <z, r> = 0 for all z in Z_1(G; Q).",
+  "test_cases": [
+    {
+      "name": "path_P3",
+      "description": "Path graph: 3 vertices, 2 edges, no cycles. H^1 = 0.",
+      "dim_H1": 0,
+      "dim_H1_expected": 0,
+      "dim_H1_correct": true,
+      "is_cocycle": true,
+      "is_coboundary": true,
+      "classification": "coboundary_removable",
+      "cycle_pairings": [],
+      "all_pairings_zero": true,
+      "theorem_holds": true,
+      "passed": true
+    },
+    {
+      "name": "triangle_C3",
+      "description": "3-cycle (no face): H^1 = Q. Non-trivial residue.",
+      "dim_H1": 1,
+      "dim_H1_expected": 1,
+      "dim_H1_correct": true,
+      "is_cocycle": true,
+      "is_coboundary": false,
+      "classification": "nontrivial_H1_obstruction",
+      "cycle_pairings": [
+        "-5"
+      ],
+      "all_pairings_zero": false,
+      "theorem_holds": true,
+      "passed": true
+    },
+    {
+      "name": "triangle_C3_coboundary",
+      "description": "3-cycle (no face): H^1 = Q. Trivial residue (zero circulation).",
+      "dim_H1": 1,
+      "dim_H1_expected": 1,
+      "dim_H1_correct": true,
+      "is_cocycle": true,
+      "is_coboundary": true,
+      "classification": "coboundary_removable",
+      "cycle_pairings": [
+        "0"
+      ],
+      "all_pairings_zero": true,
+      "theorem_holds": true,
+      "passed": true
+    },
+    {
+      "name": "four_cycle_C4",
+      "description": "4-cycle (our object): H^1 = Q. Period -5.",
+      "dim_H1": 1,
+      "dim_H1_expected": 1,
+      "dim_H1_correct": true,
+      "is_cocycle": true,
+      "is_coboundary": false,
+      "classification": "nontrivial_H1_obstruction",
+      "cycle_pairings": [
+        "-5"
+      ],
+      "all_pairings_zero": false,
+      "theorem_holds": true,
+      "passed": true
+    },
+    {
+      "name": "five_cycle_C5",
+      "description": "5-cycle: H^1 = Q. Residue with non-zero circulation.",
+      "dim_H1": 1,
+      "dim_H1_expected": 1,
+      "dim_H1_correct": true,
+      "is_cocycle": true,
+      "is_coboundary": false,
+      "classification": "nontrivial_H1_obstruction",
+      "cycle_pairings": [
+        "-12"
+      ],
+      "all_pairings_zero": false,
+      "theorem_holds": true,
+      "passed": true
+    },
+    {
+      "name": "diamond_chord",
+      "description": "4-cycle plus one chord: H^1 = Q^2. Two independent cycles.",
+      "dim_H1": 2,
+      "dim_H1_expected": 2,
+      "dim_H1_correct": true,
+      "is_cocycle": true,
+      "is_coboundary": false,
+      "classification": "nontrivial_H1_obstruction",
+      "cycle_pairings": [
+        "-5",
+        "-2"
+      ],
+      "all_pairings_zero": false,
+      "theorem_holds": true,
+      "passed": true
+    },
+    {
+      "name": "diamond_coboundary",
+      "description": "4-cycle plus chord: coboundary = delta^0(0,1,2,1), pairings both zero.",
+      "dim_H1": 2,
+      "dim_H1_expected": 2,
+      "dim_H1_correct": true,
+      "is_cocycle": true,
+      "is_coboundary": true,
+      "classification": "coboundary_removable",
+      "cycle_pairings": [
+        "0",
+        "0"
+      ],
+      "all_pairings_zero": true,
+      "theorem_holds": true,
+      "passed": true
+    },
+    {
+      "name": "filled_triangle",
+      "description": "Filled triangle: H^1 = 0. Cocycles are automatically coboundaries.",
+      "dim_H1": 0,
+      "dim_H1_expected": 0,
+      "dim_H1_correct": true,
+      "is_cocycle": true,
+      "is_coboundary": true,
+      "classification": "coboundary_removable",
+      "cycle_pairings": [
+        "0"
+      ],
+      "all_pairings_zero": true,
+      "theorem_holds": true,
+      "passed": true
+    },
+    {
+      "name": "complete_K4",
+      "description": "Complete graph K4: H^1 = Q^3. Three independent obstruction cycles.",
+      "dim_H1": 3,
+      "dim_H1_expected": 3,
+      "dim_H1_correct": true,
+      "is_cocycle": true,
+      "is_coboundary": false,
+      "classification": "nontrivial_H1_obstruction",
+      "cycle_pairings": [
+        "1",
+        "1",
+        "-5"
+      ],
+      "all_pairings_zero": false,
+      "theorem_holds": true,
+      "passed": true
+    }
+  ],
+  "all_passed": true
+}

@@ -1,0 +1,770 @@
+{
+  "theorem": "dynamic_warrant_debt",
+  "four_cycle_debt_formula": "D(t) = p(t)^2 / ||z||^2, ||z||^2 = 4",
+  "caveat": "D(t) and the harmonic decomposition are relative to the standard rational inner product on the declared edge basis. The period p(t) = <z, r_t> is inner-product-independent.",
+  "scenarios": [
+    {
+      "label": "Toy model: r_t=(1,1,1,3-eps_t), onset from admissible (eps=0..5)",
+      "steps": [
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "3"
+          ],
+          "period": "0",
+          "is_admissible": true,
+          "D": "0",
+          "D_formula": "0",
+          "formula_agrees": true,
+          "r_adm": [
+            "1",
+            "1",
+            "1",
+            "3"
+          ],
+          "r_debt": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "b_star": [
+            "-3",
+            "-2",
+            "-1",
+            "0"
+          ],
+          "t": 0,
+          "fatigue": "0"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "2"
+          ],
+          "period": "-1",
+          "is_admissible": false,
+          "D": "1/4",
+          "D_formula": "1/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "3/4",
+            "3/4",
+            "3/4",
+            "9/4"
+          ],
+          "r_debt": [
+            "1/4",
+            "1/4",
+            "1/4",
+            "-1/4"
+          ],
+          "b_star": [
+            "-9/4",
+            "-3/2",
+            "-3/4",
+            "0"
+          ],
+          "t": 1,
+          "fatigue": "1/4"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "period": "-2",
+          "is_admissible": false,
+          "D": "1",
+          "D_formula": "1",
+          "formula_agrees": true,
+          "r_adm": [
+            "1/2",
+            "1/2",
+            "1/2",
+            "3/2"
+          ],
+          "r_debt": [
+            "1/2",
+            "1/2",
+            "1/2",
+            "-1/2"
+          ],
+          "b_star": [
+            "-3/2",
+            "-1",
+            "-1/2",
+            "0"
+          ],
+          "t": 2,
+          "fatigue": "3/4"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "0"
+          ],
+          "period": "-3",
+          "is_admissible": false,
+          "D": "9/4",
+          "D_formula": "9/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "1/4",
+            "1/4",
+            "1/4",
+            "3/4"
+          ],
+          "r_debt": [
+            "3/4",
+            "3/4",
+            "3/4",
+            "-3/4"
+          ],
+          "b_star": [
+            "-3/4",
+            "-1/2",
+            "-1/4",
+            "0"
+          ],
+          "t": 3,
+          "fatigue": "5/4"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-1"
+          ],
+          "period": "-4",
+          "is_admissible": false,
+          "D": "4",
+          "D_formula": "4",
+          "formula_agrees": true,
+          "r_adm": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "r_debt": [
+            "1",
+            "1",
+            "1",
+            "-1"
+          ],
+          "b_star": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "t": 4,
+          "fatigue": "7/4"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-2"
+          ],
+          "period": "-5",
+          "is_admissible": false,
+          "D": "25/4",
+          "D_formula": "25/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "-1/4",
+            "-1/4",
+            "-1/4",
+            "-3/4"
+          ],
+          "r_debt": [
+            "5/4",
+            "5/4",
+            "5/4",
+            "-5/4"
+          ],
+          "b_star": [
+            "3/4",
+            "1/2",
+            "1/4",
+            "0"
+          ],
+          "t": 5,
+          "fatigue": "9/4"
+        }
+      ],
+      "W_cumulative": "55/4",
+      "D_max": "25/4",
+      "n_admissible_steps": 1,
+      "n_steps": 6,
+      "always_in_debt": false,
+      "ever_admissible": true,
+      "formula_always_agrees": true
+    },
+    {
+      "label": "Fatigue/recovery cycle: onset \u2192 partial recovery \u2192 re-escalation",
+      "steps": [
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "3"
+          ],
+          "period": "0",
+          "is_admissible": true,
+          "D": "0",
+          "D_formula": "0",
+          "formula_agrees": true,
+          "r_adm": [
+            "1",
+            "1",
+            "1",
+            "3"
+          ],
+          "r_debt": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "b_star": [
+            "-3",
+            "-2",
+            "-1",
+            "0"
+          ],
+          "t": 0,
+          "fatigue": "0"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "period": "-2",
+          "is_admissible": false,
+          "D": "1",
+          "D_formula": "1",
+          "formula_agrees": true,
+          "r_adm": [
+            "1/2",
+            "1/2",
+            "1/2",
+            "3/2"
+          ],
+          "r_debt": [
+            "1/2",
+            "1/2",
+            "1/2",
+            "-1/2"
+          ],
+          "b_star": [
+            "-3/2",
+            "-1",
+            "-1/2",
+            "0"
+          ],
+          "t": 1,
+          "fatigue": "1"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-1"
+          ],
+          "period": "-4",
+          "is_admissible": false,
+          "D": "4",
+          "D_formula": "4",
+          "formula_agrees": true,
+          "r_adm": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "r_debt": [
+            "1",
+            "1",
+            "1",
+            "-1"
+          ],
+          "b_star": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "t": 2,
+          "fatigue": "3"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-2"
+          ],
+          "period": "-5",
+          "is_admissible": false,
+          "D": "25/4",
+          "D_formula": "25/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "-1/4",
+            "-1/4",
+            "-1/4",
+            "-3/4"
+          ],
+          "r_debt": [
+            "5/4",
+            "5/4",
+            "5/4",
+            "-5/4"
+          ],
+          "b_star": [
+            "3/4",
+            "1/2",
+            "1/4",
+            "0"
+          ],
+          "t": 3,
+          "fatigue": "9/4"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "0"
+          ],
+          "period": "-3",
+          "is_admissible": false,
+          "D": "9/4",
+          "D_formula": "9/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "1/4",
+            "1/4",
+            "1/4",
+            "3/4"
+          ],
+          "r_debt": [
+            "3/4",
+            "3/4",
+            "3/4",
+            "-3/4"
+          ],
+          "b_star": [
+            "-3/4",
+            "-1/2",
+            "-1/4",
+            "0"
+          ],
+          "t": 4,
+          "fatigue": "-4"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "2"
+          ],
+          "period": "-1",
+          "is_admissible": false,
+          "D": "1/4",
+          "D_formula": "1/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "3/4",
+            "3/4",
+            "3/4",
+            "9/4"
+          ],
+          "r_debt": [
+            "1/4",
+            "1/4",
+            "1/4",
+            "-1/4"
+          ],
+          "b_star": [
+            "-9/4",
+            "-3/2",
+            "-3/4",
+            "0"
+          ],
+          "t": 5,
+          "fatigue": "-2"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "3"
+          ],
+          "period": "0",
+          "is_admissible": true,
+          "D": "0",
+          "D_formula": "0",
+          "formula_agrees": true,
+          "r_adm": [
+            "1",
+            "1",
+            "1",
+            "3"
+          ],
+          "r_debt": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "b_star": [
+            "-3",
+            "-2",
+            "-1",
+            "0"
+          ],
+          "t": 6,
+          "fatigue": "-1/4"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "2"
+          ],
+          "period": "-1",
+          "is_admissible": false,
+          "D": "1/4",
+          "D_formula": "1/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "3/4",
+            "3/4",
+            "3/4",
+            "9/4"
+          ],
+          "r_debt": [
+            "1/4",
+            "1/4",
+            "1/4",
+            "-1/4"
+          ],
+          "b_star": [
+            "-9/4",
+            "-3/2",
+            "-3/4",
+            "0"
+          ],
+          "t": 7,
+          "fatigue": "1/4"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "0"
+          ],
+          "period": "-3",
+          "is_admissible": false,
+          "D": "9/4",
+          "D_formula": "9/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "1/4",
+            "1/4",
+            "1/4",
+            "3/4"
+          ],
+          "r_debt": [
+            "3/4",
+            "3/4",
+            "3/4",
+            "-3/4"
+          ],
+          "b_star": [
+            "-3/4",
+            "-1/2",
+            "-1/4",
+            "0"
+          ],
+          "t": 8,
+          "fatigue": "2"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-2"
+          ],
+          "period": "-5",
+          "is_admissible": false,
+          "D": "25/4",
+          "D_formula": "25/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "-1/4",
+            "-1/4",
+            "-1/4",
+            "-3/4"
+          ],
+          "r_debt": [
+            "5/4",
+            "5/4",
+            "5/4",
+            "-5/4"
+          ],
+          "b_star": [
+            "3/4",
+            "1/2",
+            "1/4",
+            "0"
+          ],
+          "t": 9,
+          "fatigue": "4"
+        }
+      ],
+      "W_cumulative": "45/2",
+      "D_max": "25/4",
+      "n_admissible_steps": 2,
+      "n_steps": 10,
+      "always_in_debt": false,
+      "ever_admissible": true,
+      "formula_always_agrees": true
+    },
+    {
+      "label": "Actual object r=(1,1,1,-2) held fixed \u2014 constant debt D=25/4",
+      "steps": [
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-2"
+          ],
+          "period": "-5",
+          "is_admissible": false,
+          "D": "25/4",
+          "D_formula": "25/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "-1/4",
+            "-1/4",
+            "-1/4",
+            "-3/4"
+          ],
+          "r_debt": [
+            "5/4",
+            "5/4",
+            "5/4",
+            "-5/4"
+          ],
+          "b_star": [
+            "3/4",
+            "1/2",
+            "1/4",
+            "0"
+          ],
+          "t": 0,
+          "fatigue": "25/4"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-2"
+          ],
+          "period": "-5",
+          "is_admissible": false,
+          "D": "25/4",
+          "D_formula": "25/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "-1/4",
+            "-1/4",
+            "-1/4",
+            "-3/4"
+          ],
+          "r_debt": [
+            "5/4",
+            "5/4",
+            "5/4",
+            "-5/4"
+          ],
+          "b_star": [
+            "3/4",
+            "1/2",
+            "1/4",
+            "0"
+          ],
+          "t": 1,
+          "fatigue": "0"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-2"
+          ],
+          "period": "-5",
+          "is_admissible": false,
+          "D": "25/4",
+          "D_formula": "25/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "-1/4",
+            "-1/4",
+            "-1/4",
+            "-3/4"
+          ],
+          "r_debt": [
+            "5/4",
+            "5/4",
+            "5/4",
+            "-5/4"
+          ],
+          "b_star": [
+            "3/4",
+            "1/2",
+            "1/4",
+            "0"
+          ],
+          "t": 2,
+          "fatigue": "0"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-2"
+          ],
+          "period": "-5",
+          "is_admissible": false,
+          "D": "25/4",
+          "D_formula": "25/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "-1/4",
+            "-1/4",
+            "-1/4",
+            "-3/4"
+          ],
+          "r_debt": [
+            "5/4",
+            "5/4",
+            "5/4",
+            "-5/4"
+          ],
+          "b_star": [
+            "3/4",
+            "1/2",
+            "1/4",
+            "0"
+          ],
+          "t": 3,
+          "fatigue": "0"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-2"
+          ],
+          "period": "-5",
+          "is_admissible": false,
+          "D": "25/4",
+          "D_formula": "25/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "-1/4",
+            "-1/4",
+            "-1/4",
+            "-3/4"
+          ],
+          "r_debt": [
+            "5/4",
+            "5/4",
+            "5/4",
+            "-5/4"
+          ],
+          "b_star": [
+            "3/4",
+            "1/2",
+            "1/4",
+            "0"
+          ],
+          "t": 4,
+          "fatigue": "0"
+        },
+        {
+          "residue": [
+            "1",
+            "1",
+            "1",
+            "-2"
+          ],
+          "period": "-5",
+          "is_admissible": false,
+          "D": "25/4",
+          "D_formula": "25/4",
+          "formula_agrees": true,
+          "r_adm": [
+            "-1/4",
+            "-1/4",
+            "-1/4",
+            "-3/4"
+          ],
+          "r_debt": [
+            "5/4",
+            "5/4",
+            "5/4",
+            "-5/4"
+          ],
+          "b_star": [
+            "3/4",
+            "1/2",
+            "1/4",
+            "0"
+          ],
+          "t": 5,
+          "fatigue": "0"
+        }
+      ],
+      "W_cumulative": "75/2",
+      "D_max": "25/4",
+      "n_admissible_steps": 0,
+      "n_steps": 6,
+      "always_in_debt": true,
+      "ever_admissible": false,
+      "formula_always_agrees": true
+    }
+  ],
+  "all_formula_verified": true
+}

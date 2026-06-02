@@ -35,6 +35,97 @@ r \notin \operatorname{im}\delta^0.
 
 This is the definition of cohomology $H^1 = \ker\delta^1 / \operatorname{im}\delta^0$.
 
+\subsection{General finite regional obstruction theorem}
+
+Let $G$ be a finite connected oriented graph (vertices $V$, edges $E$, no
+2-faces). The cochain complex is $C^0\xrightarrow{\delta^0}C^1\xrightarrow{0}0$.
+Every $r\in C^1$ is a cocycle. The cycle space $Z_1(G;\mathbb{Q})=\ker(\delta^{0,T})$
+has dimension $|E|-|V|+1$.
+
+\textbf{Theorem (General cycle-detection).}
+For $r\in C^1(G;\mathbb{Q})$:
+\[
+[r]=0\in H^1(G;\mathbb{Q})
+\;\Longleftrightarrow\;
+\langle z,r\rangle=0 \text{ for every } z\in Z_1(G;\mathbb{Q}).
+\]
+
+\textit{Proof.}
+$(\Rightarrow)$ If $r=\delta^0 b$ then $\langle z,r\rangle=\langle\delta^{0,T}z,b\rangle=0$.
+$(\Leftarrow)$ By rank-nullity, $\dim Z_1+\dim\operatorname{im}\delta^0=\dim C^1$.
+Since $\operatorname{im}\delta^0\subseteq Z_1^\perp$ and both have the same dimension,
+$\operatorname{im}\delta^0=Z_1^\perp$. So $r\perp Z_1$ implies $r\in\operatorname{im}\delta^0$.
+$\square$
+
+\textbf{Consequence.}
+A residue is non-removable if and only if it has nonzero circulation around at
+least one cycle. Equivalently, $\dim H^1(G;\mathbb{Q})=|E|-|V|+1$ equals the
+circuit rank of $G$.
+
+Verified on path $P_3$, triangles $C_3$, cycles $C_4$ (our object), $C_5$,
+diamond, filled triangle, and $K_4$ by \texttt{general\_obstruction\_classifier.py}.
+
+\subsection{Complete four-cycle classification theorem}
+
+\textbf{Theorem (Complete four-cycle $H^1$ classifier).}
+For the four-region loop nerve $N$, the \emph{circulation functional}
+\[
+q(a,b,c,d) = -a-b-c+d = \langle z, r\rangle, \quad z=(-1,-1,-1,1),
+\]
+is the complete invariant of the cohomology class: for any $r=(a,b,c,d)\in C^1$,
+\[
+[r]=0\in H^1(N;\mathbb{Q})
+\;\Longleftrightarrow\;
+-a-b-c+d=0.
+\]
+
+\textbf{Proof.}
+$(\Rightarrow)$ If $r=\delta^0 b$ then $\langle z,r\rangle=\langle\delta^{0,T}z,b\rangle=0$, so $q(r)=0$.
+
+$(\Leftarrow)$ If $q(r)=0$, i.e.\ $d=a+b+c$, set
+$b^*=(0,\,a,\,a+b,\,a+b+c)$.
+Then $\delta^0 b^* = (a,b,c,d)=r$. $\square$
+
+\textbf{Corollary (Actual object).}
+$q(1,1,1,-2)=-1-1-1+(-2)=-5\neq 0$, so $[r]\neq 0\in H^1(N;\mathbb{Q})$. $\square$
+
+The theorem classifies every residue on the four-cycle completely.
+The actual object is a corollary, not merely an example.
+
+\subsection{Integral cohomology and modular sensitivity}
+
+\textbf{Theorem (Integral period).}
+The circulation map $q:\mathbb{Z}^4\to\mathbb{Z}$ induces an isomorphism
+$H^1(N;\mathbb{Z})\cong\mathbb{Z}$.
+The actual residue satisfies $[r]=-5\in\mathbb{Z}\cong H^1(N;\mathbb{Z})$.
+
+\textbf{Proof.}
+$q$ is surjective over $\mathbb{Z}$ since $q(0,0,0,1)=1$.
+By the constructive direction of the classifier theorem (which works integrally:
+if $d=a+b+c$ then $b^*\in\mathbb{Z}^4$), $\ker q=\operatorname{im}\delta^0$ over
+$\mathbb{Z}$. Therefore $\mathbb{Z}^4/\operatorname{im}\delta^0=\mathbb{Z}^4/\ker
+q\cong\mathbb{Z}$, and the class of $r$ is $q(r)=-5$. $\square$
+
+\textbf{Theorem (Modular sensitivity).}
+For any field $k$:
+\[
+[r]\neq 0\in H^1(N;k)
+\;\Longleftrightarrow\;
+\operatorname{char}(k)\nmid 5.
+\]
+
+\textbf{Proof.}
+Over $k$, the same analysis gives $H^1(N;k)\cong k$ via $q_k$. Then
+$[r]=-5\cdot 1_k\in k$, which is zero iff $\operatorname{char}(k)\mid 5$, i.e.\
+$\operatorname{char}(k)=5$.
+
+Explicit coboundary certificate over $\mathbb{F}_5$: the vector $b=(0,1,2,3)$
+satisfies $\delta^0 b=(1,1,1,3)\equiv(1,1,1,-2)\pmod{5}=r$, so $r$ is a
+coboundary over $\mathbb{F}_5$. $\square$
+
+Modular sensitivity is verified computationally for primes $2,3,5,7,11,13,17,19,23$
+by \texttt{classification\_theorem.py}, which emits a machine-readable certificate.
+
 \subsection{Base obstruction}
 \textbf{Proposition.} $0 \neq [r] \in H^1(N;\mathbb{Q})$.
 
@@ -104,3 +195,41 @@ Suppose $z \in Z_1(N;\mathbb{Q})$ with $\langle z, r \rangle \neq 0$. If there e
 Let $B'$ be the boundary matrix of $N'$, $P=\rho_*$, and $K$ a basis for $\ker B' = Z_1(N')$. Then $\rho$ is cycle-faithful relative to $z$ iff $\operatorname{rank}(PK) = \operatorname{rank}([PK\; z])$.
 
 Further details and explicit computations for the four declared refinements are given in the repository and the main manuscript.
+
+\subsection{Residue-Admissibility Bridge Theorem}
+
+\textbf{Setup.}
+A \emph{global admissible claim} $\Phi$ is an assignment $\Phi_i\in\mathbb{Q}$
+to each region, consistent with all seam data: $\Phi_j-\Phi_i=r_{ij}$ at every
+overlap. In cochain terms, $\delta^0\Phi=r$.
+
+\textbf{Theorem (Residue-Admissibility Bridge).}
+For $r\in C^1(N;\mathbb{Q})$ satisfying $\delta^1 r=0$:
+\begin{enumerate}
+\item Gauge-admissible: $\exists\,b\in C^0$ with $\delta^0 b=r$.
+\item Globally consistent: $\exists\,\Phi$ with $\Phi_j-\Phi_i=r_{ij}$.
+\item Cohomologically trivial: $[r]=0\in H^1(N;\mathbb{Q})$.
+\end{enumerate}
+are equivalent. When $[r]\neq0$, no global consistent claim exists.
+The class $[r]$ is the \emph{warrant debt}: the quantified, irremovable
+inconsistency.
+
+\textbf{Proof.} (1)$\Leftrightarrow$(3): definition of $H^1$.
+(2)$\Leftrightarrow$(1): $\delta^0\Phi=r\Leftrightarrow\Phi$ is a gauge.
+$\square$
+
+\textbf{Warrant Debt Decomposition.}
+The orthogonal splitting $C^1=\operatorname{im}\delta^0\oplus Z_1$ yields
+$r=r^{\mathrm{adm}}+r^{\mathrm{debt}}$:
+\[
+r^{\mathrm{adm}}\in\operatorname{im}\delta^0
+\;\text{(closest consistent residue)},
+\quad
+r^{\mathrm{debt}}\in Z_1
+\;\text{(irremovable warrant debt)}.
+\]
+For $r=(1,1,1,-2)$: $r^{\mathrm{adm}}=(-\tfrac{1}{4},-\tfrac{1}{4},-\tfrac{1}{4},-\tfrac{3}{4})$,
+$r^{\mathrm{debt}}=(\tfrac{5}{4},\tfrac{5}{4},\tfrac{5}{4},-\tfrac{5}{4})=-\tfrac{5}{4}\,z$,
+$\|r^{\mathrm{debt}}\|^2=\tfrac{25}{4}$.
+
+Verified by \texttt{admissibility\_bridge.py}.

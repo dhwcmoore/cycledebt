@@ -1,267 +1,169 @@
-# Finite Regional Residue Obstruction Classifier
+# Finite Regional Warrant Debt Pipeline
 
-## Current proof status
+## Status
 
-The authoritative mathematical account is in [`PROOF.md`](PROOF.md).
+**Complete finite four-cycle warrant-debt pipeline. Version 0.4.**
 
-The project proves:
+This project is a certified finite cohomological framework for detecting,
+decomposing, and tracking warrant debt in local-to-global regional systems.
 
-1. The actual residue represents a nonzero class in $H^1$.
-2. The obstruction verdict is invariant under the declared presentation changes.
-3. The obstruction persists under the four declared refinement witnesses.
+### Verified components
 
-The project does not yet prove persistence under all possible refinements. A universal refinement theorem would require a general pushforward/pullback pairing result.
+| # | Component | Script | Certificate |
+|---|---|---|---|
+| 1 | General H¹ obstruction classifier (arbitrary graphs) | `residue_test.py` | `*_certificate.json` |
+| 2 | Complete four-cycle classification theorem ($q = 0 \iff$ removable) | `classification_theorem.py` | `classification_theorem_certificate.json` |
+| 3 | Integral period theorem ($H^1(N;\mathbb{Z}) \cong \mathbb{Z}$, period $= -5$) | `classification_theorem.py` | same |
+| 4 | Modular coefficient sensitivity ($[r]=0$ iff $\operatorname{char}(k) = 5$) | `classification_theorem.py` | same |
+| 5 | General cycle-detection theorem (7 graph types) | `general_obstruction_classifier.py` | `general_obstruction_classifier_certificate.json` |
+| 6 | Presentation invariance (5 changes) | `invariance_test.py` | `*_invariance_report.json` |
+| 7 | Refinement persistence (4 refinements; cycle-lift theorem) | `admissible_refinement_theorem.py` | `admissible_refinement_theorem_certificate.json` |
+| 8 | Residue-Admissibility Bridge Theorem | `admissibility_bridge.py` | `admissibility_bridge_certificate.json` |
+| 9 | Warrant debt decomposition $r = r^{\mathrm{adm}} + r^{\mathrm{debt}}$ | `admissibility_bridge.py` | same |
+| 10 | Dynamic warrant debt: $D(t) = p(t)^2/4$, trajectories | `dynamic_warrant_debt.py` | `dynamic_warrant_debt_certificate.json` |
+| 11 | General Gram matrix debt formula: $D = p^T G^{-1} p$ | `general_warrant_debt.py` | `general_warrant_debt_certificate.json` |
 
-## Overview
+### The full pipeline
 
-This framework classifies seam residues in finite geometric constructions using Čech cohomology. It determines whether a residue is:
-1. A **coherence failure** (δ¹r ≠ 0)
-2. A **removable coboundary** (δ¹r = 0 and δ⁰b = r solvable)
-3. A **nontrivial H¹ obstruction** (δ¹r = 0 and δ⁰b = r unsolvable)
+```
+r_t  →  [r_t] ∈ H¹  →  p(t) = ⟨z, r_t⟩  →  D(t) = p(t)² / ‖z‖²
+```
 
-## Quick Start
+- **p(t)**: obstruction period — inner-product-independent integer
+- **D(t)**: warrant debt magnitude — metric-relative, closed form from period
+- **W(T) = Σ D(t)**: cumulative debt load over trajectory
 
-### Run classification on actual object:
+For the actual object $r = (1,1,1,-2)$: $p = -5$, $D = 25/4$.
+
+### The central theorem (Residue-Admissibility Bridge)
+
+These three conditions are equivalent:
+1. $\exists\, b$ with $\delta^0 b = r$ (gauge-admissible)
+2. $\exists\, \Phi$ with $\Phi_j - \Phi_i = r_{ij}$ (globally consistent claim)
+3. $[r] = 0 \in H^1$ (cohomologically trivial)
+
+Non-zero $[r]$ is a **warrant debt certificate**: the local observations cannot
+be assembled into any globally consistent claim.
+
+---
+
+## Quick start
+
 ```bash
+# Classify the actual object
 python residue_test.py actual/actual_gluing_object_v1.json
-```
-Output: `certificates/actual_gluing_object_v1_certificate.json`
 
-### Run all inline regression tests:
-```bash
-python residue_test.py
-```
-Displays three canonical examples (Examples A, B, C).
+# Run the full pipeline on the actual object
+python classification_theorem.py      # integral period, modular sensitivity
+python admissibility_bridge.py        # bridge theorem + debt decomposition
+python dynamic_warrant_debt.py        # time-indexed debt trajectories
+python general_warrant_debt.py        # Gram matrix formula, arbitrary graphs
 
-### Run invariance test suite:
-```bash
+# Verify on arbitrary graph types (path, triangle, diamond, K4, ...)
+python general_obstruction_classifier.py
+
+# Invariance and refinement persistence
 python invariance_test.py actual/actual_gluing_object_v1.json
+python admissible_refinement_theorem.py
 ```
-Output: `certificates/actual_gluing_object_v1_invariance_report.json`
 
-### Run refinement invariance test:
-```bash
-python refinement_invariance_test.py actual/actual_gluing_object_v1.json
+---
+
+## Mathematical content
+
+### Object
+
+Finite nerve $N$: regions $U_1, U_2, U_3, U_4$, edges $U_1U_2, U_2U_3, U_3U_4,
+U_1U_4$. Residue $r = (1,1,1,-2) \in C^1(N;\mathbb{Q})$.
+
+### Classification
+
+$[r] \neq 0 \in H^1(N;\mathbb{Q})$.
+Proved by: contradiction (no solution to $\delta^0 b = r$) and cycle witness
+($\langle z, r\rangle = -5 \neq 0$ for $z = (-1,-1,-1,1)$).
+
+### Complete four-cycle theorem
+
+For any residue $(a,b,c,d)$ on the four-region loop:
+$$[r] = 0 \iff -a-b-c+d = 0.$$
+
+### Integral period
+
+$H^1(N;\mathbb{Z}) \cong \mathbb{Z}$ via the circulation $q$. The actual
+residue has integral period $q(r) = -5$.
+
+### Modular sensitivity
+
+$[r] \neq 0 \in H^1(N;k) \iff \operatorname{char}(k) \nmid 5$.
+Over $\mathbb{F}_5$: explicit coboundary $b = (0,1,2,3)$.
+
+### Warrant debt decomposition
+
+Relative to the standard rational inner product:
+$$r = r^{\mathrm{adm}} + r^{\mathrm{debt}}, \qquad r^{\mathrm{debt}} = \frac{p}{\|z\|^2}\,z = -\tfrac{5}{4}\,z.$$
+Closest admissible gauge: $b^* = (3/4, 1/2, 1/4, 0)$. Debt magnitude: $D = 25/4$.
+
+### Dynamic warrant debt
+
+For trajectory $r_t = (1, 1, 1, 3-\varepsilon_t)$:
+$$p(t) = -\varepsilon_t, \qquad D(t) = \varepsilon_t^2/4.$$
+At $\varepsilon = 5$: actual object, $D = 25/4$. Cumulative load $W(5) = 55/4$.
+
+### General Gram matrix formula
+
+For arbitrary finite nerve with cycle basis $\{z_1, \ldots, z_k\}$:
+$$D(r) = p(r)^T G^{-1} p(r), \qquad p_i = \langle z_i, r\rangle, \qquad G_{ij} = \langle z_i, z_j\rangle.$$
+
+---
+
+## File organisation
+
 ```
-Output: `certificates/actual_gluing_object_v1_refinement_test_report.json`
-
-### Generate one-page summary PDF
-
-- A small utility script generates a concise PDF summary from `reports/one_page_summary.txt`.
-- To regenerate the PDF:
-```bash
-python3 scripts/generate_pdf.py reports/one_page_summary.txt reports/summary.pdf
-```
-- Requires the `reportlab` Python package (added to `requirements.txt`).
-
-## Workflow
-
-### Stage 1: Classification
-- **Input:** JSON file with regions, edges, faces, residue values
-- **Process:** Apply two sequential tests (cocycle, then coboundary)
-- **Output:** JSON certificate with classification and audit trail
-
-### Stage 2: Invariance Testing
-- **Tests:** 5 presentation transformations verified stable
-  1. Region renaming (cosmetic)
-  2. Edge orientation reversal (sign correction)
-  3. Non-zero rational scaling
-  4. Gauge perturbation (r' = r + δ⁰b)
-  5. Edge order permutation
-- **Output:** Invariance report with "stable_under_tested_presentations" claim
-
-### Stage 3: Refinement Invariance Testing
-- **Test:** Subdivide one region (U1 → U1a, U1b) with equal-distribution transfer map
-- **Transfer map:** Old edge values split equally across refined edges; internal edge (U1a-U1b) gets value 0
-- **Output:** Refinement report confirming obstruction persists in refined cover
-
-## File Organization
-
-```
-residue_test.py                    # Classification engine
-invariance_test.py                 # Invariance test suite (5 presentation tests)
-refinement_invariance_test.py      # Refinement test (cover subdivision)
-REFINEMENT_STRATEGY.py             # Transfer map strategy notes
-PAPER_FORMULATION.py               # Paper-ready statement drafts
+residue_test.py                      # General H¹ classifier (any JSON input)
+classification_theorem.py            # Complete classifier + integral/modular theorems
+general_obstruction_classifier.py    # General cycle-detection on 7 graph types
+admissibility_bridge.py              # Bridge theorem + warrant debt decomposition
+dynamic_warrant_debt.py              # Time-indexed debt trajectories
+general_warrant_debt.py              # Gram matrix formula for arbitrary nerves
+invariance_test.py                   # 5 presentation invariance tests
+refinement_invariance_test.py        # Refinement persistence tests
+admissible_refinement_theorem.py     # Cycle-lift persistence theorem
+cycle_lift_test.py                   # Cycle-faithfulness linear-system tests
 
 actual/
-  actual_gluing_object_v1.json     # Your actual object
+  actual_gluing_object_v1.json       # The actual object
 
 examples/
-  loop_obstruction.json            # Example A: H¹ obstruction
-  filled_triangle_coboundary.json  # Example B: removable
-  invalid_cocycle.json             # Example C: coherence failure
+  loop_obstruction.json              # H¹ obstruction example
+  filled_triangle_coboundary.json    # Removable example
+  invalid_cocycle.json               # Coherence failure example
 
-certificates/
-  *_certificate.json               # Classification certificates
-  *_invariance_report.json         # Invariance test reports
-  *_refinement_test_report.json    # Refinement test reports
+certificates/                        # All machine-readable certificates
+invariance_tests/                    # Presentation-variant inputs
+refinement_tests/                    # Refined cover inputs
+manuscript/                          # LaTeX manuscript
+  jact_full.tex                      # Full manuscript
+  proof.tex                          # Formal proof (LaTeX, sourced from PROOF.md)
+  references.bib
 
-invariance_tests/
-  *.json                           # Variant input objects (renaming, scaling, etc.)
-
-refinement_tests/
-  *.json                           # Refined input objects (subdivided covers)
+PROOF.md                             # Authoritative mathematical proof
 ```
 
-## JSON Input Format
+## Input format
 
 ```json
 {
   "name": "object_name",
-  "description": "...",
-  "coefficient_domain": "Q",
   "regions": ["U1", "U2", "U3", "U4"],
-  "edges": [
-    ["U1", "U2"],
-    ["U2", "U3"],
-    ["U3", "U4"],
-    ["U1", "U4"]
-  ],
+  "edges": [["U1","U2"], ["U2","U3"], ["U3","U4"], ["U1","U4"]],
   "faces": [],
-  "residue": {
-    "U1-U2": "1",
-    "U2-U3": "1",
-    "U3-U4": "1",
-    "U1-U4": "-2"
-  }
+  "residue": {"U1-U2": "1", "U2-U3": "1", "U3-U4": "1", "U1-U4": "-2"},
+  "coefficient_domain": "Q"
 }
 ```
 
-## Certificate Format
+## Open problems
 
-```json
-{
-  "residue_degree": 1,
-  "coefficient_domain": "Q",
-  "is_cocycle": true,
-  "is_coboundary": false,
-  "classification": "nontrivial_H1_obstruction",
-  "support": ["U1-U2", "U2-U3", "U3-U4", "U1-U4"],
-  "residue_values": {...},
-  "cohomology_summary": {
-    "dim_C0": 4,
-    "dim_C1": 4,
-    "dim_C2": 0,
-    "rank_delta0": 3,
-    "rank_delta1": 0,
-    "dim_kernel_delta1": 4,
-    "dim_H1": 1
-  },
-  "witness": {
-    "cocycle_test_passed": true,
-    "coboundary_test_passed": false,
-    "failed_linear_system": "D0 b = r has no solution; residue is forced.",
-    "loop_sum": "1",
-    "loop_obstruction_meaning": "Non-zero accumulation around loop..."
-  },
-  "cycle_witness": {
-    "cycle_edges": ["U1-U2", "U2-U3", "U3-U4", "U1-U4"],
-    "cycle_vector": ["-1", "-1", "-1", "1"],
-    "boundary_of_cycle": "0",
-    "pairing_with_residue": "-5",
-    "conclusion": "residue_not_coboundary_by_nonzero_pairing"
-  }
-}
-```
-
-## Interpretation
-
-### Nontrivial H¹ Obstruction (✓ Your result)
-```
-δ¹r = 0          (cocycle condition satisfied)
-δ⁰b = r          (no solution exists)
-```
-**Meaning:** The residue is forced; it cannot be removed by re-choice of local representatives.
-
-### Coboundary (Removable)
-```
-δ¹r = 0          (cocycle condition satisfied)
-δ⁰b = r          (solution exists: b is the gauge correction)
-```
-**Meaning:** The residue is a presentation artefact. Apply b to trivialize it.
-
-### Coherence Failure
-```
-δ¹r ≠ 0          (cocycle condition failed)
-```
-**Meaning:** The residue is not a degree-1 obstruction. The failure is at a higher level (degree 2 or above).
-
-## Invariance Report
-
-After `invariance_test.py` completes:
-- All 5 tested transformations passed? → `"stable_under_tested_presentations"`
-- Any test failed? → `"failed_some_invariance_tests"`
-
-The report confirms the obstruction is not fragile under:
-- Renaming regions
-- Reversing edge orientations  
-- Scaling by nonzero rationals
-- Adding exact coboundaries
-- Reordering edges
-
-**Status:** Proven stable under tested re-presentations.
-
-## Refinement Invariance Report
-
-After `refinement_invariance_test.py` completes:
-- `obstruction_persists: true` → obstruction survives cover subdivision
-- Transfer map used: equal distribution (old edge values halved across refined edges)
-
-The report confirms the obstruction is not an artefact of the coarse cover: splitting U1 into (U1a, U1b) leaves `[r]` non-zero in the refined nerve.
-
-**Status:** Obstruction survives tested refinement.
-
-## Key Results for Your Actual Object
-
-```
-Base Classification: nontrivial_H1_obstruction
-├── is_cocycle: true
-├── is_coboundary: false
-└── loop_sum: 1
-
-Invariance Testing: stable_under_tested_presentations
-├── region_renaming: PASS
-├── orientation_reversal: PASS
-├── nonzero_rational_scaling: PASS
-├── gauge_perturbation: PASS
-└── edge_order_permutation: PASS
-
-Refinement Testing: obstruction_survives_refinement
-└── subdivide_U1_equal (U1 → U1a, U1b): PASS
-    ├── refined regions: [U1a, U1b, U2, U3, U4]
-    ├── refined edges: 7 (4 split + 2 from U1-U4 + 1 internal)
-    ├── transfer map: equal distribution (r/2 per refined edge)
-    └── refined classification: nontrivial_H1_obstruction
-```
-
-## Paper statements (scoped)
-
-See [`PROOF.md`](PROOF.md) for the full proof with explicit scope at each step.
-
-**Base obstruction (proved):**
-> The residue $r = (1,1,1,-2)$ is not a coboundary. Cycle witness: $\langle z, r \rangle = -5 \neq 0$.
-
-**Presentation invariance (proved for declared transformations):**
-> The obstruction verdict is stable under region renaming, orientation reversal, edge reordering, nonzero rational scaling, and gauge perturbation.
-
-**Refinement persistence (proved for four declared witnesses):**
-> The obstruction persists under the four declared refinement maps (subdivide $U_1$, subdivide $U_2$, subdivide all regions, insert bridge), certified by nonzero cycle pairings $-7/2$, $-4$, $-5/4$, $-5$.
-
-**Not yet proved:**
-> Persistence under all admissible refinements. A universal theorem requires a pushforward/pullback pairing argument; see `PROOF.md` §4.
-
-## Technical Notes
-
-- Exact rational arithmetic via SymPy (no floating-point errors)
-- Proper sign conventions for oriented edges and faces
-- Linear system solving for coboundary test
-- Full audit trail in each certificate (no hidden assumptions)
-
-## Next Steps
-
-1. ~~**Refinement invariance**: Define transfer maps for subdivided covers~~ ✓ Done (equal-distribution transfer map, U1 subdivision)
-2. **Additional refinement strategies**: Test other transfer maps (e.g., restriction maps, non-equal splits) and refine other regions
-3. **Parameter stability**: Vary coefficient system, test persistence of obstruction
-4. **Multiple actual objects**: Compare obstruction across different constructions
-5. **Total complex variant**: Test against Hochschild/Gerstenhaber-Schack if applicable
+- **Balanced Loop Refinement Conjecture**: characterise all cycle-faithful refinements.
+- **General dynamic theory**: extend to arbitrary finite nerves with multi-dimensional debt vectors.
+- **Temporal resolution**: given a debt trajectory, compute the minimal intervention to restore admissibility at each step.
