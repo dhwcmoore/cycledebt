@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "cycldebt_certificate_v1",
+  "title": "CycleDebt Certificate",
+  "description": "Machine-checkable obstruction certificate produced by scripts/cyclediagnostic_demo.py. All rational-number fields use SymPy canonical string form: an integer 'n' or a fraction 'n/d' where d > 0.",
+  "type": "object",
+  "required": [
+    "tool", "version", "system_name", "diagnostic_claim",
+    "verdict", "arithmetic", "case",
+    "is_cocycle", "is_admissible", "dim_H1",
+    "residue", "edges",
+    "L1_matrix", "D1_matrix",
+    "harmonic_basis_vectors",
+    "G", "p_periods", "r_debt_vector", "debt_norm_squared",
+    "gram_harmonic_agree"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "tool": {
+      "type": "string",
+      "const": "CycleDebt",
+      "description": "Tool identifier"
+    },
+    "version": {
+      "type": "string",
+      "description": "Tool version"
+    },
+    "system_name": {
+      "type": "string",
+      "description": "Human-readable name of the diagnostic system"
+    },
+    "diagnostic_claim": {
+      "type": "object",
+      "required": ["statement"],
+      "properties": {
+        "statement": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "WARRANT DEBT",
+        "GLOBALLY ADMISSIBLE",
+        "LOCAL DATA SELF-CONTRADICTORY"
+      ],
+      "description": "Human-readable verdict string"
+    },
+    "arithmetic": {
+      "type": "string",
+      "description": "Arithmetic domain used (must be exact rational)"
+    },
+    "case": {
+      "type": "string",
+      "enum": ["warrant_debt", "globally_admissible", "coherence_failure"],
+      "description": "Machine-readable case identifier"
+    },
+    "is_cocycle": {
+      "type": "boolean",
+      "description": "True iff delta^1 r = 0 (local coherence holds)"
+    },
+    "is_admissible": {
+      "type": "boolean",
+      "description": "True iff delta^0 b = r is solvable (globally admissible)"
+    },
+    "dim_H1": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Dimension of H^1(G; Q): number of independent cyclic obstructions"
+    },
+    "residue": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/rational_string" },
+      "description": "Interface residue r in C^1(G; Q), one entry per edge in order"
+    },
+    "edges": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Edge labels in the same order as residue entries"
+    },
+    "L1_matrix": {
+      "$ref": "#/definitions/rational_matrix",
+      "description": "Hodge Laplacian L1 = D0 D0^T + D1^T D1, stored for independent verification"
+    },
+    "D1_matrix": {
+      "$ref": "#/definitions/rational_matrix",
+      "description": "Coboundary map D1: C^1 -> C^2. Empty array when there are no faces."
+    },
+    "harmonic_basis_vectors": {
+      "$ref": "#/definitions/rational_matrix",
+      "description": "Basis for ker(L1): each row is one harmonic 1-cochain representing H^1"
+    },
+    "G": {
+      "$ref": "#/definitions/rational_matrix",
+      "description": "Gram matrix G[i][j] = <h_i, h_j> of the harmonic basis"
+    },
+    "p_periods": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/rational_string" },
+      "description": "Obstruction periods p_i = <h_i, r>, one per harmonic basis vector"
+    },
+    "r_debt_vector": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/rational_string" },
+      "description": "Harmonic projection r_debt = G^{-1}p * h (the irremovable debt component)"
+    },
+    "debt_norm_squared": {
+      "$ref": "#/definitions/rational_string",
+      "description": "Warrant debt magnitude D = ||r_debt||^2 = p^T G^{-1} p"
+    },
+    "gram_harmonic_agree": {
+      "type": "boolean",
+      "description": "Cross-check: Gram formula and harmonic projection give equal D"
+    },
+    "suggested_refinement": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "description": "Refinement options that kill the obstruction (warrant_debt case only)",
+          "properties": {
+            "option_1_minimal_correction": {
+              "type": "object",
+              "required": ["description", "delta_r", "new_residue"],
+              "properties": {
+                "description": { "type": "string" },
+                "delta_r": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/rational_string" }
+                },
+                "new_residue": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/rational_string" }
+                }
+              }
+            },
+            "option_2_single_interface_fixes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["edge", "from_r", "delta", "to_r"],
+                "properties": {
+                  "edge":   { "type": "string" },
+                  "from_r": { "$ref": "#/definitions/rational_string" },
+                  "delta":  { "$ref": "#/definitions/rational_string" },
+                  "to_r":   { "$ref": "#/definitions/rational_string" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "rational_string": {
+      "type": "string",
+      "pattern": "^-?[0-9]+(/[0-9]+)?$",
+      "description": "Rational number in SymPy canonical form: integer 'n' or fraction 'n/d' (d > 0)"
+    },
+    "rational_matrix": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/rational_string" }
+      },
+      "description": "Matrix of rational numbers stored as arrays of arrays of rational_string"
+    }
+  }
+}

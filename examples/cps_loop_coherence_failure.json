@@ -1,0 +1,29 @@
+{
+  "name": "cps_loop_coherence_failure",
+  "system_name": "CPS monitoring cluster (A-B-C triple overlap)",
+  "description": "Three-node monitoring cluster A_Sensor, B_Controller, C_Actuator with a triple monitoring overlap (2-simplex), plus D_Monitor. Three independent pairwise sensors at the A-B, B-C, A-C interfaces each report a residue of 1. These readings are mutually inconsistent: the cocycle condition delta^1 r = r_BC - r_AC + r_AB = 1-1+1 = 1 != 0 is violated at the triple overlap. The H^1 admissibility question does not arise.",
+  "diagnostic_claim": {
+    "statement": "fault_origin = B_Controller",
+    "description": "The root cause of the observed fault is the B_Controller subsystem."
+  },
+  "observation_note": "Three independent pairwise sensors at the A-B, B-C, and A-C interfaces each report a residue of 1. Transitivity requires r_AC = r_AB + r_BC = 2, but the A-C sensor reports 1. The sensor readings are mutually inconsistent.",
+  "coefficient_domain": "Q",
+  "regions": ["A_Sensor", "B_Controller", "C_Actuator", "D_Monitor"],
+  "edges": [
+    ["A_Sensor", "B_Controller"],
+    ["B_Controller", "C_Actuator"],
+    ["A_Sensor", "C_Actuator"],
+    ["C_Actuator", "D_Monitor"],
+    ["A_Sensor", "D_Monitor"]
+  ],
+  "faces": [
+    ["A_Sensor", "B_Controller", "C_Actuator"]
+  ],
+  "residue": {
+    "A_Sensor-B_Controller": "1",
+    "B_Controller-C_Actuator": "1",
+    "A_Sensor-C_Actuator": "1",
+    "C_Actuator-D_Monitor": "1",
+    "A_Sensor-D_Monitor": "1"
+  }
+}

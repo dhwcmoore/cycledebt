@@ -1,0 +1,120 @@
+{
+  "tool": "CycleDebt",
+  "version": "1.0",
+  "system_name": "four-node CPS diagnostic loop (HELICS wrapper)",
+  "diagnostic_claim": {
+    "statement": "fault_origin = B_Controller"
+  },
+  "verdict": "WARRANT DEBT",
+  "arithmetic": "exact rational (sympy Q)",
+  "case": "warrant_debt",
+  "is_cocycle": true,
+  "is_admissible": false,
+  "dim_H1": 1,
+  "residue": [
+    "1",
+    "1",
+    "1",
+    "-2"
+  ],
+  "edges": [
+    "A_Sensor-B_Controller",
+    "B_Controller-C_Actuator",
+    "C_Actuator-D_Monitor",
+    "A_Sensor-D_Monitor"
+  ],
+  "L1_matrix": [
+    [
+      "2",
+      "-1",
+      "0",
+      "1"
+    ],
+    [
+      "-1",
+      "2",
+      "-1",
+      "0"
+    ],
+    [
+      "0",
+      "-1",
+      "2",
+      "1"
+    ],
+    [
+      "1",
+      "0",
+      "1",
+      "2"
+    ]
+  ],
+  "D1_matrix": [],
+  "harmonic_basis_vectors": [
+    [
+      "-1",
+      "-1",
+      "-1",
+      "1"
+    ]
+  ],
+  "G": [
+    [
+      "4"
+    ]
+  ],
+  "p_periods": [
+    "-5"
+  ],
+  "r_debt_vector": [
+    "5/4",
+    "5/4",
+    "5/4",
+    "-5/4"
+  ],
+  "debt_norm_squared": "25/4",
+  "gram_harmonic_agree": true,
+  "suggested_refinement": {
+    "option_1_minimal_correction": {
+      "description": "subtract harmonic debt; adjusts all interfaces proportionally",
+      "delta_r": [
+        "-5/4",
+        "-5/4",
+        "-5/4",
+        "5/4"
+      ],
+      "new_residue": [
+        "-1/4",
+        "-1/4",
+        "-1/4",
+        "-3/4"
+      ]
+    },
+    "option_2_single_interface_fixes": [
+      {
+        "edge": "A_Sensor-D_Monitor",
+        "from_r": "-2",
+        "delta": "5",
+        "to_r": "3"
+      },
+      {
+        "edge": "A_Sensor-B_Controller",
+        "from_r": "1",
+        "delta": "-5",
+        "to_r": "-4"
+      },
+      {
+        "edge": "B_Controller-C_Actuator",
+        "from_r": "1",
+        "delta": "-5",
+        "to_r": "-4"
+      },
+      {
+        "edge": "C_Actuator-D_Monitor",
+        "from_r": "1",
+        "delta": "-5",
+        "to_r": "-4"
+      }
+    ]
+  }
+}

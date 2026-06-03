@@ -1,0 +1,31 @@
+{
+  "name": "cycledebt_helics_demo",
+  "broker": true,
+  "federates": [
+    {
+      "name": "A_Sensor",
+      "directory": "federates",
+      "exec": "python A_sensor.py"
+    },
+    {
+      "name": "B_Controller",
+      "directory": "federates",
+      "exec": "python B_controller.py"
+    },
+    {
+      "name": "C_Actuator",
+      "directory": "federates",
+      "exec": "python C_actuator.py"
+    },
+    {
+      "name": "D_Monitor",
+      "directory": "federates",
+      "exec": "python D_monitor.py"
+    },
+    {
+      "name": "CycleDebt_Auditor",
+      "directory": "federates",
+      "exec": "python cycledebt_auditor.py"
+    }
+  ]
+}

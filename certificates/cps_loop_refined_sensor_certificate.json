@@ -1,0 +1,79 @@
+{
+  "tool": "CycleDebt",
+  "version": "1.0",
+  "system_name": "four-node CPS diagnostic loop (refined sensor)",
+  "diagnostic_claim": {
+    "statement": "fault_origin = B_Controller",
+    "description": "The root cause of the observed fault is the B_Controller subsystem."
+  },
+  "verdict": "GLOBALLY ADMISSIBLE",
+  "arithmetic": "exact rational (sympy Q)",
+  "case": "globally_admissible",
+  "is_cocycle": true,
+  "is_admissible": true,
+  "dim_H1": 1,
+  "residue": [
+    "1",
+    "1",
+    "1",
+    "3"
+  ],
+  "edges": [
+    "A_Sensor-B_Controller",
+    "B_Controller-C_Actuator",
+    "C_Actuator-D_Monitor",
+    "A_Sensor-D_Monitor"
+  ],
+  "L1_matrix": [
+    [
+      "2",
+      "-1",
+      "0",
+      "1"
+    ],
+    [
+      "-1",
+      "2",
+      "-1",
+      "0"
+    ],
+    [
+      "0",
+      "-1",
+      "2",
+      "1"
+    ],
+    [
+      "1",
+      "0",
+      "1",
+      "2"
+    ]
+  ],
+  "D1_matrix": [],
+  "harmonic_basis_vectors": [
+    [
+      "-1",
+      "-1",
+      "-1",
+      "1"
+    ]
+  ],
+  "G": [
+    [
+      "4"
+    ]
+  ],
+  "p_periods": [
+    "0"
+  ],
+  "r_debt_vector": [
+    "0",
+    "0",
+    "0",
+    "0"
+  ],
+  "debt_norm_squared": "0",
+  "gram_harmonic_agree": true,
+  "suggested_refinement": null
+}

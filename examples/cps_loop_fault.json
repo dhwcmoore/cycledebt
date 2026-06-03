@@ -1,0 +1,25 @@
+{
+  "name": "cps_loop_fault",
+  "system_name": "four-node CPS diagnostic loop",
+  "description": "Four-node cyber-physical system with monitoring cycle A_Sensor -> B_Controller -> C_Actuator -> D_Monitor -> A_Sensor. Diagnostic claim 'fault_origin = B_Controller' cannot be warranted: the observation map collapses two internal fault states of B_Controller (B_fault_1 and B_fault_2), leaving a non-zero cyclic obstruction.",
+  "diagnostic_claim": {
+    "statement": "fault_origin = B_Controller",
+    "description": "The root cause of the observed fault is the B_Controller subsystem."
+  },
+  "observation_note": "Observation map M collapses fault states B_fault_1 and B_fault_2 in B_Controller. Available sensors at the A_Sensor-B_Controller and B_Controller-C_Actuator interfaces cannot distinguish these states.",
+  "coefficient_domain": "Q",
+  "regions": ["A_Sensor", "B_Controller", "C_Actuator", "D_Monitor"],
+  "edges": [
+    ["A_Sensor", "B_Controller"],
+    ["B_Controller", "C_Actuator"],
+    ["C_Actuator", "D_Monitor"],
+    ["A_Sensor", "D_Monitor"]
+  ],
+  "faces": [],
+  "residue": {
+    "A_Sensor-B_Controller": "1",
+    "B_Controller-C_Actuator": "1",
+    "C_Actuator-D_Monitor": "1",
+    "A_Sensor-D_Monitor": "-2"
+  }
+}

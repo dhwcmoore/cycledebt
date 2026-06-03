@@ -9,4 +9,18 @@ __pycache__/
 *.bbl
 *.blg
 audit_*/
-reports/*.png
+
+# Coq build artefacts
+*.vo
+*.vos
+*.vok
+*.glob
+
+# OCaml build artefacts
+*.cmi
+*.cmx
+*.o
+coq/run_extracted
+coq/verify_extracted.ml
+coq/verify_extracted.mli
+verify/verify_certificate

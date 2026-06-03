@@ -1,0 +1,25 @@
+{
+  "name": "cps_loop_refined_sensor",
+  "system_name": "four-node CPS diagnostic loop (refined sensor)",
+  "description": "Same four-node CPS as cps_loop_fault.json, but with a refined sensor added at the C_Actuator-D_Monitor interface. The refined sensor distinguishes fault states B_fault_1 and B_fault_2. The cyclic obstruction vanishes and the diagnostic claim is now warranted.",
+  "diagnostic_claim": {
+    "statement": "fault_origin = B_Controller",
+    "description": "The root cause of the observed fault is the B_Controller subsystem."
+  },
+  "observation_note": "The added observation distinguishes the formerly collapsed states.",
+  "coefficient_domain": "Q",
+  "regions": ["A_Sensor", "B_Controller", "C_Actuator", "D_Monitor"],
+  "edges": [
+    ["A_Sensor", "B_Controller"],
+    ["B_Controller", "C_Actuator"],
+    ["C_Actuator", "D_Monitor"],
+    ["A_Sensor", "D_Monitor"]
+  ],
+  "faces": [],
+  "residue": {
+    "A_Sensor-B_Controller": "1",
+    "B_Controller-C_Actuator": "1",
+    "C_Actuator-D_Monitor": "1",
+    "A_Sensor-D_Monitor": "3"
+  }
+}
