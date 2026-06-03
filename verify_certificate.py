@@ -92,22 +92,23 @@ def verify_entry(entry):
 
 
 def main():
-    cert_path = Path("certificates/finite_nerve_warrant_debt_certificate.json")
+    cert_path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("certificates/finite_nerve_warrant_debt_certificate.json")
     if not cert_path.exists():
         print(f"Certificate not found: {cert_path}")
         sys.exit(1)
 
     cert = json.load(open(cert_path))
+    entries = cert.get("results", [cert])
 
     print("=" * 60)
     print("INDEPENDENT CERTIFICATE VERIFICATION")
     print("=" * 60)
     print(f"Source: {cert_path}")
-    print(f"Arithmetic: {cert['results'][0].get('arithmetic', '?')}")
+    print(f"Arithmetic: {entries[0].get('arithmetic', '?')}")
     print()
 
     all_ok = True
-    for entry in cert["results"]:
+    for entry in entries:
         result = verify_entry(entry)
         label = result["label"][:55]
         status = "PASS" if result["all_checks_pass"] else "FAIL"
@@ -123,7 +124,7 @@ def main():
     print(f"Overall: {'ALL VERIFIED' if all_ok else 'VERIFICATION FAILURES'}")
 
     # Detailed output for the warrant_debt case
-    wdc = next((e for e in cert["results"] if e["case"] == "warrant_debt"), None)
+    wdc = next((e for e in entries if e.get("case") == "warrant_debt"), None)
     if wdc:
         res = verify_entry(wdc)
         print()
