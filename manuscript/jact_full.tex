@@ -59,8 +59,12 @@ oriented nerves. The main contributions are:
     closed-form debt from the period alone. Fatigue, recovery, and cumulative
     load are computed for three trajectories including the toy model that
     terminates at the actual object.
-  \item \textbf{Machine-readable certificates.} All results are backed by
-    audit-grade JSON certificates emitted by reproducible scripts.
+  \item \textbf{Independent verifier (Appendix~\ref{app:verify}).}
+    The certificate carries exact rational $L_1$, harmonic basis vectors,
+    periods, debt vector, and $D$. A standalone verifier (\texttt{verify\_certificate.py})
+    reconstructs the verdict from the certificate alone, importing nothing from
+    the engine. Eight verification steps are given in full; a ten-line Python
+    block reproduces the calculation.
 \end{itemize}
 
 The repository contains the code, the JSON inputs, the certificates, and the
@@ -456,32 +460,39 @@ simultaneous onset, diamond second-cycle-only, $K_4$ single-edge drift) are
 verified in the certificate.
 
 \section{Discussion}
-The work has four layers of strength.
+The work has six layers of strength.
 
-First, the general theorem (Section~\ref{sec:general}) shows that obstruction
-is cycle-detectable across any finite regional overlap graph: no hidden algebraic
-mechanism, only circulation.
+\textbf{Layer 1 (general theory).} The general theorem (Section~\ref{sec:general})
+identifies warrant debt with the non-zero harmonic $H^1$-component of a coherent
+seam residue: $D(r)=\|P_{\mathcal{H}^1}r\|^2>0$. This applies to any finite
+nerve, not just the four-cycle example.
 
-Second, the classification theorem (Section~\ref{thm:classifier}) proves the
-complete invariant for the four-cycle: $q=0$ iff admissible. The actual object
-is the corollary $q(r)=-5$.
+\textbf{Layer 2 (four-cycle corollary).} The classification theorem
+(Section~\ref{thm:classifier}) is a corollary: the four-cycle is the one-cycle
+case with $\mathcal{H}^1=\operatorname{span}(z)$ and invariant $q=-a-b-c+d$.
+The actual object has $q(r)=-5$, giving the corollary $D=25/4$.
 
-Third, the integral and modular theorem (Section~\ref{thm:modular}) gives
-arithmetic precision. The obstruction is the integer $-5$, not a binary
-yes/no. Detectability depends on the coefficient field.
+\textbf{Layer 3 (arithmetic).} The integral and modular theorem
+(Section~\ref{thm:modular}) gives the obstruction as the integer $-5 \in \mathbb{Z}
+\cong H^1(N;\mathbb{Z})$. Detectability depends on the coefficient field:
+$[r]=0$ exactly when $\operatorname{char}(k) = 5$.
 
-Fourth, the bridge theorem (Section~\ref{sec:bridge}) connects the algebra to
-admissibility. The H¹ class is not just a topological invariant — it is the
-exact measure of how far the system is from having a globally consistent
-description. The harmonic decomposition $r=r^{\mathrm{adm}}+r^{\mathrm{debt}}$
-separates what is fixable from what is structurally irremovable.
+\textbf{Layer 4 (bridge).} The bridge theorem (Section~\ref{sec:bridge})
+identifies $[r]\neq0$ with the non-existence of a globally consistent claim.
+The harmonic decomposition $r=r^{\mathrm{adm}}+r^{\mathrm{debt}}$ separates
+the fixable from the structurally irremovable.
 
-Fifth, the dynamic warrant debt theorem (Section~\ref{sec:dynamic}) makes the
-theory temporal. Warrant debt is not merely the presence of an obstruction but a
-trajectory quantity: it can accumulate, partially recover, or hold constant. The
-closed-form $D(t)=p(t)^2/4$ makes debt directly computable from the period
-sequence. This connects the finite obstruction theory to the monitoring of
-structural fatigue under evolving observational constraint.
+\textbf{Layer 5 (dynamics).} The dynamic warrant debt theorem
+(Section~\ref{sec:dynamic}) makes the theory temporal: $D(t)=p(t)^2/4$ tracks
+debt as a trajectory, with cumulative load $W(T)=\sum D(t)$ measuring total
+structural burden.
+
+\textbf{Layer 6 (certification).} The engine emits a self-contained certificate
+(Appendix~\ref{app:verify}) carrying exact rational $L_1$, harmonic basis, period,
+debt vector, and $D$. An independent verifier reconstructs the verdict from the
+certificate alone without re-running the engine. The three certificate cases
+(\texttt{coherence\_failure}, \texttt{globally\_admissible}, \texttt{warrant\_debt})
+are each tied to a proved theorem.
 
 \section*{Acknowledgements}
 This work began as an independent project and benefited from feedback in
@@ -525,10 +536,14 @@ Field & Value \\
 \[
 L_1 h =
 \begin{pmatrix}
-2(-1)+(-1)(-1)+1(1) \\
-(-1)(-1)+2(-1)+(-1)(-1) \\
-(-1)(-1)+2(-1)+1(1) \\
-1(-1)+1(-1)+2(1)
+2(-1)+(-1)(-1)+0(-1)+1(1) \\
+(-1)(-1)+2(-1)+(-1)(-1)+0(1) \\
+0(-1)+(-1)(-1)+2(-1)+1(1) \\
+1(-1)+0(-1)+1(-1)+2(1)
+\end{pmatrix}
+=
+\begin{pmatrix}
+-2+1+0+1\\1-2+1+0\\0+1-2+1\\-1+0-1+2
 \end{pmatrix}
 =\mathbf{0}. \quad\checkmark
 \]
@@ -555,17 +570,17 @@ $D = \|r^{\mathrm{debt}}\|^2 = 4\cdot(5/4)^2 = 25/4$. $\checkmark$
 
 \begin{verbatim}
 import sympy as sp, json
-cert  = json.load(open("certificates/finite_nerve_warrant_debt_certificate.json"))
-entry = next(r for r in cert["results"] if r["case"] == "warrant_debt")
-L1    = sp.Matrix([[sp.Rational(v) for v in row] for row in entry["L1_matrix"]])
-h     = sp.Matrix([sp.Rational(v) for v in entry["harmonic_basis_vectors"][0]])
-r     = sp.Matrix([sp.Rational(v) for v in entry["residue"]])
-assert L1 * h == sp.zeros(len(r), 1)
+cert   = json.load(open("certificates/finite_nerve_warrant_debt_certificate.json"))
+entry  = next(r for r in cert["results"] if r["case"] == "warrant_debt")
+L1     = sp.Matrix([[sp.Rational(v) for v in row] for row in entry["L1_matrix"]])
+h      = sp.Matrix([sp.Rational(v) for v in entry["harmonic_basis_vectors"][0]])
+r      = sp.Matrix([sp.Rational(v) for v in entry["residue"]])
+assert L1 * h == sp.zeros(len(r), 1),               "Step 2: L1 h != 0"
 p      = h.dot(r)
 r_debt = sp.Rational(p, h.dot(h)) * h
 D      = r_debt.dot(r_debt)
-assert D == sp.Rational(entry["debt_norm_squared"])
-assert entry["case"] == "warrant_debt"
+assert D == sp.Rational(entry["debt_norm_squared"]),  "Step 6: D mismatch"
+assert entry["case"] == "warrant_debt",               "Step 8: wrong case"
 print(f"VERIFIED  p={p}  D={D}  case={entry['case']}")
 \end{verbatim}
 

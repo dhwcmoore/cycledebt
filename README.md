@@ -91,18 +91,24 @@ verification.
 ## Quick start
 
 ```bash
-# Run the general engine on any finite regional nerve
+# 1. Verify the actual object certificate independently (no engine trust required)
+python verify_certificate.py
+# Expected: ALL VERIFIED — seven cases, five checks each
+
+# 2. Run the general engine on any finite regional nerve
 python finite_nerve_warrant_debt.py --json actual/actual_gluing_object_v1.json
 
-# Run built-in test suite (7 cases: graphs + nerves, all three cert branches)
+# 3. Run the engine's built-in test suite (7 cases: graphs + nerves)
 python finite_nerve_warrant_debt.py
 
-# Full pipeline for the four-cycle example
+# 4. Full pipeline for the four-cycle example
 python classification_theorem.py      # period -5, modular sensitivity
 python admissibility_bridge.py        # r_adm + r_debt decomposition
 python dynamic_warrant_debt.py        # D(t) = p(t)^2/4 trajectories
 python general_warrant_debt.py        # Gram matrix, D = p^T G^{-1} p
 ```
+
+See `VERIFY.md` for a step-by-step hand verification and the eight-step mathematical derivation.
 
 ---
 
