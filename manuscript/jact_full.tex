@@ -462,36 +462,60 @@ verified in the certificate.
 \section{Discussion}
 The work has six layers of strength.
 
-\textbf{Layer 1 (general theory).} The general theorem (Section~\ref{sec:general})
-identifies warrant debt with the non-zero harmonic $H^1$-component of a coherent
-seam residue: $D(r)=\|P_{\mathcal{H}^1}r\|^2>0$. This applies to any finite
-nerve, not just the four-cycle example.
+\begin{center}
+\begin{tabular}{r l}
+\toprule
+Layer & Role \\
+\midrule
+1 & General finite graph theorem \\
+2 & Finite nerve / Hodge extension \\
+3 & Four-cycle corollary \\
+4 & Admissibility bridge \\
+5 & Dynamic warrant debt \\
+6 & Exact certificate and independent verifier \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\textbf{Layer 2 (four-cycle corollary).} The classification theorem
-(Section~\ref{thm:classifier}) is a corollary: the four-cycle is the one-cycle
-case with $\mathcal{H}^1=\operatorname{span}(z)$ and invariant $q=-a-b-c+d$.
-The actual object has $q(r)=-5$, giving the corollary $D=25/4$.
+\textbf{Layer 1 (general finite graph theorem).}
+For any finite connected oriented graph over $\mathbb{Q}$, the four conditions
+gauge-admissibility, global consistency, zero cycle pairings, and $[r]=0$ are
+equivalent. The proof uses the dimension identity
+$\dim Z_1 + \dim\operatorname{im}\delta^0 = |E|$
+to show $\operatorname{im}\delta^0 = Z_1^\perp$.
 
-\textbf{Layer 3 (arithmetic).} The integral and modular theorem
-(Section~\ref{thm:modular}) gives the obstruction as the integer $-5 \in \mathbb{Z}
-\cong H^1(N;\mathbb{Z})$. Detectability depends on the coefficient field:
-$[r]=0$ exactly when $\operatorname{char}(k) = 5$.
+\textbf{Layer 2 (finite nerve / Hodge extension).}
+For simplicial complexes with 2-faces, the harmonic 1-cochains are
+$\mathcal{H}^1 = \ker(L_1)$ where $L_1 = \delta^0(\delta^0)^T + (\delta^1)^T\delta^1$.
+Warrant debt is the non-zero harmonic $H^1$-component:
+$D(r)=\|P_{\mathcal{H}^1}r\|^2$.
+The Hodge Laplacian correctly accounts for faces that kill apparent graph cycles.
 
-\textbf{Layer 4 (bridge).} The bridge theorem (Section~\ref{sec:bridge})
-identifies $[r]\neq0$ with the non-existence of a globally consistent claim.
-The harmonic decomposition $r=r^{\mathrm{adm}}+r^{\mathrm{debt}}$ separates
-the fixable from the structurally irremovable.
+\textbf{Layer 3 (four-cycle corollary).}
+The four-cycle is the one-cycle case with $\mathcal{H}^1=\operatorname{span}(z)$,
+$z=(-1,-1,-1,1)$, and $D=p^2/4$.
+The actual object has $p=-5$ and $D=25/4$.
+The integral period is $-5\in\mathbb{Z}\cong H^1(N;\mathbb{Z})$;
+detectability depends on coefficient field ($[r]=0$ iff $\operatorname{char}(k)=5$).
 
-\textbf{Layer 5 (dynamics).} The dynamic warrant debt theorem
-(Section~\ref{sec:dynamic}) makes the theory temporal: $D(t)=p(t)^2/4$ tracks
-debt as a trajectory, with cumulative load $W(T)=\sum D(t)$ measuring total
-structural burden.
+\textbf{Layer 4 (admissibility bridge).}
+The class $[r]\neq0$ is equivalent to the non-existence of any globally
+consistent claim $\Phi$.
+The decomposition $r=r^{\mathrm{adm}}+r^{\mathrm{debt}}$ separates the
+fixable residue from the structurally irremovable warrant debt.
 
-\textbf{Layer 6 (certification).} The engine emits a self-contained certificate
-(Appendix~\ref{app:verify}) carrying exact rational $L_1$, harmonic basis, period,
-debt vector, and $D$. An independent verifier reconstructs the verdict from the
-certificate alone without re-running the engine. The three certificate cases
-(\texttt{coherence\_failure}, \texttt{globally\_admissible}, \texttt{warrant\_debt})
+\textbf{Layer 5 (dynamic warrant debt).}
+The theory is made temporal: $D(t)=p(t)^2/4$ tracks debt as a trajectory.
+Cumulative load $W(T)=\sum D(t)$ measures total structural burden.
+Fatigue, partial recovery, and persistent debt are distinguished.
+
+\textbf{Layer 6 (exact certificate and independent verifier).}
+The engine emits a self-contained certificate (Appendix~\ref{app:verify})
+carrying exact rational $L_1$, harmonic basis, $p$, $r^{\mathrm{debt}}$, and $D$.
+An independent verifier (\texttt{verify\_certificate.py}) reconstructs the verdict
+from the certificate alone, importing nothing from the engine.
+The three certificate cases (\texttt{coherence\_failure},
+\texttt{globally\_admissible}, \texttt{warrant\_debt})
 are each tied to a proved theorem.
 
 \section*{Acknowledgements}

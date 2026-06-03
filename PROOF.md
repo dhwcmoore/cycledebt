@@ -618,23 +618,34 @@ non-uniform ratio vector, both computed over $\mathbb Q$ by `cycle_lift_test.py`
 
 ## 9. Scope of the proof
 
-What is proved:
+The proof is organised in six layers (see also §0c and the manuscript Discussion):
 
-1. **General theory.** For any finite connected oriented overlap graph, a residue is non-removable if and only if it has nonzero circulation around at least one cycle (§0).
+| Layer | Role | Sections |
+|---|---|---|
+| 1 | General finite graph theorem | §0a |
+| 2 | Finite nerve / Hodge extension | §0b–§0c |
+| 3 | Four-cycle corollary (incl. integral/modular) | §1–§2 |
+| 4 | Admissibility bridge | §11b |
+| 5 | Dynamic warrant debt | §11c–§11d |
+| 6 | Exact certificate and independent verifier | §0c, `verify_certificate.py` |
 
-2. **Complete classification.** Every residue on the four-region loop is classified by the circulation $q = -a-b-c+d$ (§1). The actual object is the corollary $q(r) = -5 \neq 0$.
+What is proved in each layer:
 
-3. **Integral and modular.** $H^1(N;\mathbb{Z}) \cong \mathbb{Z}$ with integral period $-5$. The obstruction persists over every field of characteristic $\neq 5$ (§2).
+1. **General finite graph theorem.** $\operatorname{im}(\delta^0) = Z_1^\perp$; the four conditions gauge-admissibility, global consistency, zero cycle pairings, and $[r]=0$ are equivalent. Proved with explicit dimension count (§0a).
 
-4. **Presentation invariance.** The verdict is stable under five declared presentation changes (§4).
+2. **Finite nerve / Hodge extension.** The harmonic 1-cochains $\mathcal{H}^1 = \ker(L_1)$ represent $H^1(N;\mathbb{Q})$. Warrant debt is $D(r) = \|P_{\mathcal{H}^1} r\|^2$. Verified on graphs and nerves (§0b).
 
-5. **Refinement persistence.** The class persists under four declared refinements; two by the Cycle-Lift Theorem, two by direct pairing (§5–8).
+3. **Four-cycle corollary.** The four-cycle is the one-cycle case. Every residue $(a,b,c,d)$ is classified by $q = -a-b-c+d$. Integral period $-5$; modular sensitivity $[r]=0$ iff $\operatorname{char}(k)=5$ (§1–§2).
 
-6. **Admissibility bridge.** Non-zero residue is equivalent to the impossibility of a globally consistent claim. The warrant debt decomposes as $r = r^{\mathrm{adm}} + r^{\mathrm{debt}}$ with $r^{\mathrm{debt}} = (-5/4)z$ for the actual object (§12).
+4. **Admissibility bridge.** $[r]\neq 0$ iff no globally consistent claim $\Phi$ exists. The decomposition $r = r^{\mathrm{adm}} + r^{\mathrm{debt}}$ is explicit with $r^{\mathrm{debt}} = (-5/4)z$ for the actual object (§11b).
+
+5. **Dynamic warrant debt.** $D(t) = p(t)^2/4$ tracks debt over time. Cumulative load $W(T) = \sum D(t)$. General Gram matrix formula $D = p^T G^{-1} p$ for multi-cycle systems (§11c–§11d).
+
+6. **Exact certificate and independent verifier.** The engine's certificate carries exact rational $L_1$, harmonic basis, $p$, $r^{\mathrm{debt}}$, and $D$. `verify_certificate.py` reconstructs the verdict from the certificate alone (§0c). Three-case soundness: `coherence_failure`, `globally_admissible`, `warrant_debt`.
 
 What is not yet proved:
 
-> A characterisation of all cycle-faithful refinements, or a proof of the Balanced Loop Refinement Conjecture. A dynamic (time-indexed) version of the warrant-debt trajectory.
+> Balanced Loop Refinement Conjecture (characterise all cycle-faithful refinements). Dynamic theory for general nerves with time-varying $\dim\mathcal{H}^1$.
 
 ---
 

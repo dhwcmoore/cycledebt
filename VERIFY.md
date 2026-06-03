@@ -1,11 +1,15 @@
 # Independent Verification of the Actual Object Certificate
 
+*Layer 6 of the six-layer structure: exact certificate and independent verifier.*
+
 This document shows how to verify the warrant-debt certificate for the actual object
 `actual_gluing_object_v1` from scratch, using only the file
 `certificates/finite_nerve_warrant_debt_certificate.json`.
 
 No trust in the computation scripts is required. Everything can be checked by
-hand or with the ten-line script at the end of this document.
+hand or with the ten-line script at the end of this document. The verdict rests on
+the Finite Nerve Warrant Debt Theorem (PROOF.md §0c): $D(r)>0 \Rightarrow [r]\neq0
+\Rightarrow$ warrant debt.
 
 ---
 

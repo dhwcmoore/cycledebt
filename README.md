@@ -18,6 +18,21 @@ $H^1$ space, computed via the Hodge Laplacian $L_1 = \delta^0(\delta^0)^T +
 $$D(r) = 0 \;\Longleftrightarrow\; [r] = 0 \in H^1 \;\Longleftrightarrow\; \text{a global consistent claim exists.}$$
 $$D(r) > 0 \;\Longleftrightarrow\; [r] \neq 0 \in H^1 \;\Longleftrightarrow\; \text{warrant debt; no global claim.}$$
 
+## Six-layer structure
+
+| Layer | Role |
+|---|---|
+| 1 | General finite graph theorem |
+| 2 | Finite nerve / Hodge extension |
+| 3 | Four-cycle corollary |
+| 4 | Admissibility bridge |
+| 5 | Dynamic warrant debt |
+| 6 | Exact certificate and independent verifier |
+
+The actual object $r=(1,1,1,-2)$ lives in Layer 3 as a worked corollary of the
+Layer 1–2 theory. Layer 6 is the decisive computational contribution: the
+certificate can be verified without re-running the engine.
+
 ## Three-case certificate structure
 
 Every computation returns one of three formally accountable outcomes:
