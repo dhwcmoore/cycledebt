@@ -492,16 +492,114 @@ reproducibility.
 \bibliography{references}
 
 \appendix
+\section{Independent certificate verification}
+\label{app:verify}
+
+This appendix shows how to verify the warrant-debt certificate for the actual
+object using only the file \texttt{certificates/finite\_nerve\_warrant\_debt\_certificate.json}.
+No trust in the engine scripts is required.
+
+\subsection*{Certificate fields used}
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Field & Value \\
+\midrule
+\texttt{residue} & $[1,1,1,-2]$ \\
+\texttt{L1\_matrix} & $\begin{pmatrix}2&-1&0&1\\-1&2&-1&0\\0&-1&2&1\\1&0&1&2\end{pmatrix}$ \\
+\texttt{harmonic\_basis\_vectors} & $[[-1,-1,-1,1]]$ \\
+\texttt{p\_periods} & $[-5]$ \\
+\texttt{r\_debt\_vector} & $[5/4,\,5/4,\,5/4,\,-5/4]$ \\
+\texttt{debt\_norm\_squared} & $25/4$ \\
+\texttt{case} & \texttt{warrant\_debt} \\
+\texttt{arithmetic} & exact rational (sympy Q) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Eight-step hand verification}
+
+\textbf{Step 1. Read} $L_1$ and $h=(-1,-1,-1,1)^T$ from the certificate.
+
+\textbf{Step 2. Verify $L_1 h = 0$.}
+\[
+L_1 h =
+\begin{pmatrix}
+2(-1)+(-1)(-1)+1(1) \\
+(-1)(-1)+2(-1)+(-1)(-1) \\
+(-1)(-1)+2(-1)+1(1) \\
+1(-1)+1(-1)+2(1)
+\end{pmatrix}
+=\mathbf{0}. \quad\checkmark
+\]
+
+\textbf{Step 3. Compute the period.}
+$p = \langle h,r\rangle = (-1)(1)+(-1)(1)+(-1)(1)+(1)(-2) = -5$. $\checkmark$
+
+\textbf{Step 4. Compute $\langle h,h\rangle = 4$.}
+
+\textbf{Step 5. Compute $r^{\mathrm{debt}}$.}
+\[
+r^{\mathrm{debt}} = \frac{p}{\langle h,h\rangle}\,h = -\tfrac{5}{4}\,(-1,-1,-1,1)^T
+= \bigl(\tfrac{5}{4},\tfrac{5}{4},\tfrac{5}{4},-\tfrac{5}{4}\bigr)^T. \quad\checkmark
+\]
+
+\textbf{Step 6. Compute $D$.}
+$D = \|r^{\mathrm{debt}}\|^2 = 4\cdot(5/4)^2 = 25/4$. $\checkmark$
+
+\textbf{Step 7.} $D = p^2/\langle h,h\rangle = 25/4$. $\checkmark$
+
+\textbf{Step 8.} $D > 0$ $\Rightarrow$ case = \texttt{warrant\_debt}. $\checkmark$
+
+\subsection*{Ten-line Python verification}
+
+\begin{verbatim}
+import sympy as sp, json
+cert  = json.load(open("certificates/finite_nerve_warrant_debt_certificate.json"))
+entry = next(r for r in cert["results"] if r["case"] == "warrant_debt")
+L1    = sp.Matrix([[sp.Rational(v) for v in row] for row in entry["L1_matrix"]])
+h     = sp.Matrix([sp.Rational(v) for v in entry["harmonic_basis_vectors"][0]])
+r     = sp.Matrix([sp.Rational(v) for v in entry["residue"]])
+assert L1 * h == sp.zeros(len(r), 1)
+p      = h.dot(r)
+r_debt = sp.Rational(p, h.dot(h)) * h
+D      = r_debt.dot(r_debt)
+assert D == sp.Rational(entry["debt_norm_squared"])
+assert entry["case"] == "warrant_debt"
+print(f"VERIFIED  p={p}  D={D}  case={entry['case']}")
+\end{verbatim}
+
+Expected output: \texttt{VERIFIED\ \ p=-5\ \ D=25/4\ \ case=warrant\_debt}.
+
+Run as: \texttt{python verify\_certificate.py}
+
+\subsection*{What this proves}
+
+Starting only from the certificate:
+$L_1 h = 0$ shows $h \in \mathcal{H}^1$;
+$D = 25/4 > 0$ shows $P_{\mathcal{H}^1} r \neq 0$;
+the Finite Nerve Warrant Debt Theorem (§0c) then gives $[r]\neq0$ and no global
+consistent claim exists.
+
 \section{Summary tables of certificates}
 \label{app:certs}
-Key certificate fields (base object):
+Key certificate fields (actual object, \texttt{finite\_nerve\_warrant\_debt\_certificate.json}):
+\begin{center}
 \begin{tabular}{ll}
-Residue & (1,1,1,-2) \\
-Support & U1-U2, U2-U3, U3-U4, U1-U4 \\
-Pairing & -5 \\
-dim C0, C1 & 4, 4 \\
-dim H1 & 1 \\
+\toprule
+Field & Value \\
+\midrule
+Residue & $(1,1,1,-2)$ \\
+Case & \texttt{warrant\_debt} \\
+$\dim H^1$ & 1 \\
+Harmonic basis & $(-1,-1,-1,1)$ \\
+Period $p$ & $-5$ \\
+Debt vector & $(5/4,\,5/4,\,5/4,\,-5/4)$ \\
+$D$ & $25/4$ \\
+Arithmetic & exact rational \\
+\bottomrule
 \end{tabular}
+\end{center}
 
 \section{Full proofs (from repository)}
 \label{app:proof}
