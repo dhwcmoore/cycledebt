@@ -124,18 +124,18 @@ def analyse(regions, edges, faces, residue, label=""):
     """
     etup = [tuple(e) for e in edges]
     D0, D1 = build_matrices(regions, etup, faces)
-    r_rat = [sp.Rational(v) for v in residue]
 
     # Classification (cocycle / coboundary)
     base = classify_residue(regions, etup, faces, residue)
 
     # Hodge basis and Gram matrix
+    L1 = hodge_laplacian_1(D0, D1)
     basis = harmonic_basis_1(D0, D1)
     G = gram_matrix(basis)
     p = period_vector(residue, basis)
     D = debt_magnitude(p, G)
 
-    # Cross-check: harmonic projection
+    # Cross-check: harmonic projection (Gram-Schmidt)
     r_debt = harmonic_project(residue, basis)
     D_check = r_debt.dot(r_debt)
     agree = bool(D == D_check)
@@ -165,20 +165,24 @@ def analyse(regions, edges, faces, residue, label=""):
 
     return {
         "label": label,
+        "arithmetic": "exact rational (sympy Q)",
         "residue": [str(sp.Rational(v)) for v in residue],
         "dim_H1": len(basis),
         "is_cocycle": base["is_cocycle"],
         "is_admissible": base["is_coboundary"],
         "case": case,
         "theorem_invoked": theorem,
-        "basis_type": (
-            "harmonic ker(L_1) = ker((delta^0)^T) cap ker(delta^1) via Hodge Laplacian"
-        ),
+        # --- Independent verification fields (exact rational) ---
+        "L1_matrix": [[str(L1[i, j]) for j in range(L1.shape[1])]
+                      for i in range(L1.shape[0])],
+        "harmonic_basis_vectors": [[str(v) for v in h] for h in basis],
         "G": [[str(G[i, j]) for j in range(G.shape[1])]
               for i in range(G.shape[0])],
-        "p": [str(v) for v in p],
-        "D_gram": str(D),
-        "D_harmonic_check": str(D_check),
+        "p_periods": [str(v) for v in p],
+        "r_debt_vector": [str(v) for v in r_debt],
+        "debt_norm_squared": str(D),
+        # --- Cross-check ---
+        "D_harmonic_cross_check": str(D_check),
         "gram_harmonic_agree": agree,
     }
 
@@ -285,13 +289,13 @@ def print_report(results):
     all_ok = True
     for res in results:
         exp = res.get("expected_D")
-        d_ok = (exp is None) or (str(sp.sympify(res["D_gram"])) == str(sp.sympify(exp)))
+        d_ok = (exp is None) or (str(sp.sympify(res["debt_norm_squared"])) == str(sp.sympify(exp)))
         if not d_ok:
             all_ok = False
         chk = "OK" if d_ok else "FAIL"
         label = res["label"][:41]
         ccase = res.get("case", "?")[:17]
-        print(f"  {label:<42} {res['dim_H1']:>4} {res['D_gram']:>8} {ccase:>18} {chk:>5}")
+        print(f"  {label:<42} {res['dim_H1']:>4} {res['debt_norm_squared']:>8} {ccase:>18} {chk:>5}")
     print()
     print(f"  {'Gram==Harmonic for all':50} "
           f"{'ALL OK' if all(r['gram_harmonic_agree'] for r in results) else 'FAIL'}")
@@ -313,9 +317,9 @@ def print_report(results):
     # Show actual object
     act = next((r for r in results if "four_cycle" in r["label"] and "25/4" in r["label"]), None)
     if act:
-        print(f"  Actual object:  G={act['G']}  p={act['p']}  D={act['D_gram']}")
-        print(f"  Four-cycle formula: D = p^2/4 = {act['p'][0]}^2/4 = "
-              f"{sp.Rational(act['p'][0])**2/4}")
+        print(f"  Actual object:  G={act['G']}  p={act['p_periods']}  D={act['debt_norm_squared']}")
+        print(f"  Four-cycle formula: D = p^2/4 = {act['p_periods'][0]}^2/4 = "
+              f"{sp.Rational(act['p_periods'][0])**2/4}")
 
 
 if __name__ == "__main__":
@@ -342,13 +346,13 @@ if __name__ == "__main__":
     actual_json = Path("actual/actual_gluing_object_v1.json")
     if actual_json.exists():
         res_actual = analyse_json(str(actual_json))
-        print(f"  JSON input (actual object):  D = {res_actual['D_gram']}  "
+        print(f"  JSON input (actual object):  D = {res_actual['debt_norm_squared']}  "
               f"H1 dim = {res_actual['dim_H1']}  admissible = {res_actual['is_admissible']}")
         print()
 
     all_ok = all(
         (tc.get("expected_D") is None) or
-        (str(sp.sympify(r["D_gram"])) == str(sp.sympify(tc["expected_D"])))
+        (str(sp.sympify(r["debt_norm_squared"])) == str(sp.sympify(tc["expected_D"])))
         for r, tc in zip(results, TEST_CASES)
     ) and all(r["gram_harmonic_agree"] for r in results)
 
