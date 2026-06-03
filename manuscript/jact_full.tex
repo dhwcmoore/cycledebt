@@ -599,12 +599,12 @@ entry  = next(r for r in cert["results"] if r["case"] == "warrant_debt")
 L1     = sp.Matrix([[sp.Rational(v) for v in row] for row in entry["L1_matrix"]])
 h      = sp.Matrix([sp.Rational(v) for v in entry["harmonic_basis_vectors"][0]])
 r      = sp.Matrix([sp.Rational(v) for v in entry["residue"]])
-assert L1 * h == sp.zeros(len(r), 1),               "Step 2: L1 h != 0"
+assert L1 * h == sp.zeros(len(r), 1),              "Step 2: L1 h != 0"
 p      = h.dot(r)
 r_debt = sp.Rational(p, h.dot(h)) * h
 D      = r_debt.dot(r_debt)
-assert D == sp.Rational(entry["debt_norm_squared"]),  "Step 6: D mismatch"
-assert entry["case"] == "warrant_debt",               "Step 8: wrong case"
+assert D == sp.Rational(entry["debt_norm_squared"]), "Step 6: D mismatch"
+assert entry["case"] == "warrant_debt",              "Step 8: wrong case"
 print(f"VERIFIED  p={p}  D={D}  case={entry['case']}")
 \end{verbatim}
 
