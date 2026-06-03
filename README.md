@@ -11,7 +11,28 @@ ending in a formally proved Rocq core.
 
 ## Quick start
 
-For the verified HELICS federation run, see [helics_demo/outputs/auditor.log](helics_demo/outputs/auditor.log) for the raw runtime transitions and [HELICS_VERIFIED_RUN.md](HELICS_VERIFIED_RUN.md) for the recorded summary.
+For the verified HELICS federation run, see [HELICS_VERIFIED_RUN.md](HELICS_VERIFIED_RUN.md) for the recorded summary and the generated certificates in [helics_demo/outputs/certificates](helics_demo/outputs/certificates) for the emitted JSON artifacts.
+
+## HELICS co-simulation demo
+
+Run:
+
+```bash
+helics run --path=helics_demo/runner.json
+```
+
+Expected result:
+
+```text
+t=2.0: verdict=warrant_debt, period=-5, D=25/4, python_verified=True, extracted_verified=True, verified=True
+t=3.0: verdict=globally_admissible, period=0, D=0, python_verified=True, extracted_verified=True, verified=True
+```
+
+You can also verify the generated certificates with:
+
+```bash
+make verify-helics
+```
 
 ```bash
 # Python demo — three diagnostic cases
