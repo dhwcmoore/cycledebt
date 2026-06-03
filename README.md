@@ -147,7 +147,7 @@ all theorems `Closed under the global context`.
 |---|---|---|
 | check1 | Each basis vector in ker(L₁) | **Proved** |
 | check2 | Stored periods agree with ⟨h_i, r⟩ | **Proved** |
-| check3 | r\_debt = G⁻¹p·h (harmonic direction) | Open — requires Gaussian elimination in Rocq |
+| check3 | r\_debt = G⁻¹p·h (harmonic direction) | Open in Rocq — currently checked by Python/OCaml; can be closed by a certificate-carrying linear-solve witness |
 | check4 | Stored D equals ‖r\_debt‖² | **Proved** |
 | check5 | Cocycle flag agrees with D₁r = 0 | **Proved** |
 | check6 | Verdict consistent with D and is\_cocycle | **Proved** |
