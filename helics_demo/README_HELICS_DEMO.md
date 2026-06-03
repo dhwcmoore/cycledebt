@@ -13,12 +13,24 @@ This folder adds a minimal HELICS federation that mirrors the existing four-cycl
   - `CycleDebt/certificate_path`
   - `CycleDebt/verified`
 
+## Install
+
+```bash
+pip install -r requirements-helics.txt
+```
+
 ## Run
 
 From the repository root:
 
 ```bash
 helics run --path=helics_demo/runner.json
+```
+
+## Verify the exported certificates
+
+```bash
+bash scripts/verify_helics_outputs.sh
 ```
 
 The first audit checkpoint reports the warrant-debt residues (`-2`) and the second reports the refined residues (`3`). In this minimal HELICS time-step schedule the two audit points appear as the next available grants after the publication exchange, which are logged as `t=2.0` and `t=3.0`.

@@ -84,27 +84,33 @@ def main() -> None:
         cert_path = REPO_ROOT / "helics_demo" / "outputs" / "certificates" / f"t{int(current_time):03d}_certificate.json"
         cert_path.parent.mkdir(parents=True, exist_ok=True)
         write_certificate(model, result, cert_path)
-        verify_ok, _ = verify_from_file(cert_path)
+        python_verified, _ = verify_from_file(cert_path)
 
-        subprocess.run(
+        extracted = subprocess.run(
             ["./run_extracted", str(cert_path)],
             cwd=REPO_ROOT / "coq",
             check=False,
             capture_output=True,
             text=True,
         )
+        extracted_verified = extracted.returncode == 0
+        verified = python_verified and extracted_verified
 
         verdict = result["case"]
         period = result["p_periods"][0] if result.get("p_periods") else "0"
         debt = result["debt_norm_squared"]
 
-        print(f"[CycleDebt_Auditor] t={current_time}: verdict={verdict}, period={period}, D={debt}, verified={verify_ok}")
+        print(
+            "[CycleDebt_Auditor] "
+            f"t={current_time}: verdict={verdict}, period={period}, D={debt}, "
+            f"python_verified={python_verified}, extracted_verified={extracted_verified}, verified={verified}"
+        )
 
         helics.helicsPublicationPublishString(verdict_pub, verdict)
         helics.helicsPublicationPublishString(period_pub, period)
         helics.helicsPublicationPublishString(debt_pub, debt)
         helics.helicsPublicationPublishString(cert_pub, str(cert_path.relative_to(REPO_ROOT)))
-        helics.helicsPublicationPublishString(verified_pub, str(verify_ok).lower())
+        helics.helicsPublicationPublishString(verified_pub, str(verified).lower())
 
     helics.helicsFederateFinalize(fed)
     helics.helicsFederateFree(fed)
